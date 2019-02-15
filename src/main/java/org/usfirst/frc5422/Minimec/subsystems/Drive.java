@@ -65,7 +65,7 @@ public class Drive extends Subsystem {
         addChild("Mecanum Drive 1",mecanumDrive1);
         mecanumDrive1.setSafetyEnabled(true);
         mecanumDrive1.setExpiration(0.1);
-        mecanumDrive1.setMaxOutput(0.3);
+        mecanumDrive1.setMaxOutput(1.0);
 
         
 
@@ -76,7 +76,7 @@ public class Drive extends Subsystem {
 
  
     public void driveArcade(double x, double y, double z) {
-        mecanumDrive1.driveCartesian(x, -1 * y, z);
+        mecanumDrive1.driveCartesian(x,  y, .5 * z);
     }   
 
     @Override

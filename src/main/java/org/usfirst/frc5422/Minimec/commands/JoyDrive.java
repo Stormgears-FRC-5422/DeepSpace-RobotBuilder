@@ -12,6 +12,9 @@
 package org.usfirst.frc5422.Minimec.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+
+import java.time.Year;
+
 import org.usfirst.frc5422.Minimec.Robot;
 
 /**
@@ -47,8 +50,18 @@ public class JoyDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        double null_size = .1;
         // Execute drive subsystem command from joystick input
-        Robot.drive.driveArcade(joy.getX(), joy.getY(), joy.getZ());
+        double rate = 0.5 + (joy.getRawAxis(3) * .5);
+        double x = rate * joy.getX();
+        double y = rate * -1 * (joy.getY());
+        double z = rate * (joy.getZ());
+        if (Math.abs(x) < null_size) x = 0;
+        if (Math.abs(y) < null_size) y = 0;
+        if (Math.abs(z) < null_size) z = 0;
+
+        Robot.drive.driveArcade(x,y,z);
+        
     }
 
     // Make this return true when this Command no longer needs to run execute()
