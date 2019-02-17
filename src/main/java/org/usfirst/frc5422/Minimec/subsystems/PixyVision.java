@@ -45,7 +45,7 @@ public class PixyVision extends PIDSubsystem {
 
     // Initialize your subsystem here
     public PixyVision(String vision_table) {
-        super("PixyVision", .01, 0.0, 0.0, 0.0, .04);
+        super("PixyVision", .01, 0.0, 0.005, 0.0, .04);
         getPIDController().setContinuous(false);
         getPIDController().setName("PixyVision", "PIDSubsystem Controller");
         LiveWindow.add(getPIDController());
@@ -91,8 +91,8 @@ public class PixyVision extends PIDSubsystem {
         
         getPIDController().enable();
         SmartDashboard.putString("Pixy mode", mode.toString());
-        SmartDashboard.putString("Pixy debug", String.format("%s/dock",m_vision_table_name));
     }
+
     public void disable() {
         getPIDController().disable();
         clearLastTracked();
