@@ -28,7 +28,7 @@ import org.usfirst.frc5422.Minimec.PixyObject.PixyType;
 public class PixyVision extends PIDSubsystem {
 
     private NetworkTable m_vision_table;
-    private PixyObject.PixyType m_mode;
+    private VisionMode m_mode;
     private PixyObject m_last_item_tracked;
     private double m_pid_out;
     private NetworkTableEntry m_entry_x;
@@ -36,8 +36,52 @@ public class PixyVision extends PIDSubsystem {
     private NetworkTableEntry m_entry_height;
     private NetworkTableEntry m_entry_width;
     private NetworkTableEntry m_entry_type;
+    private NetworkTableEntry m_entry_brightness;
     private String m_vision_table_name;
     private NetworkTableInstance m_nt_inst;
+    private DockSidePair dock_mode = DockSidePair.MIDDLE;
+
+
+    public enum VisionMode {
+        CARGO(1),
+        ROCKET_DOCK(2),
+        SIDE_CARGO_DOCK(3),
+        FRONT_CARGO_DOCK(4);
+
+        private int numVal;
+
+        VisionMode(int numVal) {
+            this.numVal = numVal;
+        }
+
+        public int getNumVal() {
+            return numVal;
+        }
+
+    }
+
+    public enum DockSidePair {
+        LEFT(1),
+        MIDDLE(2),
+        RIGHT(3);
+
+        private int numVal;
+
+        DockSidePair(int numVal) { this.numVal = numVal; }
+
+        public int getNumVal() { return numVal; }
+    }
+
+    public enum DockFrontPair {
+        LEFT(1),
+        RIGHT(2);
+
+        private int numVal;
+
+        DockFrontPair(int numVal) { this.numVal = numVal; }
+
+        public int getNumVal() { return numVal; }
+    }
 
     // Leave setpoint at 0. We will calculate relative position to target
     // so that we can always set input to 0 when we don't have an object
@@ -76,18 +120,23 @@ public class PixyVision extends PIDSubsystem {
         m_last_item_tracked = null;
     }
 
-    public void enable(PixyObject.PixyType mode) {
+    public void enable(VisionMode mode) {
         m_mode = mode;
-        if (mode == PixyType.DOCK)    
-            m_vision_table = m_nt_inst.getTable(String.format("%s/dock",m_vision_table_name));
-        if (mode == PixyType.CARGO)    
+        if (mode != VisionMode.CARGO) {
+            m_vision_table = m_nt_inst.getTable(String.format("%s/dock", m_vision_table_name));
+            m_nt_inst.getTable(m_vision_table_name).getEntry("brightness").setNumber(15);
+        }
+        if (mode == VisionMode.CARGO) {
             m_vision_table = m_nt_inst.getTable(String.format("%s/cargo",m_vision_table_name));
+            m_nt_inst.getTable(m_vision_table_name).getEntry("brightness").setNumber(60);
+        }
 
         m_entry_x = m_vision_table.getEntry("centerX");
         m_entry_y = m_vision_table.getEntry("centerY");
         m_entry_type = m_vision_table.getEntry("Type");
         m_entry_height = m_vision_table.getEntry("height");
         m_entry_width = m_vision_table.getEntry("width");
+        m_entry_brightness = m_vision_table.getEntry("brightness");
         
         getPIDController().enable();
         SmartDashboard.putString("Pixy mode", mode.toString());
@@ -130,10 +179,10 @@ public class PixyVision extends PIDSubsystem {
         }
 
         List<PixyObject> targets;
-        if (m_mode == PixyType.CARGO) {
+        if (m_mode == VisionMode.CARGO) {
             // Get closest (largest) cargo, or last known
             if (m_last_item_tracked != null) {
-                targets = objects.getClosest(m_last_item_tracked.getX());
+                targets = objects.getClosest(m_last_item_tracked.getX(), m_last_item_tracked.getY());
             }
             else {
                 targets = objects.getLargest();
@@ -144,18 +193,9 @@ public class PixyVision extends PIDSubsystem {
                 return(PixyObject.frame_center_x - cargo.getX());                
             }
         }
-        else if (m_mode == PixyType.DOCK) {
+        else if (m_mode != VisionMode.CARGO) {
             // Get markers closest to center
-            targets = objects.getClosest(PixyObject.frame_center_x);
-            if (targets.size() > 1) {
-                PixyObject dock0 = targets.get(0);
-                PixyObject dock1 = targets.get(1);
-                double center = (dock0.getX() + dock1.getX())/2;
-                return(PixyObject.frame_center_x - center);                
-            } 
-            else if (targets.size() == 1) {
-                return(PixyObject.frame_center_x -targets.get(0).getX());
-            }
+            return (sideCargoDock(objects, dock_mode));
         }
         return(0); // Return no error if nothing seen
     }
@@ -169,6 +209,38 @@ public class PixyVision extends PIDSubsystem {
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);
         m_pid_out = output;
+    }
+
+    private double sideCargoDock(PixyObjectCollection objects, DockSidePair mode) {
+        List<PixyObject> targets;
+        SmartDashboard.putNumber("Number of docks seen: ", objects.size());
+        if (m_last_item_tracked != null) {
+            targets = objects.getClosest(m_last_item_tracked.getX());
+        }
+
+        else if (objects.size() < 6) {
+            return 0;
+        }
+
+        else {
+            targets = objects.leftToRight();
+            if (mode == DockSidePair.MIDDLE) { targets.subList(2, 3);}
+            else if (mode == DockSidePair.LEFT) { targets.subList(0,1);}
+            else if (mode == DockSidePair.RIGHT) { targets.subList(4,5);}
+        }
+
+        if (targets.size() > 1){
+            double x1 = targets.get(0).getX();
+            double x2 = targets.get(1).getX();
+
+            double avg_x = (x1 + x2) / 2.0;
+
+            m_last_item_tracked = new PixyObject(targets.get(0).getType(), avg_x, targets.get(0).getY(), targets.get(0).getHeight(), targets.get(0).getWidth());
+
+            return (PixyObject.frame_center_x - avg_x);
+        }
+
+        else { return 0; }
     }
 }
 

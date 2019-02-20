@@ -15,6 +15,7 @@ import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.PixyObject;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
 
 /**
  *
@@ -42,7 +43,7 @@ public class DockDrive extends Command {
     @Override
     protected void initialize() {
         joy = Robot.oi.getJoystick1();
-        Robot.pixyVision.enable(PixyObject.PixyType.DOCK);
+        Robot.pixyVision.enable(PixyVision.VisionMode.ROCKET_DOCK);
     }
 
     // Called repeatedly when this Command is scheduled to run

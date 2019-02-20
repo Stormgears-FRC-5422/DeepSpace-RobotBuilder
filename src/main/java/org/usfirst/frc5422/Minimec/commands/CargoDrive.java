@@ -16,6 +16,7 @@ import org.usfirst.frc5422.Minimec.PixyObject.PixyType;
 import org.usfirst.frc5422.Minimec.PixyObject;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
 
 /**
  *
@@ -42,7 +43,7 @@ public class CargoDrive extends Command {
     @Override
     protected void initialize() {
         joy = Robot.oi.getJoystick1();
-        Robot.pixyVision.enable(PixyType.CARGO);   
+        Robot.pixyVision.enable(PixyVision.VisionMode.CARGO);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -72,7 +73,7 @@ public class CargoDrive extends Command {
         if (Math.abs(y_out) < null_size) y_out = 0;
 
         SmartDashboard.putNumber("PixyVisionPidOut",Robot.pixyVision.get_pid_output());
-        Robot.drive.driveArcade(x_out,y_out, z_out);
+        Robot.drive.driveArcade(x_out, y_out, z_out);
  }
 
     // Make this return true when this Command no longer needs to run execute()
