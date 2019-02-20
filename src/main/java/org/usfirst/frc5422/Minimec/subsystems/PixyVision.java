@@ -31,6 +31,7 @@ public class PixyVision extends PIDSubsystem {
     private PixyObject.PixyType m_mode;
     private PixyObject m_last_item_tracked;
     private double m_pid_out;
+    private NetworkTableEntry m_entry_brightness; // Control camera brightness
     private NetworkTableEntry m_entry_x;
     private NetworkTableEntry m_entry_y;
     private NetworkTableEntry m_entry_height;
@@ -45,15 +46,15 @@ public class PixyVision extends PIDSubsystem {
 
     // Initialize your subsystem here
     public PixyVision(String vision_table) {
-        super("PixyVision", .01, 0.0, 0.005, 0.0, .04);
+        super("PixyVision", .01, 0.0, 0.02, 0.0, .04);
         getPIDController().setContinuous(false);
         getPIDController().setName("PixyVision", "PIDSubsystem Controller");
         LiveWindow.add(getPIDController());
         getPIDController().setAbsoluteTolerance(.02);
         getPIDController().setOutputRange(-1.0, 1.0);
         m_vision_table_name = vision_table;
-
         m_nt_inst = NetworkTableInstance.getDefault();
+        m_entry_brightness = m_nt_inst.getTable(m_vision_table_name).getEntry("brightness");
         m_pid_out = 0;
         // Use these to get going:
         // setSetpoint() -  Sets where the PID controller should move the system
@@ -78,11 +79,14 @@ public class PixyVision extends PIDSubsystem {
 
     public void enable(PixyObject.PixyType mode) {
         m_mode = mode;
-        if (mode == PixyType.DOCK)    
+        if (mode == PixyType.DOCK) {   
             m_vision_table = m_nt_inst.getTable(String.format("%s/dock",m_vision_table_name));
-        if (mode == PixyType.CARGO)    
+            m_entry_brightness.setNumber(15);
+        }
+        if (mode == PixyType.CARGO) {
             m_vision_table = m_nt_inst.getTable(String.format("%s/cargo",m_vision_table_name));
-
+            m_entry_brightness.setNumber(65);
+        }
         m_entry_x = m_vision_table.getEntry("centerX");
         m_entry_y = m_vision_table.getEntry("centerY");
         m_entry_type = m_vision_table.getEntry("Type");
