@@ -79,6 +79,17 @@ public class Arm extends Subsystem {
 
     }
 
+
+    public void moveTo45() {
+        armTalon.selectProfileSlot(0, 0);
+        armTalon.configMotionAcceleration(250);
+        armTalon.configMotionCruiseVelocity(2500);
+        armTalon.set(ControlMode.MotionMagic, (1024 * 2.5)/2);
+        curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
+
+
+    }
+
     public void movePivot() {
         pivotTalon.set(ControlMode.Position, -1024 * 2.5);
     }
@@ -95,6 +106,11 @@ public class Arm extends Subsystem {
         curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
 
 
+    }
+
+    public void stop(){
+        armTalon.set(ControlMode.Position, 0);
+        pivotTalon.set(ControlMode.Position, 0);
     }
 
     public void moveUp() {
