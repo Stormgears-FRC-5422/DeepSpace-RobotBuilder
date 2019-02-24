@@ -12,7 +12,6 @@
 package org.usfirst.frc5422.Minimec.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.subsystems.pneumatics.PneumaticArm;
 
 /**
  *
