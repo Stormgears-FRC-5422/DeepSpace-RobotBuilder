@@ -14,7 +14,10 @@ package org.usfirst.frc5422.Minimec;
 import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import org.usfirst.frc5422.Minimec.subsystems.*;
+import org.usfirst.frc5422.Minimec.commands.Drive.CargoDrive;
+import org.usfirst.frc5422.Minimec.commands.Drive.DockDrive;
+import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive;
+import org.usfirst.frc5422.Minimec.commands.Drive.SelectedDockDrive;
 import org.usfirst.frc5422.Minimec.subsystems.dsio.DSIO;
 
 

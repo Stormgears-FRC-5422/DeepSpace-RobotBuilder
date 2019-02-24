@@ -9,7 +9,7 @@
 // it from being updated in the future.
 
 
-package org.usfirst.frc5422.Minimec.commands;
+package org.usfirst.frc5422.Minimec.commands.Pneumatics;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
 
