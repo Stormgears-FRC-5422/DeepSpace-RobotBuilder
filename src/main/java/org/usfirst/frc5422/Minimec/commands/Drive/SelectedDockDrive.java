@@ -1,4 +1,4 @@
-package org.usfirst.frc5422.Minimec.commands;
+package org.usfirst.frc5422.Minimec.commands.Drive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
