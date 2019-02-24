@@ -150,11 +150,16 @@ public class PixyVision extends PIDSubsystem {
         }
         else if (m_mode == PixyType.DOCK) {
             // Get markers closest to center
-            targets = objects.getClosest(PixyObject.frame_center_x);
+            if (m_last_item_tracked != null) {
+                targets = objects.getClosest(m_last_item_tracked.getX());
+            } else {
+                targets = objects.getClosest(PixyObject.frame_center_x);
+            } 
             if (targets.size() > 1) {
                 PixyObject dock0 = targets.get(0);
                 PixyObject dock1 = targets.get(1);
                 double center = (dock0.getX() + dock1.getX())/2;
+                m_last_item_tracked = new PixyObject("Dock", center, dock0.getY(), dock0.getHeight(), dock0.getWidth());
                 return(PixyObject.frame_center_x - center);                
             } 
             else if (targets.size() == 1) {
@@ -172,7 +177,7 @@ public class PixyVision extends PIDSubsystem {
     protected void usePIDOutput(double output) {
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);
-        m_pid_out = output;
+        m_pid_out = -1 * output;  // Invert because camera is upside down
     }
 }
 
