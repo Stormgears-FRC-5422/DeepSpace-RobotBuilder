@@ -95,7 +95,7 @@ public class Arm extends Subsystem {
     }
 
     public void movePivotUp() {
-        pivotTalon.set(ControlMode.Position, 5);
+        pivotTalon.set(ControlMode.Position, 0);
     }
 
 
@@ -135,6 +135,7 @@ public class Arm extends Subsystem {
     public double getArmEnc() {
         return armTalon.getSensorCollection().getQuadraturePosition();
     }
+    public double getPivotEnc(){return pivotTalon.getSensorCollection().getQuadraturePosition();}
 
     public void move() {
         SmartDashboard.putNumber("ENC VAL", armTalon.getSensorCollection().getQuadraturePosition());
