@@ -48,7 +48,8 @@ public class StormNet {
 		m_listener = new EthernetListener(ethernetVoice,0);
 		m_listener.setCommandLocations(m_commandMap, m_commandSize);
 
-		// TODO This might leak a thread if we end up here twice
+		// This might leak a thread if we end up here twice
+		// Call stop before connecting a second time
 		m_thread = new Thread(m_listener);
 		m_thread.start();
 		m_lidar = new EthernetLidar(m_listener);
