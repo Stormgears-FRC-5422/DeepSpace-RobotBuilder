@@ -22,11 +22,11 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 
 	init {
 		// TODO magic number
-		sensorCount = 4
+		sensorCount = 2
 		sensorValues = ShortArray(m_numSensors)
 		sensorPairValues = ShortArray(2)
-		// TODO: 24 addresses are hardcoded on the Mega
-		addressValues = ByteArray(24)
+		// TODO: count of addresses is hardcoded on the Mega
+		addressValues = ByteArray(2)
 
 		this.m_deviceString = voice.deviceString
 
@@ -42,9 +42,7 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 				pollDistance()
 				log("Lidar test returned [ " +
 					sensorValues[0] + " ] [ " +
-					sensorValues[1] + " ] [ " +
-					sensorValues[2] + " ] [ " +
-					sensorValues[3] + " ] ")
+					sensorValues[1] + " ] ")
 				TimeUnit.SECONDS.sleep(1)
 			}
 		} catch (e: Exception) {
@@ -60,9 +58,7 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 				pollAddress()
 				log("Lidar Address test returned [ " +
 					addressValues[0] + " ] [ " +
-					addressValues[1] + " ] [ " +
-					addressValues[2] + " ] [ " +
-					addressValues[3] + " ]")
+					addressValues[1] + " ]")
 				TimeUnit.SECONDS.sleep(1)
 			}
 		} catch (e: Exception) {
@@ -79,41 +75,16 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 		fetchBytes("A", "Address", addressValues)
 	}
 
-	private fun pollPairs(pairNumber: Int) {
-		fetchPairs(0, sensorPairValues)
-	}
-
 	// Distance in millimeters
 	fun getDistance(sensorNumber: Int): Int {
 		pollDistance()
 		return sensorValues[sensorNumber].toInt() // Java wants shorts to be signed.  We want unsigned value
 	}
 
-	fun getPair(pairNumber: Int): ShortArray {
-		pollPairs(pairNumber)
-		return sensorPairValues
-	}
+	fun getAverageDistance(unit: Int = MILLIMETERS): Double {
+		pollDistance()
 
-	fun changeThreshold(threshold: Int) {
-		this.threshold = threshold
-		fetchThreshold(threshold)
-	}
-
-	fun getAverageDistance(side: Int, unit: Int = INCHES): Double? {
-		pollPairs(side)
-
-		var distanceCount = 0
-		var distanceTotal = 0
-		sensorPairValues.forEach {
-			if (it < 8190) {
-				distanceTotal += it
-				distanceCount++
-			}
-		}
-
-		if (distanceCount == 0) return null
-
-		val distance = distanceTotal.toDouble() / distanceCount
+		val distance = (sensorValues[0] + sensorValues[1]) / 2.0
 
 		return when (unit) {
 			INCHES -> distance / 25.4
@@ -121,33 +92,15 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 		}
 	}
 
-	private fun fetchThreshold(threshold: Int): Boolean {
-		val receiveBuffer = ByteArray(4)
-		val buffer = ByteBuffer.allocate(5)
-		buffer.order(ByteOrder.LITTLE_ENDIAN)
+	fun getOffset(unit: Int = MILLIMETERS): Double {
+		pollDistance()
 
-		buffer.put("T".toByteArray(StandardCharsets.US_ASCII)[0])
-		buffer.putInt(threshold)
-		return fetchCommand(buffer.array(), "Change Threshold", receiveBuffer)
-	}
+		val offset = (sensorValues[0] - sensorValues[1]).toDouble()
 
-	private fun fetchPairs(pairNumber: Int, shortArray: ShortArray): Boolean {
-		val receiveBuffer = ByteArray(shortArray.size * java.lang.Short.BYTES)
-		val sendingBuffer = ByteBuffer.allocate(5)
-		sendingBuffer.order(ByteOrder.LITTLE_ENDIAN)
-
-		sendingBuffer.put("R".toByteArray(StandardCharsets.US_ASCII)[0])
-		sendingBuffer.putInt(pairNumber)
-
-		val result = fetchCommand(sendingBuffer.array(), "Report Pairs", receiveBuffer)
-
-		val buffer = ByteBuffer.wrap(receiveBuffer)
-		buffer.order(ByteOrder.LITTLE_ENDIAN)
-		for (i in shortArray.indices) {
-			shortArray[i] = buffer.short
-//			debug("short value: " + shortArray[i])
+		return when (unit) {
+			INCHES -> offset / 25.4
+			else -> offset
 		}
-		return result
 	}
 
 }

@@ -7,8 +7,12 @@ public class StormNet {
 	private static StormNet instance;
 	private Thread m_thread;
 	private EthernetListener m_listener;
-	private EthernetLidar m_lidar;
+
+	// Sensors
 	private StormNetSensor m_testSensor;
+	private EthernetLidar m_lidar;
+	private LineIR m_lineIR;
+
 	private Map<String,Integer> m_commandMap;
 	private int m_commandSize = 36;
 
@@ -52,8 +56,9 @@ public class StormNet {
 		// Call stop before connecting a second time
 		m_thread = new Thread(m_listener);
 		m_thread.start();
-		m_lidar = new EthernetLidar(m_listener);
 		m_testSensor = new StormNetSensor(m_listener);
+		m_lidar = new EthernetLidar(m_listener);
+		m_lineIR = new LineIR(m_listener);
 	}
 
 	public void stop() {
@@ -71,16 +76,13 @@ public class StormNet {
 		return true;
 	}
 
-	public EthernetLidar getM_lidar() {
-		return m_lidar;
-	}
-	public StormNetSensor getM_testSensor() { return m_testSensor; }
-
-	public int getLidarDistance(int sensorNumber) {
-		return m_lidar.getDistance(sensorNumber);
+	public int getLidarDistance() {
+		return (int)m_lidar.getAverageDistance(1);
 	}
 
-	public String printLidarPair(int num) {
-		return m_lidar.getPair(num)[0] + ", " + m_lidar.getPair(num)[1];
+	public int getLidarOffset() {
+		return (int)m_lidar.getOffset(1);
 	}
+
+	public float getLineIROffset()  {return 10.0f * m_lineIR.getOffset(); } // cm to mm
 }
