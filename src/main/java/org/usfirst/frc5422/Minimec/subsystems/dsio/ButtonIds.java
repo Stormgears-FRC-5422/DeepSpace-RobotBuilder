@@ -14,8 +14,9 @@ public class ButtonIds {
     public static final int WRIST_SWITCH_ID = 10; //On = false
     public static final int INTAKE_SWITCH_ID = 11; //On = false
 
-    public static final int BACKJACK_LEVEL_2 = 9;
-    public static final int BACKJACK_LEVEL_3 = 8;
+
+    public static final int BACKJACK_MOVE_BUTTON_ID = 8;
+    public static final int BACKJACK_SWITCH_ID = 13;
 
     public static final int ELEVATOR_FAILSAFE_BUTTON_ID = 12; //The switch with the red cap on it
 

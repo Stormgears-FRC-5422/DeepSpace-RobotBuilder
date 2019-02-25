@@ -12,7 +12,8 @@ public class DSIO {
     private Joystick buttonBoard2;
 
     //TODO: RENAME BUTTONS BASED ON COLOR
-    private JoystickButton elevatorSwitch, cargoIntake, cargoRelease, backJackLevel3,backJackLevel2,
+
+    private JoystickButton elevatorSwitch, cargoIntake, cargoRelease, backJackMove, backJackSwitch,
             wristSwitch, intakeOn, hatchIntake, hatchRelease, elevatorRest, elevatorGround, elevatorLevelOne, elevatorLevelTwo, elevatorLevelThree;
 
     public DSIO(){
@@ -25,8 +26,8 @@ public class DSIO {
 
         elevatorSwitch = new JoystickButton(buttonBoard, ButtonIds.ELEVATOR_FAILSAFE_BUTTON_ID);
 
-        backJackLevel2 = new JoystickButton(buttonBoard, ButtonIds.BACKJACK_LEVEL_2);
-        backJackLevel3 = new JoystickButton(buttonBoard, ButtonIds.BACKJACK_LEVEL_3);
+        backJackMove = new JoystickButton(buttonBoard, ButtonIds.BACKJACK_MOVE_BUTTON_ID);
+        // TODO fix switch stuff
 
         wristSwitch = new JoystickButton(buttonBoard, ButtonIds.WRIST_SWITCH_ID);
 
@@ -60,10 +61,14 @@ public class DSIO {
 
         //TODO: ADD SUBSYSTEMS AND COMMANDS
 
+//        if((buttonBoard.getRawButton(ButtonIds.BACKJACK_SWITCH_ID).){
+//
+//        }
 
-        //if (buttonBoard.getRawButton(ButtonIds.BACKJACK_SWITCH_ID)){
-            //TODO: Jack class
+
         //}
+
+
 
     }
     public Joystick getJoystick(){
