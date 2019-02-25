@@ -16,19 +16,19 @@ import org.usfirst.frc5422.Minimec.Robot;
 /**
  *
  */
-public class SwitchValue extends Command {
+public class SetJackLevel extends Command {
 
-    int switchValue;
+    int habLevel;
 
-    public SwitchValue(int sv) {
-        switchValue = sv;
+    public SetJackLevel(int sv) {
+        habLevel = sv;
         requires(Robot.backjack);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.backjack.setLevel(switchValue);
+        Robot.backjack.setLevel(habLevel);
     }
     // Called repeatedly when this Command is scheduled to run
     @Override
