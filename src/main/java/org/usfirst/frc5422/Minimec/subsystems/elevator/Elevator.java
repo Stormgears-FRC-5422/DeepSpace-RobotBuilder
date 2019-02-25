@@ -3,7 +3,7 @@ package org.usfirst.frc5422.Minimec.subsystems.elevator;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.usfirst.frc5422.Minimec.utils.StormProp;
+import org.usfirst.frc5422.utils.StormProp;
 
 public class Elevator extends Subsystem {
     public static Elevator instance;
