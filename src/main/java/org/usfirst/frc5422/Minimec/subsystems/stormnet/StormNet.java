@@ -2,11 +2,13 @@ package org.usfirst.frc5422.Minimec.subsystems.stormnet;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 
 public class StormNet {
 	private static StormNet instance;
 	private Thread m_thread;
-	private EthernetListener m_listener;
+	private UDPListener m_listener;
 
 	// Sensors
 	private StormNetSensor m_testSensor;
@@ -48,8 +50,7 @@ public class StormNet {
 	public static StormNet getInstance() {return instance;}
 
 	private void connect() {
-		EthernetVoice ethernetVoice = new EthernetVoice(m_address, m_port);
-		m_listener = new EthernetListener(ethernetVoice,0);
+		m_listener = new UDPListener(m_address, m_port);
 		m_listener.setCommandLocations(m_commandMap, m_commandSize);
 
 		// This might leak a thread if we end up here twice
@@ -68,6 +69,14 @@ public class StormNet {
 	public boolean test() {
 		System.out.println("In StormNet Test");
 		System.out.println("about to test core");
+		System.out.println("waiting for 1 second to make sure we've gotten data");
+
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		m_testSensor.setDebug(true);
 		System.out.println("core test " + new String(m_testSensor.test() ? "passed" : "failed"));
 //		System.out.println("about to test lidar");
@@ -85,4 +94,6 @@ public class StormNet {
 	}
 
 	public float getLineIROffset()  {return 10.0f * m_lineIR.getOffset(); } // cm to mm
+
+	public int getLineIRCount() {return m_lineIR.getSensorCount(); }
 }

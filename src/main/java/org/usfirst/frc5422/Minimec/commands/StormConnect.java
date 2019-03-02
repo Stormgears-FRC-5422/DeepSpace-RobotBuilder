@@ -42,6 +42,7 @@ public class StormConnect extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        System.out.println("In stormconnect intitialize");
         Robot.stormNetSubsystem.connect(m_address, m_port);
     }
 

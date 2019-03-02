@@ -69,6 +69,8 @@ public class StormNetSubsystem extends Subsystem {
 
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
+        System.out.println("In StormNetSubsystem default command");
+        setDefaultCommand(new StormConnect("localhost", 5422));
     }
 
     @Override

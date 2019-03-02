@@ -2,6 +2,7 @@ package org.usfirst.frc5422.Minimec.subsystems.stormnet;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -10,21 +11,23 @@ import java.util.Map;
 
 // This same pattern could someday be used to implement an I2C listener or something else entirely
 // that's why I didn't subclass EthernetVoice. It is really solving a slightly different problem.
-public class EthernetListener extends StormNetVoice implements Runnable{
-    private EthernetVoice m_ethernetVoice;
+public class UDPListener extends StormNetVoice implements Runnable{
     private byte m_deviceAddress;
+    private String m_address;
+    private int m_port;
     private Map<String, Integer> m_commandMap;
     private byte[] m_receiveBuffer = new byte[0];
     private boolean m_stopNow = false;
 
-    public EthernetListener(EthernetVoice eVoice, int deviceAddress) {
-        m_ethernetVoice = eVoice;
-        m_deviceAddress = (byte) deviceAddress; // Constrains us to 7 bit addresses for now
+    public UDPListener(String address, int port) {
+        m_address = address;
+        m_port = port;
+        m_deviceAddress = 0; // not really meaningful here
     }
 
     @Override
     public String getDeviceString() {
-        return m_ethernetVoice.getDeviceString() + "listener " + Integer.toString(m_deviceAddress);
+        return "UDP listener: " + m_port;
     }
 
     public void setCommandLocations(Map<String, Integer> commandMap, int size) {
@@ -60,22 +63,31 @@ public class EthernetListener extends StormNetVoice implements Runnable{
     // This only happens once, so we know a lot about its synchrony with other
     // parts of the class
     public void run() {
+        DatagramSocket socket;
+        InetAddress address;
+        m_stopNow = false;
+
         System.out.println("Starting listener thread...");
         byte[] localBuffer = new byte[m_receiveBuffer.length];
-        DataInputStream inputStream = m_ethernetVoice.getDataInputStream();
-        m_stopNow = false;  // in case we ended up here a second time - should only happen if we reconnect
-        while (!m_stopNow) {
-            try {
-                inputStream.readFully(localBuffer, 0, localBuffer.length);
-                System.out.print("local buffer: ");
-                System.out.println(Arrays.toString(localBuffer));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            synchronized (m_receiveBuffer) {
-                System.arraycopy(localBuffer, 0, m_receiveBuffer, 0, localBuffer.length);
+        try {
+            // Listening only - lets use a different port
+            socket = new DatagramSocket(5423);
+            address = InetAddress.getByName("10.54.22.2");
+            DatagramPacket packet = new DatagramPacket(localBuffer, localBuffer.length);
+
+            while (!m_stopNow) {
+                socket.receive(packet);
+                //for debugging
+                //System.out.print("local buffer: ");
+                //System.out.println(Arrays.toString(localBuffer));
+                synchronized (m_receiveBuffer) {
+                    System.arraycopy(packet.getData(), 0, m_receiveBuffer, 0, packet.getLength());
+                }
             }
+            socket.close(); // so we don't run into ourselves later
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
