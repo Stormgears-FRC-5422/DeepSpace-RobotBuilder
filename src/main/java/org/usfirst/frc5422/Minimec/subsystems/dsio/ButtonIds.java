@@ -15,17 +15,17 @@ public class ButtonIds {
     public static final int INTAKE_SWITCH_ID = 11; //On = false
 
 
-    public static final int BACKJACK_MOVE_BUTTON_ID = 8;
-    public static final int BACKJACK_SWITCH_ID = 13;
-
-    public static final int ELEVATOR_FAILSAFE_BUTTON_ID = 12; //The switch with the red cap on it
-
     public static final int HATCH_STATUS_INTAKE_BUTTON_ID = 3;
     public static final int HATCH_STATUS_RELEASE_BUTTON_ID = 4;
 
-    //Button Board Port 2
+    //Button Board Port 1
     public static final int CARGO_STATUS_INTAKE_BUTTON_ID = 1;
     public static final int CARGO_STATUS_RELEASE_BUTTON_ID = 2;
+
+    public static final int BACKJACK_LEVEL_3 = 8;
+    public static final int BACKJACK_LEVEL_2 = 9;
+    public static final int ELEVATOR_FAILSAFE_BUTTON_ID = 10; //The switch with the red cap on it
+
 
     //These are the buttons on the top. Going from left to right
     public static final int EXTRA_BUTTON_1 = 3;
