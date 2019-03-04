@@ -52,7 +52,7 @@ public class StormNetSubsystem extends Subsystem {
         System.out.println("get instance:");
         m_stormNet = StormNet.getInstance();
         System.out.println("testing");
-        m_stormNet.test();
+        //m_stormNet.test();
         System.out.println("done testing");
     }
 
@@ -69,8 +69,7 @@ public class StormNetSubsystem extends Subsystem {
 
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
-        System.out.println("In StormNetSubsystem default command");
-        setDefaultCommand(new StormConnect("localhost", 5422));
+        setDefaultCommand(new StormConnect("10.54.22.177", 5422));
     }
 
     @Override
