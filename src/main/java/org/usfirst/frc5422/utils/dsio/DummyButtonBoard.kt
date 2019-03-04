@@ -33,4 +33,6 @@ class DummyButtonBoard: IButtonBoard {
 
     override val cargoRelease = DummyButton()
 
+    override val moveBackjack = DummyButton()
+
 }

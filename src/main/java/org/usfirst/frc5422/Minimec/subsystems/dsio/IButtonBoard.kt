@@ -31,4 +31,8 @@ interface IButtonBoard {
     val cargoIntake: IButton
 
     val cargoRelease: IButton
+
+    val moveBackjack: IButton
+
+
 }

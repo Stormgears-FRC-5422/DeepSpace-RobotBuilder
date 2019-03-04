@@ -25,6 +25,7 @@ public class ButtonIds {
     public static final int BACKJACK_LEVEL_3 = 8;
     public static final int BACKJACK_LEVEL_2 = 9;
     public static final int ELEVATOR_FAILSAFE_BUTTON_ID = 10; //The switch with the red cap on it
+    public static final int MOVE_BACKJACK = 7;
 
 
     //These are the buttons on the top. Going from left to right
