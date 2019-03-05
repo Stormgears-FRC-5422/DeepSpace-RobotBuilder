@@ -1,5 +1,6 @@
 package org.usfirst.frc5422.Minimec;
 
+import java.awt.*;
 import java.util.ArrayList;
 //import org.usfirst.frc5422.Minimec.PixyObject;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.*;  // Import the Collections class
 */
 public class PixyObjectCollection {
     private ArrayList<PixyObject> m_list;
+    private final double FRAME_SIZE = 320;
 
     public PixyObjectCollection(ArrayList<PixyObject> list) {
         m_list = list;
@@ -74,4 +76,36 @@ public class PixyObjectCollection {
         return(ret_list);
     }
 
+
+    public List<PixyObject> leftToRight() {
+        List<PixyObject> return_list = new ArrayList<PixyObject>();
+        //Sort by furthest left pair
+        return_list = m_list.stream()
+            .sorted((a, b) -> {
+                double a_x_dist = Math.abs(a.getX());
+                double b_x_dist = Math.abs(b.getX());
+                return(Double.compare(a_x_dist,b_x_dist));
+            })
+            .collect(Collectors.toList());
+
+        return(return_list);
+    }
+
+    public List<PixyObject> rightToLeft() {
+        List<PixyObject> return_list = new ArrayList<PixyObject>();
+        //Sort by furthest left pair
+        return_list = m_list.stream()
+                .sorted((a,b) -> {
+                    double a_x_dist = Math.abs(a.getX());
+                    double b_x_dist = Math.abs(b.getX());
+                    return(Double.compare(b_x_dist,a_x_dist));
+                })
+                .collect(Collectors.toList());
+
+        return(return_list);
+    }
+
+    public int size() {
+        return m_list.size();
+    }
 }
