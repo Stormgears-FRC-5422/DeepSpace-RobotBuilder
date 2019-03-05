@@ -44,7 +44,7 @@ public class DockDrive extends Command {
     @Override
     protected void initialize() {
         joy = Robot.oi.getJoystick1();
-        Robot.pixyVision.enable(PixyVision.VisionMode.ROCKET_DOCK);
+        Robot.pixyVision.enable(PixyVision.VisionMode.DOCK);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -62,6 +62,17 @@ public class DockDrive extends Command {
         } else {
             Robot.pixyVision.clearLastTracked();
         } 
+
+        // Check for dock mode changes
+        if (joy.getRawButton(3)) {
+            Robot.pixyVision.changeDockMode(PixyVision.DockSelection.LEFT);
+        }
+        if (joy.getRawButton(4)) {
+            Robot.pixyVision.changeDockMode(PixyVision.DockSelection.MIDDLE);
+        }
+        if (joy.getRawButton(2)) {
+            Robot.pixyVision.changeDockMode(PixyVision.DockSelection.RIGHT);
+        }
 
         if (z_out > 1.0) z_out  = 1.0;
         if (z_out < -1.0) z_out = -1.0;
