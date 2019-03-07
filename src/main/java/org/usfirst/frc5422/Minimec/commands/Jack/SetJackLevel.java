@@ -23,11 +23,13 @@ public class SetJackLevel extends Command {
     public SetJackLevel(int sv) {
         habLevel = sv;
         requires(Robot.backjack);
+        System.out.println("SetJackLevel(" + habLevel + ")");
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        System.out.println("SetJackLevel.initialize(" + habLevel + ")" );
         Robot.backjack.setLevel(habLevel);
     }
     // Called repeatedly when this Command is scheduled to run
