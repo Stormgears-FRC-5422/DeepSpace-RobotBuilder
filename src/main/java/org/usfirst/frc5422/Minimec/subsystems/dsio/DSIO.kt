@@ -1,17 +1,10 @@
 package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
-import edu.wpi.first.wpilibj.command.Command
 import org.usfirst.frc5422.Minimec.Robot
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
-import org.usfirst.frc5422.Minimec.commands.Jack.SetJackLevel
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.RunCompressor
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.StopCompressor
-import org.usfirst.frc5422.Minimec.subsystems.intake.Intake
 import org.usfirst.frc5422.Minimec.subsystems.pneumatics.Compression
 import org.usfirst.frc5422.utils.dsio.ButtonBoardSwitchedException
-import org.usfirst.frc5422.utils.dsio.IRawJoystick
-import org.usfirst.frc5422.utils.dsio.ISwitch
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
@@ -53,10 +46,10 @@ object DSIO {
         // Note that these are creating and passing new Command objects, not calling functions
 
         // BACKJACK
-        buttonBoard.backJackLevel2.whenPressed(SetJackLevel(2))
-        buttonBoard.backJackLevel2.whenReleased(SetJackLevel(0))
-        buttonBoard.backJackLevel3.whenPressed(SetJackLevel(3))
-        buttonBoard.backJackLevel3.whenReleased(SetJackLevel(0))
+//        buttonBoard.backJackLevel2.whenPressed(SetJackLevel(2))
+//        buttonBoard.backJackLevel2.whenReleased(SetJackLevel(0))
+//        buttonBoard.backJackLevel3.whenPressed(SetJackLevel(3))
+//        buttonBoard.backJackLevel3.whenReleased(SetJackLevel(0))
         buttonBoard.moveBackjack.whenPressed(MoveJack())
 
 //        buttonBoard.moveBackjack.whenPressed(){

@@ -156,8 +156,11 @@ public class Robot extends TimedRobot {
     // Try to set the subsystem state accordingly
     public void onInitCheck() {
         System.out.println("onInitCheck()");
-        System.out.println("jack level " + oi.getBackJackLevel());
 
-        backjack.setLevel(oi.getBackJackLevel());
+        // No longer neessary for jack.  May be needed for Wrist and Intake
+        // This is no longer necessary for backjack
+        //        System.out.println("jack level " + oi.getBackJackLevel());
+        //
+        //        backjack.setLevel(oi.getBackJackLevel());
     }
 }
