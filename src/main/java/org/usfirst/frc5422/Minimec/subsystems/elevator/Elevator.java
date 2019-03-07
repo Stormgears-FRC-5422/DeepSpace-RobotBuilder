@@ -6,14 +6,19 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.utils.StormProp;
 
 public class Elevator extends Subsystem {
-    public static Elevator instance;
-    public Elevator getInstance()
+    private static Elevator instance;
+    public static Elevator getInstance()
     {
+        if(instance == null) instance = new Elevator();
         return instance;
     }
 
     private final double CLIMBER_RADIUS = 5.5;
     private final int TICKS_PER_INCH = 13000;
+
+    private final int REST_POSITION = 6000;
+    private final int MAX_POSITION = -2830711;
+    private final int IDEAL_MAX = MAX_POSITION-200000;
 
     private TalonSRX elevatorTalon;
     private double currentPositionTicks = elevatorTalon.getSensorCollection().getQuadraturePosition();
@@ -97,7 +102,8 @@ public class Elevator extends Subsystem {
 
     private int toTicks(double inches)
     {
-        return (int)Math.round(inches * TICKS_PER_INCH);
+        elevatorTalon.set(ControlMode.Position, -1000000);
+        return 0;
     }
 
     @Override

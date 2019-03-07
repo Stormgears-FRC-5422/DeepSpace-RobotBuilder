@@ -14,6 +14,10 @@ public class ButtonIds {
     public static final int WRIST_SWITCH_ID = 10; //On = false
     public static final int INTAKE_SWITCH_ID = 11; //On = false
 
+    public static final int ARM_UP = 1;
+    public static final int ARM_DOWN = 2;
+    public static final int ARM_90 = 3;
+
 
     public static final int HATCH_STATUS_INTAKE_BUTTON_ID = 3;
     public static final int HATCH_STATUS_RELEASE_BUTTON_ID = 4;
@@ -29,7 +33,7 @@ public class ButtonIds {
 
 
     //These are the buttons on the top. Going from left to right
-    public static final int EXTRA_BUTTON_1 = 3;
+    public static final int MOVE_ARM = 3;
     public static final int EXTRA_BUTTON_2 = 3;
     public static final int EXTRA_BUTTON_3 = 3;
     public static final int EXTRA_BUTTON_4 = 3;

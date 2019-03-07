@@ -35,4 +35,6 @@ class DummyButtonBoard: IButtonBoard {
 
     override val moveBackjack = DummyButton()
 
+    override val moveArm = DummyButton()
+
 }

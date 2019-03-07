@@ -33,7 +33,7 @@ object DSIO {
     {
         buttonBoard.moveBackjack.whenPressed{
             println("MOVE BACKJACK")
-            MoveJack()
+
         }
 
         buttonBoard.backJackLevel2.whenPressed{
@@ -101,6 +101,9 @@ object DSIO {
 
         buttonBoard.cargoRelease.whenPressed{
             println("CARGO RELEASE")
+        }
+        buttonBoard.moveArm.whenPressed {
+            Robot.arm.moveDown()
         }
     }
 
