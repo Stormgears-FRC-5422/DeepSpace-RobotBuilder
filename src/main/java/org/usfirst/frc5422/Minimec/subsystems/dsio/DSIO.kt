@@ -49,41 +49,12 @@ object DSIO {
         System.out.println("setupControls()");
         // Note that these are creating and passing new Command objects, not calling functions
 
-        // BACKJACK
-//        buttonBoard.backJackLevel2.whenPressed(SetJackLevel(2))
-//        buttonBoard.backJackLevel2.whenReleased(SetJackLevel(0))
-//        buttonBoard.backJackLevel3.whenPressed(SetJackLevel(3))
-//        buttonBoard.backJackLevel3.whenReleased(SetJackLevel(0))
         buttonBoard.moveBackjack.whenPressed(MoveJack())
 
         buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
         buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
         buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
         buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
-
-//        buttonBoard.moveBackjack.whenPressed(){
-//            println("MOVE BACKJACK")
-//            MoveJack()
-//        }
-//
-//        buttonBoard.backJackLevel2.whenPressed{
-//            println("BACKJACK LEVEL 0 --> 2")
-//            SetJackLevel(2)
-//        }
-//
-//        buttonBoard.backJackLevel2.whenReleased{
-//            println("BACKJACK LEVEL 2 --> 0")
-//            SetJackLevel(0)
-//        }
-//
-//        buttonBoard.backJackLevel3.whenPressed{
-//            println("BACKJACK LEVEL 0 --> 3")
-//            SetJackLevel(3)
-//        }
-//        buttonBoard.backJackLevel3.whenReleased{
-//            println("BACKJACK LEVEL 3--> 0")
-//            SetJackLevel(0)
-//        }
 
         buttonBoard.wristSwitch.whenFlipped {
             println("WRIST SWITCH")

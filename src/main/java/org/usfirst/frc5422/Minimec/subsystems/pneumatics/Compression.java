@@ -78,18 +78,19 @@ public class Compression extends Subsystem {
     // here. Call these from Commands.
     public void startCompressor() {
         mainCompressor.setClosedLoopControl(true);
+        mainCompressor.start();
         boolean enabled = mainCompressor.enabled();
-        //System.out.println("Compressor status: " + enabled);
+        System.out.println("Compressor status: " + enabled);
         boolean pressureValue = mainCompressor.getPressureSwitchValue();
-        //System.out.println("Compressor value: " + pressureValue);
+        System.out.println("Compressor value: " + pressureValue);
         double current = mainCompressor.getCompressorCurrent();
-        //System.out.println("Compressor current: " + current);
+        System.out.println("Compressor current: " + current);
     }
 
     public void stopCompressor(){
         mainCompressor.setClosedLoopControl(false);
         boolean off = !mainCompressor.enabled();
-        //System.out.println("Compressor off: " + off);
+        System.out.println("Compressor off: " + off);
     }
 }
 

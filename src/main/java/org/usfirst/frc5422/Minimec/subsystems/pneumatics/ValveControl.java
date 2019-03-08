@@ -42,13 +42,13 @@ public class ValveControl extends Subsystem {
 
         // TODO: Magic Numbers
 
-        ballProxSensor = new DigitalInput(0);
+        ballProxSensor = new DigitalInput(5);  // TODO
         addChild("Ball Proximity Sensor", ballProxSensor);
 
-        hatchProxSensor = new DigitalInput(1);
+        hatchProxSensor = new DigitalInput(6);  // TODO
         addChild("Hatch Proximity Sensor", hatchProxSensor);
 
-        vacPressureSensor = new AnalogInput(0);
+        vacPressureSensor = new AnalogInput(0);  // TODO
         addChild("Pressure Sensor", vacPressureSensor);
 
         cargoOpen = false;

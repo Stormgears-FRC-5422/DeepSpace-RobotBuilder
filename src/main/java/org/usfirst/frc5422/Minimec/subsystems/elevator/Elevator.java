@@ -40,6 +40,10 @@ public class Elevator extends Subsystem {
         instance = new Elevator();
     }
 
+    public double getOutputCurrent() {
+        return elevatorTalon.getOutputCurrent();
+    }
+
     public void moveElevatorToPosition(double position)
     {
         boolean lowering = false;
