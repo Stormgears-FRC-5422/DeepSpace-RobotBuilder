@@ -27,6 +27,9 @@ public class ButtonIds {
     public static final int HATCH_STATUS_INTAKE_BUTTON_ID = 3;
     public static final int HATCH_STATUS_RELEASE_BUTTON_ID = 4;
 
+    public static final int ARM_REST_BUTTON_ID = 4;
+    public static final int ARM_MOVE_90_BUTTON_ID = 5;
+    public static final int ARM_MOVE_TO_135_BUTTON_ID = 6;
     //Button Board Port 1
     public static final int CARGO_STATUS_INTAKE_BUTTON_ID = 1;
     public static final int CARGO_STATUS_RELEASE_BUTTON_ID = 2;

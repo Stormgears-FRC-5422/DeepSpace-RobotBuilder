@@ -43,6 +43,12 @@ class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoysti
 
     override val moveArm = EnhancedButton(joy1, ButtonIds.MOVE_ARM)
 
+    override val armRest = EnhancedButton(joy1, ButtonIds.ARM_REST_BUTTON_ID)
+
+    override val arm90 = EnhancedButton(joy1, ButtonIds.ARM_MOVE_90_BUTTON_ID)
+
+    override val arm135 = EnhancedButton(joy1, ButtonIds.ARM_MOVE_TO_135_BUTTON_ID)
+
     companion object {
         private var instance: ButtonBoard? = null
         @JvmStatic

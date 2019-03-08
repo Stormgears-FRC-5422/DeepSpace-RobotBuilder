@@ -42,4 +42,10 @@ class DummyButtonBoard: IButtonBoard {
 
     override val moveArm = DummyButton()
 
+    override val armRest = DummyButton()
+
+    override val arm90 = DummyButton()
+
+    override  val arm135 = DummyButton()
+
 }

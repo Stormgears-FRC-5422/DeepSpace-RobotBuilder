@@ -2,7 +2,9 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.Minimec.Robot
+import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
+import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
@@ -87,6 +89,23 @@ object DSIO {
             println("ELEVATOR LEVEL THREE")
         }
 
+        buttonBoard.armRest.whenPressed{
+            println("ARM REST")
+            Robot.arm.moveToRest()
+            Robot.arm.movePivotUp()
+        }
+
+        buttonBoard.arm90.whenPressed{
+            println("ARM 90")
+            Robot.arm.moveTo90()
+            Robot.arm.movePivotUp()
+        }
+
+        buttonBoard.arm135.whenPressed{
+            println("ARM 135")
+            Robot.arm.moveTo135()
+            Robot.arm.movePivotUp()
+        }
 
     }
 

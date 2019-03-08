@@ -42,5 +42,10 @@ interface IButtonBoard {
 
     val moveArm: IButton
 
+    val armRest: IButton
+
+    val arm90: IButton
+
+    val arm135: IButton
 
 }

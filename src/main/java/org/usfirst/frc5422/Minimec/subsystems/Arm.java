@@ -38,6 +38,7 @@ public class Arm extends Subsystem {
     double curArmPos;
     double curPivPos;
 
+
     public Arm() {
         timer = new Timer();
         armTalon = new TalonSRX(30);  // SHOULDER   TODO
