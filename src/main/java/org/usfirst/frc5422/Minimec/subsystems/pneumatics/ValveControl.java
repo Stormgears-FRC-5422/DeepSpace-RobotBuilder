@@ -51,6 +51,8 @@ public class ValveControl extends Subsystem {
         vacPressureSensor = new AnalogInput(0);
         addChild("Pressure Sensor", vacPressureSensor);
 
+        // 1 - 5 V and 0 to -14
+
         cargoOpen = false;
         hatchOpen = false;
     }
@@ -64,8 +66,7 @@ public class ValveControl extends Subsystem {
 
     @Override
     public void periodic() {
-        // Put code here to be run every loop
-        // Vac Valve Management
+        manageVac();
     }
 
 
@@ -74,7 +75,6 @@ public class ValveControl extends Subsystem {
     public void cargoStart() {
         if(!cargoOpen) {
             cargoValve.set(true);
-            vacValve.set(true);
             cargoOpen = true;
         }
     }
@@ -82,7 +82,6 @@ public class ValveControl extends Subsystem {
     public void cargoStop(){
         if(cargoOpen) {
             cargoValve.set(false);
-            vacValve.set(false);
             cargoOpen = false;
         }
     }
@@ -90,7 +89,6 @@ public class ValveControl extends Subsystem {
     public void hatchStart() {
         if(!hatchOpen) {
             hatchValve.set(true);
-            vacValve.set(false);
             hatchOpen = true;
         }
     }
@@ -98,7 +96,6 @@ public class ValveControl extends Subsystem {
     public void hatchStop(){
         if(hatchOpen) {
             hatchValve.set(false);
-            vacValve.set(false);
             hatchOpen = false;
         }
     }
@@ -126,6 +123,21 @@ public class ValveControl extends Subsystem {
     public boolean getBallProxSensor() {
         System.out.println("Sense Ball?: " + ! ballProxSensor.get());
         return ballProxSensor.get();
+    }
+
+    public double toVolts(double pressure) {
+        return (pressure / -3.5) -3.5;
+    }
+
+    public void manageVac() {
+        double upper = -5.5;
+        double lower = -4;
+        if (!(vacPressureSensor.getVoltage() < toVolts(upper) && vacPressureSensor.getVoltage() > toVolts(lower))) {
+            vacStart();
+        }
+        else {
+            vacStop();
+        }
     }
 }
 
