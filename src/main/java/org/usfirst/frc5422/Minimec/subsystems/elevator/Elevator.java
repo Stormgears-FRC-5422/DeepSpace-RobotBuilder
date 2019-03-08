@@ -1,6 +1,9 @@
 package org.usfirst.frc5422.Minimec.subsystems.elevator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.utils.StormProp;
@@ -21,11 +24,15 @@ public class Elevator extends Subsystem {
     private final int IDEAL_MAX = MAX_POSITION-200000;
 
     private TalonSRX elevatorTalon;
-    private double currentPositionTicks = elevatorTalon.getSensorCollection().getQuadraturePosition();
+    private double getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
 
     public Elevator()
     {
-        elevatorTalon = new TalonSRX((int) Double.parseDouble(StormProp.getString("elevatorTalonID")));
+        //elevatorTalon = new TalonSRX((int) Double.parseDouble(StormProp.getString("elevatorTalonID")));
+        elevatorTalon = new TalonSRX(18);  //TODO
+        elevatorTalon.setNeutralMode(NeutralMode.Brake);
+        elevatorTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 10);
+        elevatorTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 10);
     }
 
     public static void init()
@@ -38,12 +45,12 @@ public class Elevator extends Subsystem {
         boolean lowering = false;
         int multiplier = 1;
         int destination = toTicks(position);
-        if(destination > currentPositionTicks)
+        if(destination > getCurrentPositionTicks())
         {
             //TODO: add PID
             lowering = true;
             multiplier = -1;
-        }else if(destination < currentPositionTicks) {
+        }else if(destination < getCurrentPositionTicks()) {
             //TODO: add PID
             lowering = false;
             multiplier = 1;
@@ -59,7 +66,7 @@ public class Elevator extends Subsystem {
 
         boolean shouldStop;
         do{
-            double cpt = currentPositionTicks;
+            double cpt = getCurrentPositionTicks();
             elevatorTalon.set(ControlMode.PercentOutput, basePower * multiplier);
 
             if(lowering)shouldStop = cpt > destination - 13000;
@@ -80,12 +87,12 @@ public class Elevator extends Subsystem {
 
     public void holdElevator()
     {
-        elevatorTalon.set(ControlMode.Position, currentPositionTicks);
+        elevatorTalon.set(ControlMode.Position, getCurrentPositionTicks());
     }
 
     public void moveUpManual()
     {
-        if (currentPositionTicks < -1190000) {
+        if (getCurrentPositionTicks() < -1190000) {
             elevatorTalon.set(ControlMode.PercentOutput, 0.0);
         } else {
             elevatorTalon.set(ControlMode.PercentOutput, 0.9);
@@ -93,7 +100,7 @@ public class Elevator extends Subsystem {
     }
     public void moveDownManual()
     {
-        if(currentPositionTicks > -1190000){
+        if(getCurrentPositionTicks() > -1190000){
             elevatorTalon.set(ControlMode.PercentOutput, 0.0);
         }else{
             elevatorTalon.set(ControlMode.PercentOutput, -0.9);
