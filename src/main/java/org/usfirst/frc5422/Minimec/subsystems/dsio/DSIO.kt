@@ -2,6 +2,8 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.Minimec.Robot
+import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
+import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
@@ -56,20 +58,13 @@ object DSIO {
         buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
         buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
 
+        buttonBoard.intakeOn.whileHeld(ExtendIntake())
+
+        buttonBoard.moveArm.whenPressed(ArmTo90())
+
+
         buttonBoard.wristSwitch.whenFlipped {
             println("WRIST SWITCH")
-        }
-
-        buttonBoard.intakeOn.whenFlipped {
-            println("INTAKE ON")
-            //Robot.intake.moveIntakeWheelsIn()
-            if (isFlipped) {
-                Robot.intake.wheelsOff()
-                isFlipped = false
-            } else {
-                Robot.intake.moveIntakeWheelsIn()
-                isFlipped = true
-            }
         }
 
         buttonBoard.elevatorRest.whenPressed{
@@ -93,9 +88,6 @@ object DSIO {
         }
 
 
-        buttonBoard.moveArm.whenPressed {
-            Robot.arm.moveDown()
-        }
     }
 
-    }
+}

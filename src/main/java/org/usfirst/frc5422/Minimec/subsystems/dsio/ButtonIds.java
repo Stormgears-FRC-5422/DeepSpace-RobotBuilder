@@ -8,16 +8,17 @@ public class ButtonIds {
     public static final int JOYSTICK_PORT_1 = 1;
     public static final int JOYSTICK_PORT_2 = 2;
 
-    //Button Board Port 1
+    //Button Board Port 2
     public static final int ELEVATOR_REST_BUTTON_ID = 5;
     public static final int ELEVATOR_LEVEL_GROUND_BUTTON_ID = 6;
     public static final int ELEVATOR_LEVEL_1_BUTTON_ID = 7;
     public static final int ELEVATOR_LEVEL_2_BUTTON_ID = 9;
     public static final int ELEVATOR_LEVEL_3_BUTTON_ID = 8;
 
-    public static final int WRIST_SWITCH_ID = 10; //On = false
-    public static final int INTAKE_SWITCH_ID = 11; //On = false
+    public static final int WRIST_SWITCH_ID = 10; //Off = false
+    public static final int INTAKE_SWITCH_ID = 11; //Off = false
 
+    // TODO - these can't be right. #1 is fixed pressed on port 2
     public static final int ARM_UP = 1;
     public static final int ARM_DOWN = 2;
     public static final int ARM_90 = 3;

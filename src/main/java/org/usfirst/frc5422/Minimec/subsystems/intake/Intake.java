@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Intake extends Subsystem {
     public static Intake instance;
+
     public static Intake getInstance()
     {
         if(instance == null) instance = getInstance();
@@ -22,10 +23,7 @@ public class Intake extends Subsystem {
 
     public void moveIntakeWheelsIn()
     {
-
-        System.out.print("tanay chief lord");
         intake.set(ControlMode.PercentOutput, 1);
-      //  System.out.println(intake.getMotorOutputPercent());
     }
 
     public void moveIntakeWheelsOut()

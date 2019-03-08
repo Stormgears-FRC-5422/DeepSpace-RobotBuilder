@@ -66,7 +66,7 @@ public class ValveControl extends Subsystem {
 
     @Override
     public void periodic() {
-        manageVac();
+        //manageVac();
     }
 
 
