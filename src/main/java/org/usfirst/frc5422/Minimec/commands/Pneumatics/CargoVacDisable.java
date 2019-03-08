@@ -2,7 +2,6 @@ package org.usfirst.frc5422.Minimec.commands.Pneumatics;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.subsystems.pneumatics.*;
 
 /**
  *
@@ -27,9 +26,8 @@ public class CargoVacDisable extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        System.out.println("Ball Unsuck");
-        Robot.valveControl.vacStop();
-        Robot.valveControl.ballStop();
+        System.out.println("Cargo Unsuck");
+        Robot.valveControl.cargoStop();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -41,15 +39,14 @@ public class CargoVacDisable extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.valveControl.ballStop();
+        Robot.valveControl.cargoStop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        Robot.valveControl.ballStop();
-        Robot.valveControl.vacStop();
+        Robot.valveControl.cargoStop();
     }
 }
 

@@ -25,7 +25,6 @@ public class HatchVacDisable extends Command {
     protected void execute() {
         System.out.println("Hatch Unsuck");
         Robot.valveControl.hatchStop();
-        Robot.valveControl.vacStop();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -45,7 +44,6 @@ public class HatchVacDisable extends Command {
     @Override
     protected void interrupted() {
         Robot.valveControl.hatchStop();
-        Robot.valveControl.vacStop();
     }
 }
 

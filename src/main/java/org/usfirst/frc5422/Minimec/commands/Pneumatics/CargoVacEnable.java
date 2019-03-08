@@ -2,7 +2,6 @@ package org.usfirst.frc5422.Minimec.commands.Pneumatics;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.subsystems.pneumatics.*;
 
 /**
  *
@@ -11,11 +10,7 @@ public class CargoVacEnable extends Command {
 
 
     public CargoVacEnable() {
-
-
         requires(Robot.valveControl);
-
-
     }
 
     // Called just before this Command runs the first time
@@ -28,13 +23,11 @@ public class CargoVacEnable extends Command {
     @Override
     protected void execute() {
         if(!Robot.valveControl.getBallProxSensor() ){
-            System.out.println("Ball Suck");
-            Robot.valveControl.ballStart();
-            Robot.valveControl.vacStart();
+            System.out.println("Cargo Suck");
+            Robot.valveControl.cargoStart();
         }
         else {
-            Robot.valveControl.vacStop();
-            Robot.valveControl.ballStop();
+            Robot.valveControl.cargoStop();
         }
     }
 
@@ -47,15 +40,14 @@ public class CargoVacEnable extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.valveControl.ballStop();
+        Robot.valveControl.cargoStop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        Robot.valveControl.ballStop();
-        Robot.valveControl.vacStop();
+        Robot.valveControl.cargoStop();
     }
 }
 
