@@ -64,7 +64,8 @@ public class JoyDrive extends Command {
         // Execute drive subsystem command from joystick input
         //double rate = 0.5 + (joy.getRawAxis(3) * .5);
         double x = joy.getRawAxis(0) * -1;
-        double y = joy.getRawAxis(3) - joy.getRawAxis(2) * -1;
+//        double y = joy.getRawAxis(3) - joy.getRawAxis(2) * -1;
+        double y = joy.getRawAxis(3) - joy.getRawAxis(2) ;
         double z = joy.getRawAxis(4);
         if (Math.abs(x) < null_size) x = 0;
         if (Math.abs(y) < null_size) y = 0;

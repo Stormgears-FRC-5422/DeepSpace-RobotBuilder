@@ -54,13 +54,13 @@ object DSIO {
         // Note that these are creating and passing new Command objects, not calling functions
 
         buttonBoard.moveBackjack.whenPressed(MoveJack())
-
+// To disable compressor comment out
         buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
         buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
         buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
         buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
-
         buttonBoard.intakeOn.whileHeld(ExtendIntake())
+// to disable
 
         buttonBoard.moveArm.whenPressed(ArmTo90())
 
