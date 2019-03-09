@@ -187,7 +187,8 @@ public class DeepSpaceMecanumDrive extends Subsystem {
         //for (int i = 0; i < talons.length; i++) {
         //System.out.println("Talon " + i + " Commanded: " + (encoderTicks));
         // motions[i].runMotionMagic((int) encoderTicks);
-        //}
+        //
+        // }
     }
 
     @Override
