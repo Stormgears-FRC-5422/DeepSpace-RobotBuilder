@@ -3,7 +3,9 @@ package org.usfirst.frc5422.Minimec.subsystems.pneumatics;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.DisableAllPneumatics;
+import org.usfirst.frc5422.utils.StormProp;
 
 public class ValveControl extends Subsystem {
 
@@ -15,43 +17,52 @@ public class ValveControl extends Subsystem {
     private DigitalInput ballProxSensor;
     private DigitalInput hatchProxSensor;
 
+    private DigitalInput vacPressureSensorHigh;  // Most vacuum - run to this limit
+    private DigitalInput vacPressureSensorLow;   // low vacuum - turn on when we get here
+
     private AnalogInput vacPressureSensor;
+
 
     private boolean cargoOpen;
     private boolean hatchOpen;
 
     public ValveControl() {
-        cargoValve = new Solenoid(11, 1);
+        int mod = StormProp.getInt("CompressorModuleId");
+
+        cargoValve = new Solenoid(mod, StormProp.getInt("cargoValve"));
         cargoValve.set(false);
         addChild("BALL_VALVE", cargoValve);
 
 
-        hatchValve = new Solenoid(11, 0);
+        hatchValve = new Solenoid(mod , StormProp.getInt("hatchValve"));
         hatchValve.set(false);
         addChild("HATCH_VALVE",hatchValve);
 
 
-        armValve = new Solenoid(11, 3);
+        armValve = new Solenoid(mod , StormProp.getInt("armValve"));
         armValve.set(false);
         addChild("ARM_VALVE",armValve);
 
 
-        vacValve = new Solenoid(11, 4);
+        vacValve = new Solenoid(mod , StormProp.getInt("vacValve"));
         vacValve.set(false);
         addChild("VAC_VALVE",vacValve);
 
         // TODO: Magic Numbers
 
-        ballProxSensor = new DigitalInput(5);  // TODO
+        ballProxSensor = new DigitalInput(StormProp.getInt("ballProxSensorDIO" ));
         addChild("Ball Proximity Sensor", ballProxSensor);
 
-        hatchProxSensor = new DigitalInput(6);  // TODO
+        hatchProxSensor = new DigitalInput(StormProp.getInt("hatchProxSensorDIO"));
         addChild("Hatch Proximity Sensor", hatchProxSensor);
 
-        vacPressureSensor = new AnalogInput(0);  // TODO
+        vacPressureSensorHigh = new DigitalInput(StormProp.getInt("vacPressureSensorHighDIO"));  // Most vacuum - run to this limit
+        vacPressureSensorLow = new DigitalInput(StormProp.getInt("vacPressureSensorLowDIO")); // low vacuum - turn on when we get here
+
+        vacPressureSensor = new AnalogInput(StormProp.getInt("vacPressureSensor"));
         addChild("Pressure Sensor", vacPressureSensor);
 
-        // 1 - 5 V and 0 to -14
+        // 1 - 5 V maps to 0 to -14 psi
 
         cargoOpen = false;
         hatchOpen = false;
@@ -120,6 +131,7 @@ public class ValveControl extends Subsystem {
         System.out.println("Sense Hatch?: " + ! hatchProxSensor.get());
         return hatchProxSensor.get();
     }
+
     public boolean getBallProxSensor() {
         System.out.println("Sense Ball?: " + ! ballProxSensor.get());
         return ballProxSensor.get();
@@ -132,7 +144,7 @@ public class ValveControl extends Subsystem {
     public void manageVac() {
         double upper = -5.5;
         double lower = -4;
-        if (!(vacPressureSensor.getVoltage() < toVolts(upper) && vacPressureSensor.getVoltage() > toVolts(lower))) {
+        if ( ! (vacPressureSensor.getVoltage() < toVolts(upper) && vacPressureSensor.getVoltage() > toVolts(lower))) {
             vacStart();
         }
         else {
