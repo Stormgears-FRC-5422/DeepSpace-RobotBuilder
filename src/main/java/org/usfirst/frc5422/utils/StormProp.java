@@ -12,7 +12,7 @@ import java.util.Set;
 public class StormProp {
     //TODO put config file in /home/lvuser
     // Maybe rename this file to something better
-    private static final String path = "/home/lvuser";
+    private static final String path = "/home/lvuser/deploy";
     private static final String name = "config.properties";
     private static final String backUP = "config_backup.properties";
     private static File configFile = new File(path, name);

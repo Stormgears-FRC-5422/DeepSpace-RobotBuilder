@@ -1,16 +1,27 @@
 package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
+import org.usfirst.frc5422.Minimec.Robot
+import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
+import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
+import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
+import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
+import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
+import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
+import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
+import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
+import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
+import org.usfirst.frc5422.Minimec.subsystems.pneumatics.Compression
 import org.usfirst.frc5422.utils.dsio.ButtonBoardSwitchedException
-import org.usfirst.frc5422.utils.dsio.IRawJoystick
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
-    val buttonBoard:IButtonBoard
-    var checkButton: Joystick
+    private val buttonBoard:IButtonBoard
+    private var checkButton: Joystick
+    private var isFlipped = false
 
     init{
-        checkButton = Joystick(2)
+        checkButton = Joystick(ButtonIds.JOYSTICK_PORT_2)
         val detector = JoystickDetector()
         detector.detect()
         buttonBoard = detector.buttonBoard
@@ -19,30 +30,43 @@ object DSIO {
         else throw ButtonBoardSwitchedException("Button board controllers are switched.")
     }
 
+    public fun getJoystick() : Joystick {
+        return buttonBoard.drivingJoystick
+    }
+
+    public fun getJoystick1() : Joystick {
+        return buttonBoard.joy1
+    }
+
+    public fun getJoystick2() : Joystick {
+        return buttonBoard.joy2
+    }
+
+    public fun getBackJackLevel() : Int {
+        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
+        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+        return 0
+    }
+
     private fun setupControls()
     {
-        buttonBoard.backJackLevel2.whenPressed{
-            println("BACKJACK LEVEL 2")
-        }
+        System.out.println("setupControls()");
+        // Note that these are creating and passing new Command objects, not calling functions
 
-        buttonBoard.backJackLevel3.whenPressed{
-            println("BACKJACK LEVEL 3")
-        }
+        buttonBoard.moveBackjack.whenPressed(MoveJack())
+
+        buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
+        buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
+        buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
+        buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
+
+        buttonBoard.intakeOn.whileHeld(ExtendIntake())
+
+        buttonBoard.moveArm.whenPressed(ArmTo90())
+
 
         buttonBoard.wristSwitch.whenFlipped {
             println("WRIST SWITCH")
-        }
-
-        buttonBoard.intakeOn.whenFlipped {
-            println("INTAKE ON")
-        }
-
-        buttonBoard.hatchIntake.whenPressed{
-            println("HATCH INTAKE")
-        }
-
-        buttonBoard.hatchRelease.whenPressed{
-            println("HATCH RELEASE")
         }
 
         buttonBoard.elevatorRest.whenPressed{
@@ -65,13 +89,12 @@ object DSIO {
             println("ELEVATOR LEVEL THREE")
         }
 
-        buttonBoard.cargoIntake.whenPressed{
-            println("CARGO INTAKE")
-        }
+        buttonBoard.armRest.whenPressed(ArmToRest())
 
-        buttonBoard.cargoRelease.whenPressed{
-            println("CARGO RELEASE")
-        }
-    }
+        buttonBoard.arm90.whenPressed(ArmTo90())
+
+        buttonBoard.arm135.whenPressed(ArmTo135())
 
     }
+
+}

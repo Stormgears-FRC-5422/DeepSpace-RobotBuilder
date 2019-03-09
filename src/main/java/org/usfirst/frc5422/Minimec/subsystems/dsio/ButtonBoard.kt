@@ -4,7 +4,13 @@ import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.utils.dsio.*
 import java.awt.Button
 
-class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoystick: LogitechJoystick):IButtonBoard {
+class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoystick: Joystick):IButtonBoard {
+    override val drivingJoystick = actualJoystick
+
+    override val joy1 = joy1
+
+    override val joy2 = joy2
+
     override val elevatorSwitch = SwitchControl(joy1, ButtonIds.ELEVATOR_FAILSAFE_BUTTON_ID)
 
     override val backJackLevel2 = EnhancedButton(joy1, ButtonIds.BACKJACK_LEVEL_2)
@@ -33,10 +39,20 @@ class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoysti
 
     override val cargoRelease = EnhancedButton(joy1, ButtonIds.CARGO_STATUS_RELEASE_BUTTON_ID)
 
+    override val moveBackjack = EnhancedButton(joy1, ButtonIds.MOVE_BACKJACK)
+
+    override val moveArm = EnhancedButton(joy1, ButtonIds.MOVE_ARM)
+
+    override val armRest = EnhancedButton(joy1, ButtonIds.ARM_REST_BUTTON_ID)
+
+    override val arm90 = EnhancedButton(joy1, ButtonIds.ARM_MOVE_90_BUTTON_ID)
+
+    override val arm135 = EnhancedButton(joy1, ButtonIds.ARM_MOVE_TO_135_BUTTON_ID)
+
     companion object {
         private var instance: ButtonBoard? = null
         @JvmStatic
-        fun getInstance(joy1: Joystick, joy2: Joystick, actualJoystick: LogitechJoystick): IButtonBoard {
+        fun getInstance(joy1: Joystick, joy2: Joystick, actualJoystick: Joystick): IButtonBoard {
             if (instance == null) {
 
                 instance = ButtonBoard(joy1, joy2, actualJoystick)

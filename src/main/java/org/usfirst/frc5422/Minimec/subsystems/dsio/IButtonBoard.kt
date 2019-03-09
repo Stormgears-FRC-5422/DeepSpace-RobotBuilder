@@ -1,9 +1,15 @@
 package org.usfirst.frc5422.Minimec.subsystems.dsio
 
+import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.utils.dsio.IButton
 import org.usfirst.frc5422.utils.dsio.ISwitch
+import org.usfirst.frc5422.utils.dsio.IRawJoystick
 
 interface IButtonBoard {
+    val drivingJoystick: Joystick
+    val joy1: Joystick
+    val joy2: Joystick
+
     val elevatorSwitch: ISwitch
 
     val backJackLevel2: IButton
@@ -31,4 +37,15 @@ interface IButtonBoard {
     val cargoIntake: IButton
 
     val cargoRelease: IButton
+
+    val moveBackjack: IButton
+
+    val moveArm: IButton
+
+    val armRest: IButton
+
+    val arm90: IButton
+
+    val arm135: IButton
+
 }
