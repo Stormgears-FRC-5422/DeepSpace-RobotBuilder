@@ -63,7 +63,7 @@ public class JoyDrive extends Command {
         double null_size = StormProp.getNumber("driveDeadZone");
         // Execute drive subsystem command from joystick input
         //double rate = 0.5 + (joy.getRawAxis(3) * .5);
-        double x = joy.getRawAxis(0) * -1;
+        double x = joy.getRawAxis(0);
 //        double y = joy.getRawAxis(3) - joy.getRawAxis(2) * -1;
         double y = joy.getRawAxis(3) - joy.getRawAxis(2) ;
         double z = joy.getRawAxis(4);

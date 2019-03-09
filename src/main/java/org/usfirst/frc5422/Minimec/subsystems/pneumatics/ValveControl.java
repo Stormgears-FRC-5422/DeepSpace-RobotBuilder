@@ -77,7 +77,12 @@ public class ValveControl extends Subsystem {
 
     @Override
     public void periodic() {
-        //manageVac();
+//        if (Robot.oi.getJoystick1().getRawButton(3))
+//            vacStop();
+//        else
+//            manageVac();
+
+        manageVac();
     }
 
 
