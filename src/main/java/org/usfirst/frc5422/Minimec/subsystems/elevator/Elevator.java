@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.utils.StormProp;
 
 public class Elevator extends Subsystem {
@@ -111,10 +112,21 @@ public class Elevator extends Subsystem {
         }
     }
 
+    public void moveElevatorJoystick()
+    {
+        if(getElevatorJoystick() == 1) moveUpManual();
+        else if(getElevatorJoystick() == -1) moveDownManual();
+    }
+
     private int toTicks(double inches)
     {
         elevatorTalon.set(ControlMode.Position, -1000000);
         return 0;
+    }
+
+    private double getElevatorJoystick()
+    {
+        return -1 * Robot.oi.getJoystick1().getRawAxis(1);
     }
 
     @Override

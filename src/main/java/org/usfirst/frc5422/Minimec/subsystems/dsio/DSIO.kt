@@ -91,20 +91,14 @@ object DSIO {
 
         buttonBoard.armRest.whenPressed{
             println("ARM REST")
-            Robot.arm.moveToRest()
-            Robot.arm.movePivotUp()
+            ArmToRest.getInstance().start()
         }
 
-        buttonBoard.arm90.whenPressed{
-            println("ARM 90")
-            Robot.arm.moveTo90()
-            Robot.arm.movePivotUp()
-        }
+        buttonBoard.arm90.whenPressed(ArmTo90())
 
         buttonBoard.arm135.whenPressed{
             println("ARM 135")
-            Robot.arm.moveTo135()
-            Robot.arm.movePivotUp()
+            ArmTo135.getInstance().start();
         }
 
     }
