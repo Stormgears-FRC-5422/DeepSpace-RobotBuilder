@@ -137,17 +137,24 @@ public class ValveControl extends Subsystem {
         return ballProxSensor.get();
     }
 
-    public double toVolts(double pressure) {
-        return (pressure / -3.5) -3.5;
+    // 1 V --> 5 V  means 0 kPa to 100 kPa (really -100, let's keep the signs out of it)
+    private double voltsToKPa(double volts) {
+        // Upper limit on sensor is -101.3 kPa
+        // 101.3 / 4.0 = 25.3
+
+        // These aren't magic numbers - let's leave them as constants.
+        // this is debatable, but...
+        return ( 25.3 *  (volts - 1.0));
     }
 
     public void manageVac() {
-        double upper = -5.5;
-        double lower = -4;
-        if ( ! (vacPressureSensor.getVoltage() < toVolts(upper) && vacPressureSensor.getVoltage() > toVolts(lower))) {
+        double highVacuum = StormProp.getNumber("highVacuumKPa");
+        double lowVacuum = StormProp.getNumber("lowVacuumKPa");
+        double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
+
+        if ( currentVac < lowVacuum) {
             vacStart();
-        }
-        else {
+        } else if (currentVac > highVacuum) {
             vacStop();
         }
     }
