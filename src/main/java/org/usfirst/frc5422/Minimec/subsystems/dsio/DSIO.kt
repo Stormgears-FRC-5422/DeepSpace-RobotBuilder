@@ -89,17 +89,11 @@ object DSIO {
             println("ELEVATOR LEVEL THREE")
         }
 
-        buttonBoard.armRest.whenPressed{
-            println("ARM REST")
-            ArmToRest.getInstance().start()
-        }
+        buttonBoard.armRest.whenPressed(ArmToRest())
 
         buttonBoard.arm90.whenPressed(ArmTo90())
 
-        buttonBoard.arm135.whenPressed{
-            println("ARM 135")
-            ArmTo135.getInstance().start();
-        }
+        buttonBoard.arm135.whenPressed(ArmTo135())
 
     }
 
