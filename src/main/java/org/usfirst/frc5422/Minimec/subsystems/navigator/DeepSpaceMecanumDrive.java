@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc5422.Minimec.commands.Drive.DefaultDrive;
 import org.usfirst.frc5422.Minimec.subsystems.navigator.motionprofile.MotionMagic;
 import org.usfirst.frc5422.utils.StormProp;
 
@@ -191,6 +192,6 @@ public class DeepSpaceMecanumDrive extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-
+        new DefaultDrive();
     }
 }

@@ -19,6 +19,11 @@ import org.usfirst.frc5422.Minimec.Robot;
  *
  */
 public class MoveJack extends Command {
+    private static MoveJack instance;
+    public static MoveJack getInstance() {
+        if(instance == null) instance = new MoveJack();
+        return instance;
+    }
 
     public MoveJack() {
         requires(Robot.backjack);
