@@ -23,9 +23,7 @@ public class DefaultDrive extends Command {
     {
         requires(Robot.mecanum);
         oi = Robot.oi;
-        if(StormProp.getInt("xboxController") == 0) xboxController = true;
-        else if(StormProp.getInt("xboxController") == 1) xboxController = false;
-        else System.out.println("CHECK CONFIG FILE FOR XBOX CONTROLLER. EXPECTED: 0 or 1");
+        xboxController = StormProp.getBoolean("xboxController");
     }
 
     @Override
