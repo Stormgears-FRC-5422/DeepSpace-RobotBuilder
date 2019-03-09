@@ -2,12 +2,13 @@ package org.usfirst.frc5422.Minimec.subsystems.navigator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.navigator.motionprofile.MotionMagic;
 import org.usfirst.frc5422.utils.StormProp;
 
-public class DeepSpaceMecanumDrive {
+public class DeepSpaceMecanumDrive extends Subsystem {
     private static DeepSpaceMecanumDrive DriveInstance = new DeepSpaceMecanumDrive();
     private double deadZone;
     private TalonSRX[] talons;
@@ -186,5 +187,10 @@ public class DeepSpaceMecanumDrive {
         //System.out.println("Talon " + i + " Commanded: " + (encoderTicks));
         // motions[i].runMotionMagic((int) encoderTicks);
         //}
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+
     }
 }
