@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import java.time.Year;
 
 import org.usfirst.frc5422.Minimec.Robot;
+import org.usfirst.frc5422.utils.StormProp;
 
 /**
  *
@@ -49,18 +50,22 @@ public class JoyDrive extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        joy = Robot.oi.getJoystick1();
+        joy = Robot.oi.getJoystick();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double null_size = .1;
+        //driveCartesian(oi.getJoystick().getRawAxis(0)*-1,
+        // (oi.getJoystick().getRawAxis(3)-oi.getJoystick().getRawAxis(2))*-1,
+        // oi.getJoystick().getRawAxis(4));
+
+        double null_size = StormProp.getNumber("driveDeadZone");
         // Execute drive subsystem command from joystick input
-        double rate = 0.5 + (joy.getRawAxis(3) * .5);
-        double x = rate * joy.getX();
-        double y = rate * -1 * (joy.getY());
-        double z = rate * (joy.getZ());
+        //double rate = 0.5 + (joy.getRawAxis(3) * .5);
+        double x = joy.getRawAxis(0) * -1;
+        double y = joy.getRawAxis(3) - joy.getRawAxis(2) * -1;
+        double z = joy.getRawAxis(4);
         if (Math.abs(x) < null_size) x = 0;
         if (Math.abs(y) < null_size) y = 0;
         if (Math.abs(z) < null_size) z = 0;
