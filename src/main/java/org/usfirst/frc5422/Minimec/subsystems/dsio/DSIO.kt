@@ -48,6 +48,10 @@ object DSIO {
         return 0
     }
 
+    public fun getVenturiOverride(): Boolean {
+        return getJoystick().getRawButton(1)
+    }
+
     private fun setupControls()
     {
         System.out.println("setupControls()");

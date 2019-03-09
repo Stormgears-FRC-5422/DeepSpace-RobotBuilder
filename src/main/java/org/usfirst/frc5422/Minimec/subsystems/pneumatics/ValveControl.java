@@ -159,7 +159,7 @@ public class ValveControl extends Subsystem {
 
         if ( currentVac < lowVacuum) {
             vacStart();
-        } else if (currentVac > highVacuum) {
+        } else if (currentVac > highVacuum || Robot.oi.getVenturiOverride()) {
             vacStop();
         }
     }
