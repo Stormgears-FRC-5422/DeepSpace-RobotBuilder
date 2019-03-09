@@ -77,7 +77,7 @@ public class DeepSpaceMecanumDrive extends Subsystem {
 
         for (int i = 0; i < speeds.length; i++) {
             SmartDashboard.putNumber("Speed: " + i, speeds[i]);
-            talons[i].set(ControlMode.PercentOutput, speeds[i] * 0.75);
+            talons[i].set(ControlMode.PercentOutput, speeds[i] * 0.9);
         }
     }
     public void strafeTo(double distX, double distY){
@@ -193,6 +193,6 @@ public class DeepSpaceMecanumDrive extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        new DefaultDrive();
+        setDefaultCommand(new DefaultDrive());
     }
 }
