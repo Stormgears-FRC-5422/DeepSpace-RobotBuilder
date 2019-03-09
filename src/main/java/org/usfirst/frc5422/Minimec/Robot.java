@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
         System.out.println("robotInit()");
 //        pixyVision = new PixyVision("vision"); // FIXME - read table name from config file?
         drive = new Drive();
-        stormNetSubsystem = new StormNetSubsystem();
+        //stormNetSubsystem = new StormNetSubsystem();
         arm = new Arm();
         backjack = new Backjack();
         intake = new Intake();
@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
         //(which it very likely will), subsystems are not guaranteed to be
         // constructed yet. Thus, their requires() statements may grab null
         // pointers. Bad news. Don't move it.
-        oi = new OI();
+       oi = new OI();
         onInitCheck();
 
         // Add commands to Autonomous Sendable Chooser
