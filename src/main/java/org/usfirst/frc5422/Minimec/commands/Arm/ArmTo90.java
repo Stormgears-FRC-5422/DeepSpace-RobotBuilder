@@ -57,7 +57,7 @@ public class ArmTo90 extends Command {
     protected void execute() {
 
         Robot.arm.moveTo90();
-        Robot.arm.movePivot();
+        Robot.arm.movePivotUp();
     }
 
     // Make this return true when this Command no longer needs to run execute()

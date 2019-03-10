@@ -157,11 +157,12 @@ public class ValveControl extends Subsystem {
         double lowVacuum = StormProp.getNumber("lowVacuumKPa");
         double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
 
-        if ( currentVac < lowVacuum) {
-            vacStart();
-        } else if (currentVac > highVacuum || Robot.oi.getVenturiOverride()) {
+        if (Robot.oi.getVenturiOverride() || currentVac > highVacuum) {
             vacStop();
+        } else if ( currentVac < lowVacuum ) {
+            vacStart();
         }
+
     }
 }
 
