@@ -16,7 +16,7 @@ public class SelectedDockDrive extends Command {
 
     protected void initialize() {
         joy = Robot.oi.getJoystick1();
-        Robot.pixyVision.enable(PixyVision.VisionMode.SIDE_CARGO_DOCK);
+        Robot.pixyVision.enable(PixyVision.VisionMode.DOCK);
     }
 
     // Called repeatedly when this Command is scheduled to run
