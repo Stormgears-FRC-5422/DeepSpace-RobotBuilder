@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.Minimec.Robot;
+import org.usfirst.frc5422.Minimec.commands.elevator.ElevatorOverride;
 import org.usfirst.frc5422.utils.StormProp;
 
 public class Elevator extends Subsystem {
@@ -23,6 +24,7 @@ public class Elevator extends Subsystem {
     private final int REST_POSITION = 6000;
     private final int MAX_POSITION = -2830711;
     private final int IDEAL_MAX = MAX_POSITION-200000;
+
 
     private TalonSRX elevatorTalon;
     private double getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
@@ -97,25 +99,16 @@ public class Elevator extends Subsystem {
 
     public void moveUpManual()
     {
-        if (getCurrentPositionTicks() < -1190000) {
-            elevatorTalon.set(ControlMode.PercentOutput, 0.0);
-        } else {
-            elevatorTalon.set(ControlMode.PercentOutput, 0.9);
-        }
+        elevatorTalon.set(ControlMode.Velocity, 200);
     }
     public void moveDownManual()
     {
-        if(getCurrentPositionTicks() > -1190000){
-            elevatorTalon.set(ControlMode.PercentOutput, 0.0);
-        }else{
-            elevatorTalon.set(ControlMode.PercentOutput, -0.9);
-        }
+        elevatorTalon.set(ControlMode.Velocity, -200);
     }
 
-    public void moveElevatorJoystick()
+    public void stopElevator()
     {
-        if(getElevatorJoystick() == 1) moveUpManual();
-        else if(getElevatorJoystick() == -1) moveDownManual();
+        elevatorTalon.set(ControlMode.Velocity, 0);
     }
 
     private int toTicks(double inches)
@@ -124,14 +117,10 @@ public class Elevator extends Subsystem {
         return 0;
     }
 
-    private double getElevatorJoystick()
-    {
-        return -1 * Robot.oi.getJoystick1().getRawAxis(1);
-    }
 
     @Override
     protected void initDefaultCommand() {
-
+        setDefaultCommand(new ElevatorOverride());
     }
 
 }
