@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc5422.utils.StormProp;
 
 import javax.naming.ldap.Control;
 
@@ -28,21 +29,15 @@ public class Arm extends Subsystem {
 
     private final int INITIALTICKS = 58;
 
-
-
-    private Timer timer;
-
     private TalonSRX armTalon;
     private TalonSRX pivotTalon;
 
     double curArmPos;
     double curPivPos;
 
-
     public Arm() {
-        timer = new Timer();
-        armTalon = new TalonSRX(30);  // SHOULDER   TODO
-        pivotTalon = new TalonSRX(5);  // WRIST TODO
+        armTalon = new TalonSRX(StormProp.getInt("armTalon"));  // SHOULDER   TODO
+        pivotTalon = new TalonSRX(StormProp.getInt("wristTalon"));  // WRIST TODO
 
         curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
         curPivPos = pivotTalon.getSensorCollection().getQuadraturePosition();
@@ -66,8 +61,6 @@ public class Arm extends Subsystem {
         armTalon.configMotionCruiseVelocity(2500);
         armTalon.set(ControlMode.MotionMagic, 1536 * 2.5);
         curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
-
-
     }
 
     public void moveTo90() {
@@ -76,8 +69,6 @@ public class Arm extends Subsystem {
         armTalon.configMotionCruiseVelocity(2500);
         armTalon.set(ControlMode.MotionMagic, 1024 * 2.5);
         curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
-
-
     }
 
 
@@ -87,8 +78,6 @@ public class Arm extends Subsystem {
         armTalon.configMotionCruiseVelocity(2500);
         armTalon.set(ControlMode.MotionMagic, (1024 * 2.5)/2);
         curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
-
-
     }
 
     public void movePivot() {
@@ -101,12 +90,8 @@ public class Arm extends Subsystem {
 
 
     public void moveDown() {
-
         moveTo135();
-
         curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
-
-
     }
 
     public void stop(){
@@ -154,15 +139,11 @@ public class Arm extends Subsystem {
                 armTalon.set(ControlMode.Position, ticks);
                 pivotTalon.set(ControlMode.Position, -(1024*2.5));
 
-            }else {
+            } else {
                 armTalon.set(ControlMode.Position, ticks);
                 pivotTalon.set(ControlMode.Position, ticks);
             }
-
-
-
         }
-
     }
 
     public void initDefaultCommand(){
