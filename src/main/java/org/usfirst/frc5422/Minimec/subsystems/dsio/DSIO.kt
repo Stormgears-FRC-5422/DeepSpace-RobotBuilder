@@ -48,19 +48,23 @@ object DSIO {
         return 0
     }
 
+    public fun getVenturiOverride(): Boolean {
+        return getJoystick().getRawButton(1)
+    }
+
     private fun setupControls()
     {
         System.out.println("setupControls()");
         // Note that these are creating and passing new Command objects, not calling functions
 
         buttonBoard.moveBackjack.whenPressed(MoveJack())
-
+// To disable compressor comment out
         buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
         buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
         buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
         buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
-
         buttonBoard.intakeOn.whileHeld(ExtendIntake())
+// to disable
 
         buttonBoard.moveArm.whenPressed(ArmTo90())
 
