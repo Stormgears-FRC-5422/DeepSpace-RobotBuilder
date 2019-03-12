@@ -59,17 +59,10 @@ public class JoyDrive extends Command {
         //driveCartesian(oi.getJoystick().getRawAxis(0)*-1,
         // (oi.getJoystick().getRawAxis(3)-oi.getJoystick().getRawAxis(2))*-1,
         // oi.getJoystick().getRawAxis(4));
-
-        double null_size = StormProp.getNumber("driveDeadZone");
-        // Execute drive subsystem command from joystick input
-        //double rate = 0.5 + (joy.getRawAxis(3) * .5);
-        double x = joy.getRawAxis(0);
-//        double y = joy.getRawAxis(3) - joy.getRawAxis(2) * -1;
-        double y = joy.getRawAxis(3) - joy.getRawAxis(2) ;
-        double z = joy.getRawAxis(4);
-        if (Math.abs(x) < null_size) x = 0;
-        if (Math.abs(y) < null_size) y = 0;
-        if (Math.abs(z) < null_size) z = 0;
+        double joy_vals[] = Robot.oi.getJoyXYZ(joy);
+        double x = joy_vals[0];
+        double y = joy_vals[1];
+        double z = joy_vals[2];
 
         Robot.drive.driveArcade(x,y,z);
         
