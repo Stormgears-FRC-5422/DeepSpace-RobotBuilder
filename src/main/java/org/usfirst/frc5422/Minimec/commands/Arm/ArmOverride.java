@@ -53,20 +53,21 @@ public class ArmOverride extends Command {
     @Override
     protected void initialize() {
         joy = Robot.oi.getJoystick1();
+        currentPosition = Robot.arm.INITIALTICKS;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
         if(getArmJoystick() == 1) {
-            Robot.arm.moveUpManual();
             //System.out.println("JOYSTICK UP");
-            currentPosition = Robot.arm.armTalon.getSensorCollection().getQuadraturePosition();
+            Robot.arm.moveUpManual();
+            currentPosition = Robot.arm.getCurrentPositionTicks();
         }
         else if(getArmJoystick() == -1) {
             //System.out.println("JOYSTICK DOWN");
             Robot.arm.moveDownManual();
-            currentPosition = Robot.arm.armTalon.getSensorCollection().getQuadraturePosition();
+            currentPosition = Robot.arm.getCurrentPositionTicks();
         }
         else if ((int)getArmJoystick() == 0){
             //System.out.println("JOYSTICK MIDDLE");
@@ -83,14 +84,14 @@ public class ArmOverride extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.arm.stop();
+        Robot.arm.hold(currentPosition);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        Robot.arm.stop();
+        Robot.arm.hold(currentPosition);
 
     }
 

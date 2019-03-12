@@ -21,19 +21,21 @@ public class Elevator extends Subsystem {
     private final double CLIMBER_RADIUS = 5.5;
     private final int TICKS_PER_INCH = 13000;
 
-    private final int REST_POSITION = 6000;
+    public final int REST_POSITION = 6000;
     private final int MAX_POSITION = -2830711;
     private final int IDEAL_MAX = MAX_POSITION-200000;
 
 
     private TalonSRX elevatorTalon;
-    private double getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
+    public double getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
 
     public Elevator()
     {
         //elevatorTalon = new TalonSRX((int) Double.parseDouble(StormProp.getString("elevatorTalonID")));
         elevatorTalon = new TalonSRX(18);  //TODO
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
+        elevatorTalon.configMotionAcceleration(750);
+        elevatorTalon.configMotionCruiseVelocity(2500);
         elevatorTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 10);
         elevatorTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 10);
     }
@@ -79,7 +81,7 @@ public class Elevator extends Subsystem {
             if(lowering)shouldStop = cpt > destination - 13000;
             else shouldStop = cpt < destination + 13000;
         }while (!shouldStop);
-        holdElevator();
+        //holdElevator();
     }
 
     //returns (theta, elevatorheight)
@@ -92,18 +94,18 @@ public class Elevator extends Subsystem {
         return values;
     }
 
-    public void holdElevator()
+    public void holdElevator(double position)
     {
-        elevatorTalon.set(ControlMode.Position, getCurrentPositionTicks());
+        elevatorTalon.set(ControlMode.MotionMagic, position);
     }
 
     public void moveUpManual()
     {
-        elevatorTalon.set(ControlMode.Velocity, 200);
+        elevatorTalon.set(ControlMode.MotionMagic, IDEAL_MAX);
     }
     public void moveDownManual()
     {
-        elevatorTalon.set(ControlMode.Velocity, -200);
+        elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
     }
 
     public void stopElevator()

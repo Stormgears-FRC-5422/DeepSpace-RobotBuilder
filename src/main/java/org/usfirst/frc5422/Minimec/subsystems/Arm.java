@@ -3,15 +3,11 @@ package org.usfirst.frc5422.Minimec.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc5422.Minimec.commands.Arm.ArmHold;
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmOverride;
 import org.usfirst.frc5422.utils.StormProp;
-
-import javax.naming.ldap.Control;
 
 public class Arm extends Subsystem {
     /*
@@ -28,15 +24,15 @@ public class Arm extends Subsystem {
     kD:
     kI: 5*10^-5
     kP: 0.25
-     */
 
-    private final int INITIALTICKS = 58;
-    private final int MAX_POSITION = 3700;
-    private final int MIN_POSITION = 50;
+     *///1850
+    public final int INITIALTICKS = 100;
+    private final int MAX_POSITION = 1550;
+    private final int MIN_POSITION = 100;
 
     private Timer timer;
 
-    public TalonSRX armTalon;
+    private TalonSRX armTalon;
     private TalonSRX pivotTalon;
 
     double curArmPos;
@@ -44,9 +40,13 @@ public class Arm extends Subsystem {
 
 
     public Arm() {
+
         timer = new Timer();
         armTalon = new TalonSRX(StormProp.getInt("armTalonId"));  // SHOULDER   TODO
         armTalon.setNeutralMode(NeutralMode.Brake);
+        //armTalon.configPeakCurrentLimit((StormProp.getInt("armCurrentLimit")));
+        armTalon.configMotionAcceleration(750);
+        armTalon.configMotionCruiseVelocity(2500);
         pivotTalon = new TalonSRX(StormProp.getInt("wristTalonId"));  // WRIST TODO
         pivotTalon.setNeutralMode(NeutralMode.Coast);
         curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
@@ -55,7 +55,7 @@ public class Arm extends Subsystem {
 
     public double getWristPosition(){return pivotTalon.getSensorCollection().getQuadraturePosition();}
     public double getWristVelocity(){return pivotTalon.getSensorCollection().getQuadratureVelocity();}
-    private double getCurrentPositionTicks(){
+    public double getCurrentPositionTicks(){
         return armTalon.getSensorCollection().getQuadraturePosition();
     }
 
@@ -110,7 +110,7 @@ public class Arm extends Subsystem {
     }
 
     public void stop(){
-        armTalon.set(ControlMode.PercentOutput, 0);
+        armTalon.set(ControlMode.Velocity, 0);
     }
 
     public void moveUp() {
@@ -163,22 +163,24 @@ public class Arm extends Subsystem {
 
     public void moveUpManual()
     {
+        armTalon.selectProfileSlot(1,0);
         System.out.println("moveUpManual()");
-        armTalon.set(ControlMode.Velocity, 2500);
+        armTalon.set(ControlMode.MotionMagic, INITIALTICKS);
         System.out.println(armTalon.getSensorCollection().getQuadratureVelocity());
     }
 
     public void moveDownManual()
     {
+        armTalon.selectProfileSlot(0,0);
         System.out.println("moveDownManual()");
-        armTalon.set(ControlMode.Velocity, -500);
+        armTalon.set(ControlMode.MotionMagic, MAX_POSITION);
         System.out.println(armTalon.getSensorCollection().getQuadratureVelocity());
     }
 
     public void hold(double position)
     {
-        //System.out.println("TRYING TO HOLD POSITION: " + position);
-        armTalon.set(ControlMode.Position, position);
+        System.out.println("TRYING TO HOLD POSITION: " + position);
+        armTalon.set(ControlMode.MotionMagic, position);
     }
 
     public void initDefaultCommand(){
