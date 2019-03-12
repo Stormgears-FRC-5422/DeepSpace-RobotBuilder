@@ -7,6 +7,7 @@ import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 
 public class ElevatorOverride extends Command {
     private Joystick joy;
+    private double currentPosition;
 
     public ElevatorOverride()
     {
@@ -17,25 +18,32 @@ public class ElevatorOverride extends Command {
     protected void initialize()
     {
         joy = Robot.oi.getJoystick1();
+        currentPosition = Robot.elevator.REST_POSITION;
     }
     @Override
     protected void execute()
     {
-        if(getElevatorJoystick() == 1) Robot.elevator.moveUpManual();
-        else if(getElevatorJoystick() == -1) Robot.elevator.moveDownManual();
-        else Robot.elevator.stopElevator();
+        if(getElevatorJoystick() == 1) {
+            currentPosition = Robot.elevator.getCurrentPositionTicks();
+            Robot.elevator.moveUpManual();
+        }
+        else if(getElevatorJoystick() == -1) {
+            currentPosition = Robot.elevator.getCurrentPositionTicks();
+            Robot.elevator.moveDownManual();
+        }
+        else Robot.elevator.holdElevator(currentPosition);
     }
 
     @Override
     protected void end()
     {
-        Robot.elevator.holdElevator();
+        Robot.elevator.holdElevator(currentPosition);
     }
 
     @Override
     protected void interrupted()
     {
-        Robot.elevator.holdElevator();
+        Robot.elevator.holdElevator(currentPosition);
     }
 
     @Override

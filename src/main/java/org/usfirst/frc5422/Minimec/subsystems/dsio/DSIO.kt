@@ -30,25 +30,25 @@ object DSIO {
         else throw ButtonBoardSwitchedException("Button board controllers are switched.")
     }
 
-    public fun getJoystick() : Joystick {
+    fun getJoystick() : Joystick {
         return buttonBoard.drivingJoystick
     }
 
-    public fun getJoystick1() : Joystick {
+    fun getJoystick1() : Joystick {
         return buttonBoard.joy1
     }
 
-    public fun getJoystick2() : Joystick {
+    fun getJoystick2() : Joystick {
         return buttonBoard.joy2
     }
 
-    public fun getBackJackLevel() : Int {
+    fun getBackJackLevel() : Int {
         if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
         if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
         return 0
     }
 
-    public fun getVenturiOverride(): Boolean {
+    fun getVenturiOverride(): Boolean {
         return getJoystick().getRawButton(1)
     }
 
