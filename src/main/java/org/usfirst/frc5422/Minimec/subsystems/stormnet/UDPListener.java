@@ -1,5 +1,7 @@
 package org.usfirst.frc5422.Minimec.subsystems.stormnet;
 
+import org.usfirst.frc5422.utils.StormProp;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.*;
@@ -12,27 +14,22 @@ import java.util.Map;
 // This same pattern could someday be used to implement an I2C listener or something else entirely
 // that's why I didn't subclass EthernetVoice. It is really solving a slightly different problem.
 public class UDPListener extends StormNetVoice implements Runnable{
-    private byte m_deviceAddress;
-    private String m_address;
-    private int m_port;
     private Map<String, Integer> m_commandMap;
     private byte[] m_receiveBuffer = new byte[0];
     private boolean m_stopNow = false;
+    private final Object m_lock = 0;
 
-    public UDPListener(String address, int port) {
-        m_address = address;
-        m_port = port;
-        m_deviceAddress = 0; // not really meaningful here
+    public UDPListener() {
     }
 
     @Override
     public String getDeviceString() {
-        return "UDP listener: " + m_port;
+        return "UDP listener";
     }
 
     public void setCommandLocations(Map<String, Integer> commandMap, int size) {
         m_commandMap = commandMap;
-        synchronized (m_receiveBuffer) {
+        synchronized (m_lock) {
             m_receiveBuffer = new byte[size];
         }
     }
@@ -53,7 +50,7 @@ public class UDPListener extends StormNetVoice implements Runnable{
 //        System.out.println(new String(new byte[]{dataToSend[0]}));// wow really?
 //        System.out.println(m_commandMap.toString());
         int offset = m_commandMap.get( new String(new byte[]{dataToSend[0]}) );  //todo error handling
-        synchronized (m_receiveBuffer) {
+        synchronized (m_lock) {
             System.arraycopy(m_receiveBuffer, offset, dataReceived,0, receiveSize);
         }
 //        System.out.println(Arrays.toString(dataReceived));
@@ -64,7 +61,6 @@ public class UDPListener extends StormNetVoice implements Runnable{
     // parts of the class
     public void run() {
         DatagramSocket socket;
-        InetAddress address;
         m_stopNow = false;
 
         System.out.println("Starting listener thread...");
@@ -72,8 +68,7 @@ public class UDPListener extends StormNetVoice implements Runnable{
 
         try {
             // Listening only - lets use a different port
-            socket = new DatagramSocket(5423);
-            address = InetAddress.getByName("10.54.22.2");
+            socket = new DatagramSocket(StormProp.getInt("udpListenerPort"));
             DatagramPacket packet = new DatagramPacket(localBuffer, localBuffer.length);
 
             while (!m_stopNow) {
@@ -81,7 +76,7 @@ public class UDPListener extends StormNetVoice implements Runnable{
                 //for debugging
                 //System.out.print("local buffer: ");
                 //System.out.println(Arrays.toString(localBuffer));
-                synchronized (m_receiveBuffer) {
+                synchronized (m_lock) {
                     System.arraycopy(packet.getData(), 0, m_receiveBuffer, 0, packet.getLength());
                 }
             }

@@ -180,7 +180,7 @@ public class Arm extends Subsystem {
     public void hold(double position)
     {
         System.out.println("TRYING TO HOLD POSITION: " + position);
-        armTalon.set(ControlMode.MotionMagic, position);
+        armTalon.set(ControlMode.Position, position);
     }
 
     public void initDefaultCommand(){
