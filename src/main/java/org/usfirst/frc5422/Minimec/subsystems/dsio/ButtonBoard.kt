@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.utils.dsio.*
 import java.awt.Button
 
-class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoystick: Joystick):IButtonBoard {
+class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoystick: Joystick) : IButtonBoard {
     override val drivingJoystick = actualJoystick
 
     override val joy1 = joy1
 
-    override val joy2 = joy2
+    override val joy2 = joy2 // jumper
 
     override val elevatorSwitch = SwitchControl(joy1, ButtonIds.ELEVATOR_FAILSAFE_BUTTON_ID)
 
@@ -48,6 +48,8 @@ class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoysti
     override val arm90 = EnhancedButton(joy1, ButtonIds.ARM_MOVE_90_BUTTON_ID)
 
     override val arm135 = EnhancedButton(joy1, ButtonIds.ARM_MOVE_TO_135_BUTTON_ID)
+
+    override val precisionButton = EnhancedButton(actualJoystick, 10)
 
     companion object {
         private var instance: ButtonBoard? = null
