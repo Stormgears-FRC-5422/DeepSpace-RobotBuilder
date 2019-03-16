@@ -17,17 +17,18 @@ import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
     private val buttonBoard:IButtonBoard
-    private var checkButton: Joystick
-    private var isFlipped = false
+//    private var checkButton: Joystick
+    var precision = false
 
     init{
-        checkButton = Joystick(ButtonIds.JOYSTICK_PORT_2)
+//        checkButton = Joystick(ButtonIds.JOYSTICK_PORT_2)
         val detector = JoystickDetector()
         detector.detect()
         buttonBoard = detector.buttonBoard
 
-        if(checkButton.getRawButton(1))setupControls()
-        else throw ButtonBoardSwitchedException("Button board controllers are switched.")
+//        if(checkButton.getRawButton(1))setupControls()
+//        else throw ButtonBoardSwitchedException("Button board controllers are switched.")
+        setupControls()
     }
 
     fun getJoystick() : Joystick {
@@ -46,6 +47,10 @@ object DSIO {
         if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
         if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
         return 0
+    }
+
+    fun getPrecisionDrive(): Boolean{
+        return precision
     }
 
     fun getVenturiOverride(): Boolean {
@@ -98,6 +103,10 @@ object DSIO {
         buttonBoard.arm90.whenPressed(ArmTo90())
 
         buttonBoard.arm135.whenPressed(ArmTo135())
+
+        buttonBoard.precisionButton.whenPressed {
+            precision = !precision
+        }
 
     }
 
