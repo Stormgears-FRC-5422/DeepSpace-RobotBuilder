@@ -161,7 +161,7 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic()
     {
-        SmartDashboard.putNumber("Current", elevator.getOutputCurrent());
+//        SmartDashboard.putNumber("Current", elevator.getOutputCurrent());
     }
 
     // We have a few buttons that are really switches. They might be in either position when the match starts
