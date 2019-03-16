@@ -39,8 +39,14 @@ object DSIO {
     }
 
     fun getBackJackLevel() : Int {
-        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
-        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+//        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
+//        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+
+        // Test code for bench testing backjack with Xbox controller
+        // 1 is forward, -1 is backwards
+        // 0 is stop
+        if (getJoystick().getRawButton(1)) return 1;
+        if (getJoystick().getRawButton(2)) return -1;
         return 0
     }
 
