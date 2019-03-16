@@ -22,7 +22,6 @@ import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive;
 
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.RunCompressor;
 import org.usfirst.frc5422.Minimec.subsystems.dsio.DSIO;
-import org.usfirst.frc5422.utils.dsio.TernarySwitch;
 import org.usfirst.frc5422.utils.StormProp;
 
 

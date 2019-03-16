@@ -17,17 +17,13 @@ import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
     private val buttonBoard:IButtonBoard
-    private var checkButton: Joystick
-    private var isFlipped = false
+    var precision = false
 
     init{
-        checkButton = Joystick(ButtonIds.JOYSTICK_PORT_2)
         val detector = JoystickDetector()
         detector.detect()
         buttonBoard = detector.buttonBoard
-
-        if(checkButton.getRawButton(1))setupControls()
-        else throw ButtonBoardSwitchedException("Button board controllers are switched.")
+        setupControls()
     }
 
     fun getJoystick() : Joystick {
@@ -48,6 +44,10 @@ object DSIO {
         return 0
     }
 
+    fun getPrecisionDrive(): Boolean{
+        return precision
+    }
+
     fun getVenturiOverride(): Boolean {
         return getJoystick().getRawButton(1)
     }
@@ -56,18 +56,27 @@ object DSIO {
     {
         System.out.println("setupControls()");
         // Note that these are creating and passing new Command objects, not calling functions
+        if (Robot.useBackjack) {
+            buttonBoard.moveBackjack.whenPressed(MoveJack());
+        }
 
-        buttonBoard.moveBackjack.whenPressed(MoveJack())
-// To disable compressor comment out
-        buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
-        buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
-        buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
-        buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
-        buttonBoard.intakeOn.whileHeld(ExtendIntake())
-// to disable
+        if (Robot.useCompressor) {
+            buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
+            buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
+            buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
+            buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
+        }
 
-        buttonBoard.moveArm.whenPressed(ArmTo90())
+        if (Robot.useIntake) {
+            buttonBoard.intakeOn.whileHeld(ExtendIntake())
+        }
 
+        if (Robot.useArm) {
+            buttonBoard.moveArm.whenPressed(ArmTo90())
+            buttonBoard.armRest.whenPressed(ArmToRest())
+            buttonBoard.arm90.whenPressed(ArmTo90())
+            buttonBoard.arm135.whenPressed(ArmTo135())
+        }
 
         buttonBoard.wristSwitch.whenFlipped {
             println("WRIST SWITCH")
@@ -93,11 +102,9 @@ object DSIO {
             println("ELEVATOR LEVEL THREE")
         }
 
-        buttonBoard.armRest.whenPressed(ArmToRest())
-
-        buttonBoard.arm90.whenPressed(ArmTo90())
-
-        buttonBoard.arm135.whenPressed(ArmTo135())
+        buttonBoard.precisionButton.whenPressed {
+            precision = !precision
+        }
 
     }
 

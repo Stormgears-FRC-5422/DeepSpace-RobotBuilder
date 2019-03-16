@@ -6,8 +6,7 @@ import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 
 public class ElevatorOverride extends Command {
-    private Joystick joy;
-    private double currentPosition;
+//    private Joystick joy;
 
     public ElevatorOverride()
     {
@@ -17,33 +16,34 @@ public class ElevatorOverride extends Command {
     @Override
     protected void initialize()
     {
-        joy = Robot.oi.getJoystick1();
-        currentPosition = Robot.elevator.REST_POSITION;
+//        joy = Robot.oi.getJoystick1();
     }
+
     @Override
     protected void execute()
     {
-        if(getElevatorJoystick() == 1) {
-            currentPosition = Robot.elevator.getCurrentPositionTicks();
-            Robot.elevator.moveUpManual();
-        }
-        else if(getElevatorJoystick() == -1) {
-            currentPosition = Robot.elevator.getCurrentPositionTicks();
-            Robot.elevator.moveDownManual();
-        }
-        else Robot.elevator.holdElevator(currentPosition);
+//        if(getElevatorJoystick() == 1) {
+//            currentPosition = Robot.elevator.getCurrentPositionTicks();
+//            Robot.elevator.moveUpManual();
+//        }
+//        else if(getElevatorJoystick() == -1) {
+//            currentPosition = Robot.elevator.getCurrentPositionTicks();
+//            Robot.elevator.moveDownManual();
+//        }
+//        else Robot.elevator.holdElevator(currentPosition);
+        Robot.elevator.holdElevator();
     }
 
     @Override
     protected void end()
     {
-        Robot.elevator.holdElevator(currentPosition);
+        //Robot.elevator.holdElevator(currentPosition);
     }
 
     @Override
     protected void interrupted()
     {
-        Robot.elevator.holdElevator(currentPosition);
+        Robot.elevator.holdElevator();
     }
 
     @Override
@@ -51,8 +51,9 @@ public class ElevatorOverride extends Command {
         return false;
     }
 
-    private double getElevatorJoystick()
-    {
-        return -1 * Robot.oi.getJoystick1().getRawAxis(1);
-    }
+//    private double getElevatorJoystick()
+//    {
+//        return -1 * Robot.oi.getJoystick1().getRawAxis(1);
+//    }
+
 }

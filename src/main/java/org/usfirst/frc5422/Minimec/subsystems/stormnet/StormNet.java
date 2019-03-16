@@ -18,18 +18,12 @@ public class StormNet {
 	private Map<String,Integer> m_commandMap;
 	private int m_commandSize = 36;
 
-	private String m_address;
-	private int m_port;
-
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
 	public static final int FRONT = 2;
 	public static final int BACK = 3;
 
-	private StormNet(String address, int port) {
-		m_address = address;
-		m_port = port;
-
+	private StormNet() {
 		// This MUST match what is coming from the StormNet board itself
 		m_commandMap = new HashMap<String,Integer>();
 		m_commandMap.put("P", 0); // ping
@@ -42,15 +36,15 @@ public class StormNet {
 		m_commandSize = 37; // count of bytes from above
 	}
 
-	public static void init(String address, int port) {
-		instance = new StormNet(address, port);
+	public static void init() {
+		instance = new StormNet();
 		instance.connect();
 	}
 
 	public static StormNet getInstance() {return instance;}
 
 	private void connect() {
-		m_listener = new UDPListener(m_address, m_port);
+		m_listener = new UDPListener();
 		m_listener.setCommandLocations(m_commandMap, m_commandSize);
 
 		// This might leak a thread if we end up here twice
@@ -85,15 +79,15 @@ public class StormNet {
 		return true;
 	}
 
-	public int getLidarDistance() {
-		return (int)m_lidar.getAverageDistance(1);
+	public double getLidarDistance() {
+		return m_lidar.getAverageDistance(2); // 2 => CENTIMETERS
 	}
 
-	public int getLidarOffset() {
-		return (int)m_lidar.getOffset(1);
+	public double getLidarOffset() {
+		return m_lidar.getOffset(2); // 2 => CENTIMETERS
 	}
 
-	public float getLineIROffset()  {return 10.0f * m_lineIR.getOffset(); } // cm to mm
+	public double getLineIROffset()  {return m_lineIR.getOffset(); } // cm 
 
 	public int getLineIRCount() {return m_lineIR.getSensorCount(); }
 }

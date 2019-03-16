@@ -66,8 +66,10 @@ public class LidarAlign extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
+        double offset = Robot.stormNetSubsystem.getLidarOffset();
+        SmartDashboard.putNumber("Lidar Offset (cm)",offset);
 
-        return(1.0 * Robot.stormNetSubsystem.getLidarOffset());
+        return(offset);
     }
 
     public double get_pid_output() {

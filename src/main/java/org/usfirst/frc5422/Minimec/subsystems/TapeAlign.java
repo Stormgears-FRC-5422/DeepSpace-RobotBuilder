@@ -66,8 +66,10 @@ public class TapeAlign extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        
-        return(Robot.stormNetSubsystem.getLineIROffset());
+        double offset = Robot.stormNetSubsystem.getLineIROffset();
+        SmartDashboard.putNumber("TapeOffset (cm)",offset);
+
+        return(offset);
     }
 
     public double get_pid_output() {

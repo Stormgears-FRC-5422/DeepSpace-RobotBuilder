@@ -17,14 +17,15 @@ import java.time.Year;
 
 import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.utils.StormProp;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
 public class DockCloseDrive extends Command {
     private static DockCloseDrive instance;
-    private static int m_distance_scale_factor = 30;  // Used determine at what distance from target to start de-rating joystick input
-    private static int m_target_distance = 10;
+    private static double m_distance_scale_factor = 30;  // Used determine at what distance from target to start de-rating joystick input
+    private static double m_target_distance = 10;
     private static double m_forward_speed_limit = .35;
     public static DockCloseDrive getInstance() {
         if(instance == null) instance = new DockCloseDrive();
@@ -81,7 +82,9 @@ public class DockCloseDrive extends Command {
             if (z > 1) { z = 1; }
             if (z < -1) { z= -1; }
 
-            int distance = Robot.stormNetSubsystem.getLidarDistance();
+            double distance = Robot.stormNetSubsystem.getLidarDistance();
+            SmartDashboard.putNumber("Lidar distance (cm)",distance);
+
             if (distance < m_distance_scale_factor) {
                 // Modulate driver forward input
                 if (y > 0 && distance < (m_target_distance + m_distance_scale_factor)) {
