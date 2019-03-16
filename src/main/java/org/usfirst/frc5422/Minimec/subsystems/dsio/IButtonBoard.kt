@@ -48,4 +48,5 @@ interface IButtonBoard {
 
     val arm135: IButton
 
+    val precisionButton: IButton
 }
