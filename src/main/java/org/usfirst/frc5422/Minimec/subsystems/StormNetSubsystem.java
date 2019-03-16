@@ -11,6 +11,7 @@
 package org.usfirst.frc5422.Minimec.subsystems;
 
 
+import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -76,6 +77,19 @@ public class StormNetSubsystem extends Subsystem {
         System.out.println("In StormNetSubsystem default command");
         setDefaultCommand(new StormConnect("localhost", 5422));
     }
+
+    public int getLidarDistance() {
+		return m_stormNet.getLidarDistance();
+	}
+
+	public int getLidarOffset() {
+		return m_stormNet.getLidarOffset();
+	}
+
+	public float getLineIROffset()  { 
+        return m_stormNet.getLineIROffset();
+    } 
+
 
     @Override
     public void periodic() {
