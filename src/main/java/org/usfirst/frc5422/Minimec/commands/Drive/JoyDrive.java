@@ -59,7 +59,7 @@ public class JoyDrive extends Command {
         double y = joy_vals[1];
         double z = joy_vals[2];
 
-        if(Robot.oi.dsio.getPrecisionDrive()) Robot.drive.driveArcade(0.25*x, 0.25*y, 0.25*z);
+        if(Robot.oi.getPrecisionDrive()) Robot.drive.driveArcade(0.25*x, 0.25*y, 0.25*z);
         else Robot.drive.driveArcade(x,y,z);
 
     }
