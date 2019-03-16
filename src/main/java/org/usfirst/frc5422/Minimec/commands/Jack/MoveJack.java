@@ -26,8 +26,8 @@ public class MoveJack extends Command {
     }
 
     public MoveJack() {
-        requires(Robot.backjack);
         System.out.println("MoveJack()");
+        requires(Robot.backjack);
     }
 
     // Called just before this Command runs the first time
