@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
         System.out.println("robotInit()");
 
         // Ideally this would be handled uniformly using a subclass of SubSystem, but not now
-        if (useDrive ) drive = new Drive();
+        drive = new Drive();  // Drive always instanced, but will not instance talons if useDrive is false
 
         if (useCompressor) compressor = new Compression();
 

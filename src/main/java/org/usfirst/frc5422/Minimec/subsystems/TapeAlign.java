@@ -11,9 +11,12 @@ import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
 import org.usfirst.frc5422.utils.StormProp;
+import edu.wpi.first.networktables.NetworkTableEntry;
 
 /**
  *
@@ -21,7 +24,9 @@ import org.usfirst.frc5422.utils.StormProp;
 public class TapeAlign extends PIDSubsystem {
 
     private double m_pid_out;
-
+    private ShuffleboardTab m_debug_tab;
+    private NetworkTableEntry m_raw_entry; 
+    private NetworkTableEntry m_ena_entry; 
 
     // Leave setpoint at 0. We will calculate relative position to target
     // so that we can always set input to 0 when we don't have an object
@@ -36,6 +41,10 @@ public class TapeAlign extends PIDSubsystem {
         getPIDController().setAbsoluteTolerance(.02);   // FIXME property TapePidTolerance
         getPIDController().setOutputRange(-0.4, 0.4);  // FIXME property TapePidRange
 
+        // Debug data
+        m_debug_tab = Shuffleboard.getTab("TapeAlignDebug");
+        m_raw_entry = m_debug_tab.add("Sensor Value (cm)", 0).getEntry();
+        m_ena_entry = m_debug_tab.add("Enabled", false).getEntry();
     }
 
     @Override
@@ -53,12 +62,13 @@ public class TapeAlign extends PIDSubsystem {
     public void enable() {
         getPIDController().enable();
         SmartDashboard.putString("Tape Subsystem", "ENABLED");
-
+        m_ena_entry.setBoolean(true);
     }
 
     public void disable() {
         getPIDController().disable();
         SmartDashboard.putString("Tape Subsystem", "DISABLED");
+        m_ena_entry.setBoolean(false);
     }
 
     @Override
@@ -67,6 +77,7 @@ public class TapeAlign extends PIDSubsystem {
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         double offset = Robot.stormNetSubsystem.getLineIROffset();
+        m_raw_entry.setDouble(offset);
         SmartDashboard.putNumber("TapeOffset (cm)",offset);
 
         return(offset);

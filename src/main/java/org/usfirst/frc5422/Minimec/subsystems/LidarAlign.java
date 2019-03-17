@@ -11,17 +11,21 @@ import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
 import org.usfirst.frc5422.utils.StormProp;
-
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 /**
  *
  */
 public class LidarAlign extends PIDSubsystem {
 
     private double m_pid_out;
-
+    private NetworkTableEntry m_raw_entry;
+    private NetworkTableEntry m_ena_entry;
 
     // Leave setpoint at 0. We will calculate relative position to target
     // so that we can always set input to 0 when we don't have an object
@@ -35,7 +39,9 @@ public class LidarAlign extends PIDSubsystem {
         LiveWindow.add(getPIDController());
         getPIDController().setAbsoluteTolerance(.02);   // FIXME property LidarPidTolerance
         getPIDController().setOutputRange(-0.4, 0.4);  // FIXME property LidarPidRange
-
+        ShuffleboardTab debug_tab = Shuffleboard.getTab("LidarAlignDebug");
+        m_raw_entry = debug_tab.add("Sensor Value (cm)", 0).getEntry();
+        m_ena_entry = debug_tab.add("Enabled", false).getEntry();
     }
 
     @Override
@@ -53,12 +59,13 @@ public class LidarAlign extends PIDSubsystem {
     public void enable() {
         getPIDController().enable();
         SmartDashboard.putString("Lidar Alignment Subsystem", "ENABLED");
-
+        m_ena_entry.setBoolean(true);
     }
 
     public void disable() {
         getPIDController().disable();
         SmartDashboard.putString("Lidar Alignment Subsystem", "DISABLED");
+        m_ena_entry.setBoolean(false);
     }
 
     @Override
@@ -67,6 +74,7 @@ public class LidarAlign extends PIDSubsystem {
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         double offset = Robot.stormNetSubsystem.getLidarOffset();
+        m_raw_entry.setDouble(offset);
         SmartDashboard.putNumber("Lidar Offset (cm)",offset);
 
         return(offset);
