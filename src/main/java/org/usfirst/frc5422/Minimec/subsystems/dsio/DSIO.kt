@@ -110,6 +110,7 @@ object DSIO {
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision
+            println(precision)
         }
 
     }

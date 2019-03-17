@@ -15,7 +15,7 @@ public class LineFollow extends Command {
     @Override
     protected void execute() {
         System.out.println("In execute");
-        Robot.lineFollower.printValues();}
+        /*Robot.lineFollower.printValues();*/}
 
     // Make this return true when this Command no longer needs to run execute()
     @Override

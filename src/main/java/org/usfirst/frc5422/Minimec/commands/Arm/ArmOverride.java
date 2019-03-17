@@ -71,7 +71,7 @@ public class ArmOverride extends Command {
         }
         else if ((int)getArmJoystick() == 0){
             //System.out.println("JOYSTICK MIDDLE");
-            Robot.arm.hold(currentPosition);
+            //Robot.arm.hold(currentPosition);
         }
     }
 
