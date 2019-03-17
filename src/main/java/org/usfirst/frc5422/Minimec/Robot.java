@@ -101,10 +101,6 @@ public class Robot extends TimedRobot {
         // pointers. Bad news. Don't move it.
         oi = new OI();
         onInitCheck();
-
-        if(useCompressor)
-            compressor.startCompressor();
-
     }
 
 

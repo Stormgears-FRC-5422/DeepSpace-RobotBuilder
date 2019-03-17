@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DeepSpace-RobotBuilder.iml" filepath="$PROJECT_DIR$/DeepSpace-RobotBuilder.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.main.iml" filepath="$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.main.iml" filepath="$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.test.iml" filepath="$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.test.iml" filepath="$PROJECT_DIR$/.idea/modules/DeepSpace-RobotBuilder.test.iml" />
     </modules>
   </component>
