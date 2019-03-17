@@ -23,7 +23,6 @@ import org.usfirst.frc5422.Minimec.commands.*;
 
 // subsystems
 import org.usfirst.frc5422.Minimec.subsystems.*;
-import org.usfirst.frc5422.Minimec.subsystems.dsio.DSIO;
 import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 import org.usfirst.frc5422.Minimec.subsystems.intake.Intake;
 import org.usfirst.frc5422.Minimec.subsystems.pneumatics.*;
@@ -57,8 +56,10 @@ public class Robot extends TimedRobot {
     public static ValveControl valveControl;
     public static Intake intake;
     public static Elevator elevator;
+    public static TapeAlign tapeAlignSys;
+    public static LidarAlign lidarAlignSys;
 
-    // DONT USE DSIO directly!
+    // DONT INSTANTIATE DSIO!!!!
     public static OI oi;
 
 
@@ -71,7 +72,7 @@ public class Robot extends TimedRobot {
         System.out.println("robotInit()");
 
         // Ideally this would be handled uniformly using a subclass of SubSystem, but not now
-        if (useDrive ) drive = new Drive();
+        drive = new Drive();  // Drive always instanced, but will not instance talons if useDrive is false
 
         if (useCompressor) compressor = new Compression();
 
@@ -87,7 +88,12 @@ public class Robot extends TimedRobot {
 
         if (useVision) pixyVision = new PixyVision(StormProp.getString("visionTable"), true);
 
-        if (useStormNet) stormNetSubsystem = new StormNetSubsystem();
+        if (useStormNet) {
+	    stormNetSubsystem = new StormNetSubsystem();
+	    tapeAlignSys = new TapeAlign();
+	    lidarAlignSys = new LidarAlign();
+	}
+
 
         // OI must be constructed after subsystems. If the OI creates Commands
         //(which it very likely will), subsystems are not guaranteed to be

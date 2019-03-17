@@ -79,15 +79,15 @@ public class StormNet {
 		return true;
 	}
 
-	public int getLidarDistance() {
-		return (int)m_lidar.getAverageDistance(1);
+	public double getLidarDistance() {
+		return m_lidar.getAverageDistance(2); // 2 => CENTIMETERS
 	}
 
-	public int getLidarOffset() {
-		return (int)m_lidar.getOffset(1);
+	public double getLidarOffset() {
+		return m_lidar.getOffset(2); // 2 => CENTIMETERS
 	}
 
-	public float getLineIROffset()  {return 10.0f * m_lineIR.getOffset(); } // cm to mm
+	public double getLineIROffset()  {return m_lineIR.getOffset(); } // cm 
 
 	public int getLineIRCount() {return m_lineIR.getSensorCount(); }
 }

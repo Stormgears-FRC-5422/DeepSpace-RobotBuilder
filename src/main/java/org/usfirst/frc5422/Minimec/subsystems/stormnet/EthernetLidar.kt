@@ -9,6 +9,7 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 	companion object {
 		const val INCHES = 0
 		const val MILLIMETERS = 1
+		const val CENTIMETERS = 2
 	}
 
 	private val sensorValues: ShortArray
@@ -88,6 +89,7 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 
 		return when (unit) {
 			INCHES -> distance / 25.4
+			CENTIMETERS -> distance / 10
 			else -> distance
 		}
 	}
@@ -99,6 +101,7 @@ class EthernetLidar(voice: StormNetVoice) : StormNetSensor(voice) {
 
 		return when (unit) {
 			INCHES -> offset / 25.4
+			CENTIMETERS -> offset / 10
 			else -> offset
 		}
 	}

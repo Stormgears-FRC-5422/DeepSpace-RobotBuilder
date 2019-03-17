@@ -20,7 +20,8 @@ import java.util.stream.*;  // Import the Collections class
 import org.usfirst.frc5422.Minimec.PixyObject;
 import org.usfirst.frc5422.Minimec.PixyObjectCollection;
 import org.usfirst.frc5422.Minimec.PixyObject.PixyType;
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 /**
  *
@@ -48,12 +49,19 @@ public class PixyVision extends PIDSubsystem {
     private int m_lost_track_count = 0;
     private boolean m_inverted = true;
 
+    private NetworkTableEntry m_dockmode_entry;
+    private NetworkTableEntry m_mode_entry;
+    private NetworkTableEntry m_num_objects_entry;
+    private NetworkTableEntry m_dbg1_entry;
+    private NetworkTableEntry m_dbg2_entry;
+
     public enum ObjectType {
         CARGO,DOCK
     }
     public enum VisionMode {
         CARGO(1),
-        DOCK(2);
+        DOCK(2),
+        DISABLED(0);
 
         private int numVal;
 
@@ -85,17 +93,27 @@ public class PixyVision extends PIDSubsystem {
 
     // Initialize your subsystem here
     public PixyVision(String vision_table,boolean camera_inverted) {
-        super("PixyVision", .01, 0.0, .04, 0.0, .02);
+        super("PixyVision", .005, 0.0, .04, 0.0, .02);
         getPIDController().setContinuous(false);
         getPIDController().setName("PixyVision", "PIDSubsystem Controller");
         LiveWindow.add(getPIDController());
-        getPIDController().setAbsoluteTolerance(.02);
-        getPIDController().setOutputRange(-1.0, 1.0);
+        getPIDController().setAbsoluteTolerance(.03);
+        getPIDController().setOutputRange(-0.4, 0.4);
         m_vision_table_name = vision_table;
         m_nt_inst = NetworkTableInstance.getDefault();
         m_entry_brightness = m_nt_inst.getTable(m_vision_table_name).getEntry("brightness");
         m_pid_out = 0;
         m_inverted = camera_inverted;
+        m_mode = VisionMode.DISABLED;
+
+        // Debug data
+        ShuffleboardTab debug_tab = Shuffleboard.getTab("PixyDebug");
+        m_mode_entry = debug_tab.add("Mode",m_mode.toString() ).getEntry();
+        m_dockmode_entry = debug_tab.add("Dock Selection", m_dock_mode.toString()).getEntry();
+        m_num_objects_entry = debug_tab.add("Number of objects seen", 0).getEntry();
+        m_dbg1_entry = debug_tab.add("TargetByMode Objects", 0).getEntry();
+        m_dbg2_entry = debug_tab.add("New lock Center", 0.0).getEntry();
+
 
     }
 
@@ -119,7 +137,7 @@ public class PixyVision extends PIDSubsystem {
         m_dock_mode = mode;
         clearLastTracked();
         SmartDashboard.putString("DOCK MODE", mode.toString());
-
+        m_dockmode_entry.setString(m_dock_mode.toString());
     }
 
     // How many items are in this byte stream
@@ -153,10 +171,12 @@ public class PixyVision extends PIDSubsystem {
         if (m_mode == VisionMode.CARGO) {
             m_vision_table = m_nt_inst.getTable(String.format("%s/cargo",m_vision_table_name));
             m_entry_brightness.setNumber(65);
+            m_dockmode_entry.setString("DISABLED");
         }
 	    else {
             m_vision_table = m_nt_inst.getTable(String.format("%s/dock",m_vision_table_name));
             m_entry_brightness.setNumber(14);
+            m_dockmode_entry.setString(m_dock_mode.toString());
         }
 
     
@@ -167,7 +187,9 @@ public class PixyVision extends PIDSubsystem {
         m_entry_type = m_vision_table.getEntry("Type");
         m_entry_height = m_vision_table.getEntry("height");
         m_entry_width = m_vision_table.getEntry("width");
+
         
+        m_mode_entry.setString(m_mode.toString());
         m_entry_invert.setBoolean(m_inverted);
         getPIDController().enable();
         SmartDashboard.putString("Pixy mode", mode.toString());
@@ -176,6 +198,8 @@ public class PixyVision extends PIDSubsystem {
     public void disable() {
         getPIDController().disable();
         clearLastTracked();
+        m_mode = VisionMode.DISABLED;
+        m_mode_entry.setString(m_mode.toString());
         SmartDashboard.putString("Pixy mode", "DISABLED");
     }
 
@@ -245,10 +269,10 @@ public class PixyVision extends PIDSubsystem {
             // Get markers closest to center
             if (m_last_item_tracked != null) {
                 targets = objects.getAdjacentPair(m_last_item_tracked.getX());
-//                System.out.println("Tracking ojbect at " + m_last_item_tracked.getX());
             } else {
                 targets = getTargetByMode(objects,m_dock_mode);
-                System.out.println("TargetByMode returned " + targets.size() + " objects for mode " + m_dock_mode.toString());
+                m_dbg1_entry.setNumber(targets.size());
+
             }
 
             if (targets.size() > 1) {
@@ -256,7 +280,7 @@ public class PixyVision extends PIDSubsystem {
                 PixyObject dock1 = targets.get(1);
                 double center = (dock0.getX() + dock1.getX())/2;
                 if (m_last_item_tracked == null) { 
-                    System.out.println("Tracking new center at " + center);
+                    m_dbg2_entry.setDouble(center);
                 }
                 m_last_item_tracked = new PixyObject("Dock", center, dock0.getY(), dock0.getWidth(), dock0.getHeight());
                 return(PixyObject.frame_center_x - center);
@@ -266,7 +290,7 @@ public class PixyVision extends PIDSubsystem {
                     m_lost_track_count = 0;
                     m_last_item_tracked = null;
                     // Give up on waiting to find it again
-                    System.out.println("Lost tracking, seeing " + targets.size() + ":" + objects.size() + " objects");
+                    m_dbg2_entry.setDouble(-1);
                 }
                 m_lost_track_count++;
                 return(0);
@@ -289,7 +313,7 @@ public class PixyVision extends PIDSubsystem {
     private List<PixyObject> getTargetByMode(PixyObjectCollection objects, DockSelection mode) {
         List<PixyObject> targets;
         SmartDashboard.putNumber("Number of docks seen: ", objects.size());
-
+        m_num_objects_entry.setNumber(objects.size());
 	    // Get distance between first two items.  This will be used to determine if we are at the
 	    // left or right ends by making sure there is nothing within that [range] to left or right sides
         if (objects.size() > 1) {

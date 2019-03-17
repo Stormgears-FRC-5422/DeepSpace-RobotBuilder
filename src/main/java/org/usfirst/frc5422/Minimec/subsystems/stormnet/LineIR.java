@@ -19,9 +19,10 @@ public class LineIR extends StormNetSensor {
 	}
 
 	// Distance match values on arduino.  presume cm
-	public float getOffset() {
+	public double getOffset() {
 		pollDetails();
-		return (sensorDetails[0]);
+		return ((double) sensorDetails[0]);
 	}
+	
 
 }
