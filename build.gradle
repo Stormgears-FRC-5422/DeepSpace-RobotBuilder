@@ -71,12 +71,6 @@ jar {
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
