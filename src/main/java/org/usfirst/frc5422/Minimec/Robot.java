@@ -89,10 +89,10 @@ public class Robot extends TimedRobot {
         if (useVision) pixyVision = new PixyVision(StormProp.getString("visionTable"), true);
 
         if (useStormNet) {
-	    stormNetSubsystem = new StormNetSubsystem();
-	    tapeAlignSys = new TapeAlign();
-	    lidarAlignSys = new LidarAlign();
-	}
+    	    stormNetSubsystem = new StormNetSubsystem();
+	        tapeAlignSys = new TapeAlign();
+	        lidarAlignSys = new LidarAlign();
+	    }   
 
 
         // OI must be constructed after subsystems. If the OI creates Commands
@@ -101,8 +101,8 @@ public class Robot extends TimedRobot {
         // pointers. Bad news. Don't move it.
         oi = new OI();
         onInitCheck();
-    }
 
+    }
 
     /**
      * This function is called when the disabled button is hit.
@@ -150,7 +150,9 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic()
     {
+        Scheduler.getInstance().run();
     }
+
 
     // We have a few buttons that are really switches. They might be in either position when the match starts
     // Try to set the subsystem state accordingly
