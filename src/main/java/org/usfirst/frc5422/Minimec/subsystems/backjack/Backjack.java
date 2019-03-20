@@ -23,7 +23,8 @@ public class Backjack extends Subsystem {
 
     private int nextLevel;
     private boolean moving = false;
-    private NetworkTableEntry currentEntry;
+    private NetworkTableEntry encoderEntry;
+    private ShuffleboardTab tab;
 
     public Backjack() {
         int kTimeoutMs = StormProp.getInt("canTimeout");
@@ -39,6 +40,7 @@ public class Backjack extends Subsystem {
 
         jackTalon = new WPI_TalonSRX(StormProp.getInt("jackTalonId"));
         jackTalon.setNeutralMode(NeutralMode.Brake);
+        jackTalon.getSensorCollection().setQuadraturePosition(0, 20);
         //jackTalon.configPeakCurrentLimit((StormProp.getInt("armCurrentLimit")));
 
 //        jackTalon.selectProfileSlot(0, 0);
@@ -57,6 +59,15 @@ public class Backjack extends Subsystem {
         addChild("JackTalon", jackTalon);
 
         nextLevel = 0;
+
+
+        tab = Shuffleboard.getTab("Backjack");
+        Shuffleboard.selectTab("Backjack");
+        encoderEntry = tab.add("encoder ticks", getCurrentPositionTicks()).getEntry();
+    }
+
+    public double getCurrentPositionTicks(){
+        return jackTalon.getSensorCollection().getQuadraturePosition();
     }
 
     @Override
@@ -67,6 +78,7 @@ public class Backjack extends Subsystem {
     @Override
     public void periodic() {
         //currentEntry.setDouble(jackTalon.getOutputCurrent());
+        encoderEntry.setDouble(getCurrentPositionTicks());
     }
 
     public void move() {

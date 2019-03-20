@@ -56,16 +56,16 @@ public class Arm extends Subsystem {
         armTalon.setSelectedSensorPosition(0);
         pivotTalon.setSelectedSensorPosition(0);
 
-//        armTalon.config_kD(armMotionMagicSlotIdx , 60);
-//        armTalon.config_kI(armMotionMagicSlotIdx , 0.01);
-//        armTalon.config_kP(armMotionMagicSlotIdx , 5.0);
-//        armTalon.config_kF(armMotionMagicSlotIdx , 2.5);
-//        armTalon.config_IntegralZone(armMotionMagicSlotIdx , 100);
-        armTalon.config_kD(armMotionMagicSlotIdx , 0);
+        armTalon.config_kD(armMotionMagicSlotIdx , 60);
+        armTalon.config_kI(armMotionMagicSlotIdx , 0.01);
+        armTalon.config_kP(armMotionMagicSlotIdx , 5.0);
+        armTalon.config_kF(armMotionMagicSlotIdx , 2.5);
+        armTalon.config_IntegralZone(armMotionMagicSlotIdx , 100);
+        /*armTalon.config_kD(armMotionMagicSlotIdx , 0);
         armTalon.config_kI(armMotionMagicSlotIdx , 0);
         armTalon.config_kP(armMotionMagicSlotIdx , 0);
         armTalon.config_kF(armMotionMagicSlotIdx , 0);
-        armTalon.config_IntegralZone(armMotionMagicSlotIdx , 0);
+        armTalon.config_IntegralZone(armMotionMagicSlotIdx , 0);*/
         armTalon.configAllowableClosedloopError(armMotionMagicSlotIdx , 25);
         armTalon.configClosedLoopPeakOutput(armMotionMagicSlotIdx ,0.10);
         armMotionMagicTuner = new TalonTuner("Arm MotionMagic", armTalon, ControlMode.MotionMagic, armMotionMagicSlotIdx );
@@ -223,8 +223,8 @@ public class Arm extends Subsystem {
     public void hold()
     {
 //        System.out.println("TRYING TO HOLD POSITION: " + currentPosition);
-//        armTalon.selectProfileSlot(armPositionSlotIdx,0);
-//        armTalon.set(ControlMode.Position, currentPosition);
+        armTalon.selectProfileSlot(armPositionSlotIdx,0);
+        armTalon.set(ControlMode.Position, currentPosition);
     }
 
     public void initDefaultCommand(){
