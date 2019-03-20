@@ -45,6 +45,8 @@ public class TapeAlign extends PIDSubsystem {
         m_debug_tab = Shuffleboard.getTab("TapeAlignDebug");
         m_raw_entry = m_debug_tab.add("Sensor Value (cm)", 0).getEntry();
         m_ena_entry = m_debug_tab.add("Enabled", false).getEntry();
+        SmartDashboard.getNumber("TapeAlign PID Value", get_pid_output());
+        //TODO: Test the line above
     }
 
     @Override

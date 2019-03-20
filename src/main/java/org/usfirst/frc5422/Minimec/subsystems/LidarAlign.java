@@ -42,6 +42,8 @@ public class LidarAlign extends PIDSubsystem {
         ShuffleboardTab debug_tab = Shuffleboard.getTab("LidarAlignDebug");
         m_raw_entry = debug_tab.add("Sensor Value (cm)", 0).getEntry();
         m_ena_entry = debug_tab.add("Enabled", false).getEntry();
+        SmartDashboard.getNumber("Lidar PID Value", get_pid_output());
+        //TODO: Test the line above
     }
 
     @Override
