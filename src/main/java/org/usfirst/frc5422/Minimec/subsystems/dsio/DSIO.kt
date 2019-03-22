@@ -47,8 +47,8 @@ object DSIO {
         // Test code for bench testing backjack with Xbox controller
         // 1 is forward, -1 is backwards
         // 0 is stop
-        if (getJoystick().getRawButton(1)) return 1;
-        if (getJoystick().getRawButton(2)) return -1;
+        //if (getJoystick().getRawButton(1)) return 1;
+        //if (getJoystick().getRawButton(2)) return -1;
         return 0
     }
 
