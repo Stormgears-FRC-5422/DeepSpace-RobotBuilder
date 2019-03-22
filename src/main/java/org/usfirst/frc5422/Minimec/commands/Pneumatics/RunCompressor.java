@@ -39,7 +39,7 @@ public class RunCompressor extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Compression.getInstance().startCompressor();
+        Robot.compressor.startCompressor();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -64,6 +64,6 @@ public class RunCompressor extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        Compression.getInstance().stopCompressor();
+        Robot.compressor.stopCompressor();
     }
 }

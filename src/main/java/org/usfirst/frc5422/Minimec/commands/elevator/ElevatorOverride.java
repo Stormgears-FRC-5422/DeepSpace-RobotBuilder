@@ -22,28 +22,26 @@ public class ElevatorOverride extends Command {
     @Override
     protected void execute()
     {
-//        if(getElevatorJoystick() == 1) {
-//            currentPosition = Robot.elevator.getCurrentPositionTicks();
-//            Robot.elevator.moveUpManual();
-//        }
-//        else if(getElevatorJoystick() == -1) {
-//            currentPosition = Robot.elevator.getCurrentPositionTicks();
-//            Robot.elevator.moveDownManual();
-//        }
-//        else Robot.elevator.holdElevator(currentPosition);
-        Robot.elevator.holdElevator();
+        if(getElevatorJoystick() == 1) {
+            Robot.elevator.moveUpManual();
+        }
+        else if(getElevatorJoystick() == -1) {
+            Robot.elevator.moveDownManual();
+        }
+        else {
+            Robot.elevator.hold();
+        }
     }
 
     @Override
     protected void end()
     {
-        //Robot.elevator.holdElevator(currentPosition);
     }
 
     @Override
     protected void interrupted()
     {
-        Robot.elevator.holdElevator();
+        Robot.elevator.hold();
     }
 
     @Override
@@ -51,9 +49,9 @@ public class ElevatorOverride extends Command {
         return false;
     }
 
-//    private double getElevatorJoystick()
-//    {
-//        return -1 * Robot.oi.getJoystick1().getRawAxis(1);
-//    }
+    private double getElevatorJoystick()
+    {
+        return -1 * Robot.oi.getJoystick1().getRawAxis(1);
+    }
 
 }

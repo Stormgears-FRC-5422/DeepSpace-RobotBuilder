@@ -34,6 +34,7 @@ public class MoveJack extends Command {
     @Override
     protected void execute() {
         Robot.backjack.move();
+        //Robot.drive.driveArcade(.1, .1, .1);
     }
 
     // Make this return true when this Command no longer needs to run execute()
