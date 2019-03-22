@@ -49,7 +49,12 @@ class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoysti
 
     override val arm135 = EnhancedButton(joy1, ButtonIds.ARM_MOVE_TO_135_BUTTON_ID)
 
-    override val precisionButton = EnhancedButton(actualJoystick, 10)
+    override val precisionButton = EnhancedButton(actualJoystick, ButtonIds.XBOX_BUTTON_RIGHT_STICK)
+
+    override val xboxA = EnhancedButton(actualJoystick, ButtonIds.XBOX_BUTTON_A)
+    override val xboxB = EnhancedButton(actualJoystick, ButtonIds.XBOX_BUTTON_B)
+    override val xboxX = EnhancedButton(actualJoystick, ButtonIds.XBOX_BUTTON_X)
+    override val xboxY = EnhancedButton(actualJoystick, ButtonIds.XBOX_BUTTON_Y)
 
     companion object {
         private var instance: ButtonBoard? = null

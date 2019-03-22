@@ -48,6 +48,7 @@ public class DockDrive extends Command {
         if (Robot.useDrive) {
             joy = Robot.oi.getJoystick();
         }
+        Robot.drive.setBrakeMode();
         Robot.pixyVision.enable(PixyVision.VisionMode.DOCK);
     }
 
@@ -98,6 +99,8 @@ public class DockDrive extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        Robot.drive.setCoastMode();
+
         Robot.pixyVision.disable();
     }
 
@@ -105,6 +108,7 @@ public class DockDrive extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        Robot.drive.setCoastMode();
         Robot.pixyVision.disable();
     }
 }
