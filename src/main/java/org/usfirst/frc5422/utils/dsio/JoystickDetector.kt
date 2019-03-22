@@ -56,7 +56,7 @@ class JoystickDetector {
         for (i in joysticks.indices) {
             val joystick = joysticks[i]
             if (joystick != null) {
-                if (joystick.name.toUpperCase().contains("XBOX")) {
+                if (joystick.name.toUpperCase().contains("XBOX") || joystick.name.contains("Controller")) {
                     xboxChannel = i
                 } else if (joystick.name.contains("Generic")) {    // Match Generic USB Joystick
                     if (joystick.getRawButton(1)) {
