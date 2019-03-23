@@ -26,6 +26,8 @@ public class ValveControl extends Subsystem {
     private boolean cargoOpen;
     private boolean hatchOpen;
 
+    public boolean getHatchOpen(){return hatchOpen;}
+
     public ValveControl() {
         int mod = StormProp.getInt("CompressorModuleId");
 
@@ -156,6 +158,7 @@ public class ValveControl extends Subsystem {
         double highVacuum = StormProp.getNumber("highVacuumKPa");
         double lowVacuum = StormProp.getNumber("lowVacuumKPa");
         double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
+//        System.out.println("Vacuum level: " + currentVac);
 
         if (Robot.oi.getVenturiOverride() || currentVac > highVacuum) {
             vacStop();

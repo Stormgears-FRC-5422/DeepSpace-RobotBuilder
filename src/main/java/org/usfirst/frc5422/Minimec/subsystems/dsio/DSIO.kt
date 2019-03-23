@@ -2,21 +2,22 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.Minimec.Robot
+import org.usfirst.frc5422.Minimec.commands.ResetCode
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
+import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
-import org.usfirst.frc5422.Minimec.subsystems.pneumatics.Compression
-import org.usfirst.frc5422.utils.dsio.ButtonBoardSwitchedException
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
-    private val buttonBoard:IButtonBoard
+
+    private var buttonBoard:IButtonBoard
     var precision = false
 
     init{
@@ -61,9 +62,11 @@ object DSIO {
     private fun setupControls()
     {
         System.out.println("setupControls()");
+        buttonBoard.resetCode.whenPressed(ResetCode())
+
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {
-            buttonBoard.moveBackjack.whenPressed(MoveJack());
+            buttonBoard.moveBackjack.whenPressed(MoveJack())
         }
 
         if (Robot.useCompressor) {
@@ -96,17 +99,12 @@ object DSIO {
             println("ELEVATOR GROUND")
         }
 
-        buttonBoard.elevatorLevelOne.whenPressed{
-            println("ELEVATOR LEVEL ONE")
-        }
+        buttonBoard.elevatorLevelOne.whileHeld(ElevatorMove(1))
 
-        buttonBoard.elevatorLevelTwo.whenPressed{
-            println("ELEVATOR LEVEL TWO")
-        }
+        buttonBoard.elevatorLevelTwo.whileHeld(ElevatorMove(2))
 
-        buttonBoard.elevatorLevelThree.whenPressed{
-            println("ELEVATOR LEVEL THREE")
-        }
+        buttonBoard.elevatorLevelThree.whileHeld(ElevatorMove(3))
+
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision

@@ -80,7 +80,10 @@ public class Robot extends TimedRobot {
 
         if (useArm) arm = new Arm();
 
-        if (useElevator) elevator = new Elevator();
+        if (useElevator){
+            System.out.println("Creating Elevator");
+            elevator = new Elevator();
+        }
 
         if (useBackjack) backjack = new Backjack();
 

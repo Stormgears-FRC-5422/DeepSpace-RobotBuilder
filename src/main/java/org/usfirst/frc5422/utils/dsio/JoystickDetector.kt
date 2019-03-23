@@ -33,9 +33,17 @@ class JoystickDetector {
             }
         }
 
+    fun getBoard(): IButtonBoard{
+        return if (jumperGamepadChannel != -1 && normalGamepadChannel != -1) {
+            val drivingJoystick = drivingJoystick
+            ButtonBoard.getInstance(Joystick(normalGamepadChannel), Joystick(jumperGamepadChannel), drivingJoystick as XboxJoystick)
+        } else {
+            DummyButtonBoard()
+        }
+    }
+
     val buttonBoard: IButtonBoard
         get() {
-//            return ButtonBoard.getInstance(Joystick(1), Joystick(2), Joystick(0))
             return if (jumperGamepadChannel != -1 && normalGamepadChannel != -1) {
                 val drivingJoystick = drivingJoystick
                 ButtonBoard.getInstance(Joystick(normalGamepadChannel), Joystick(jumperGamepadChannel), drivingJoystick as XboxJoystick)

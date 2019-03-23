@@ -11,7 +11,7 @@ class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoysti
 
     override val joy2 = joy2 // jumper
 
-    override val elevatorSwitch = SwitchControl(joy1, ButtonIds.ELEVATOR_FAILSAFE_BUTTON_ID)
+    override val resetCode = SwitchControl(joy1, ButtonIds.RESET_CODE_BUTTON_ID)
 
     override val backJackLevel2 = EnhancedButton(joy1, ButtonIds.BACKJACK_LEVEL_2)
 

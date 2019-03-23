@@ -4,13 +4,14 @@ import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.utils.dsio.IButton
 import org.usfirst.frc5422.utils.dsio.ISwitch
 import org.usfirst.frc5422.utils.dsio.IRawJoystick
+import org.usfirst.frc5422.utils.dsio.SwitchControl
 
 interface IButtonBoard {
     val drivingJoystick: Joystick
     val joy1: Joystick
     val joy2: Joystick
 
-    val elevatorSwitch: ISwitch
+    val resetCode: ISwitch
 
     val backJackLevel2: IButton
 
@@ -49,4 +50,5 @@ interface IButtonBoard {
     val arm135: IButton
 
     val precisionButton: IButton
+
 }

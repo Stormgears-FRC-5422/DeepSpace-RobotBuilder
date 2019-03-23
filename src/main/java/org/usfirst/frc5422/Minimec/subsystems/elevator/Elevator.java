@@ -3,7 +3,7 @@ package org.usfirst.frc5422.Minimec.subsystems.elevator;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.usfirst.frc5422.Minimec.commands.elevator.ElevatorOverride;
+import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorOverride;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.logging.TalonTuner;
 
@@ -11,54 +11,38 @@ public class Elevator extends Subsystem {
     private static Elevator instance;
     private double currentPosition;
 
-    private final double CLIMBER_RADIUS = 5.5;
-    private final int TICKS_PER_INCH = 350;
+    private final int TICKS_PER_INCH = 512;
 
     public final int REST_POSITION = 0;
-    private final int MAX_POSITION = 25000;
-    private final int IDEAL_MAX = MAX_POSITION-2000;
+    private final int MAX_POSITION = 27500;
 
     private WPI_TalonSRX elevatorTalon;
     private TalonTuner elevatorMotionMagicTuner;
-
-    public static Elevator getInstance()
-    {
-        if(instance == null) instance = new Elevator();
-        return instance;
-    }
 
     public Elevator()
     {
         int kTimeoutMs = 10;
         int slotIdx = 0;
         elevatorTalon = new WPI_TalonSRX(StormProp.getInt("elevatorTalonId"));
-        elevatorTalon.setSelectedSensorPosition(0);
-
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
-        elevatorTalon.configMotionAcceleration(410);
-        elevatorTalon.configMotionCruiseVelocity(410);
-//        elevatorTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 10);
-//        elevatorTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 10);
+        elevatorTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, kTimeoutMs);
+        elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
+        elevatorTalon.configForwardSoftLimitEnable(true);
+
+        reset();
+
+        elevatorTalon.configMotionAcceleration(500);
+        elevatorTalon.configMotionCruiseVelocity(1000);
 
         elevatorTalon.selectProfileSlot(slotIdx , 0);
-        elevatorTalon.config_kF(slotIdx , 0, kTimeoutMs);
-        elevatorTalon.config_kP(slotIdx , 0, kTimeoutMs);
-        elevatorTalon.config_kI(slotIdx , 0, kTimeoutMs);
-        elevatorTalon.config_kD(slotIdx , 0, kTimeoutMs);
+        elevatorTalon.config_kF(slotIdx , 2.0, kTimeoutMs);
+        elevatorTalon.config_kP(slotIdx , 2.0, kTimeoutMs);
+        elevatorTalon.config_kI(slotIdx , 0.02, kTimeoutMs);
+        elevatorTalon.config_kD(slotIdx , 10.0, kTimeoutMs);
         elevatorTalon.config_IntegralZone(slotIdx , 100, kTimeoutMs);
         elevatorTalon.configAllowableClosedloopError(0,410,kTimeoutMs);
 
-        elevatorTalon.setInverted(true);
-        elevatorTalon.setSensorPhase(true);
-
-        elevatorMotionMagicTuner = new TalonTuner("ElevatorPosition", elevatorTalon, ControlMode.MotionMagic, slotIdx);
-
-        currentPosition = 0; //getCurrentPositionTicks();
-    }
-
-    public static void init()
-    {
-        instance = new Elevator();
+        //elevatorMotionMagicTuner = new TalonTuner("ElevatorMotionMagic", elevatorTalon, ControlMode.MotionMagic, slotIdx);
     }
 
     @Override
@@ -66,18 +50,71 @@ public class Elevator extends Subsystem {
         setDefaultCommand(new ElevatorOverride());
     }
 
-    public double getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
+    public void reset() {
+        elevatorTalon.setSelectedSensorPosition(0);
+        currentPosition = 0;
+    }
 
+    public void moveToPosition(double position){
+        elevatorTalon.set(ControlMode.MotionMagic, position);
+    }
+
+    public double getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
+    public double getCurrentVelocity(){return elevatorTalon.getSensorCollection().getQuadratureVelocity();}
     public void hold() {
-//        System.out.println("Hold current position: " + currentPosition);
-//        hold(currentPosition);
+        hold(currentPosition);
     }
 
     public void hold(double position)
     {
+
         //elevatorTalon.set(ControlMode.Position, position);
+        elevatorTalon.set(ControlMode.Velocity, 0);
+
         //System.out.println("TRYING TO HOLD POSITION: " + position + "  current Position: " + getCurrentPositionTicks());
     }
+
+    public void moveUpManual()
+    {
+        elevatorTalon.set(ControlMode.MotionMagic, MAX_POSITION);
+        //elevatorTalon.set(ControlMode.Velocity, 1000);
+        currentPosition = getCurrentPositionTicks();
+    }
+
+    public void moveTo(double ticks)
+    {
+        elevatorTalon.set(ControlMode.MotionMagic, ticks);
+        currentPosition = getCurrentPositionTicks();
+    }
+
+
+    public void moveDownManual()
+    {
+        elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
+        //elevatorTalon.set(ControlMode.Velocity, -1000);
+        currentPosition = getCurrentPositionTicks();
+    }
+
+    public void periodic(){
+        //elevatorMotionMagicTuner.periodic();
+    }
+
+}
+
+
+//
+//    public void stopElevator()
+//    {
+//        elevatorTalon.set(ControlMode.Velocity, 0);
+//    }
+//
+//    private int toTicks(double inches)
+//    {
+//        elevatorTalon.set(ControlMode.Position, -1000000);
+//        return 0;
+//    }
+//
+//
 
 //    public double getOutputCurrent() {
 //        return elevatorTalon.getOutputCurrent();
@@ -129,30 +166,3 @@ public class Elevator extends Subsystem {
 //    }
 //
 //
-    public void moveUpManual()
-    {
-        elevatorTalon.set(ControlMode.MotionMagic, IDEAL_MAX);
-    }
-    public void moveDownManual()
-    {
-        elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
-    }
-//
-//    public void stopElevator()
-//    {
-//        elevatorTalon.set(ControlMode.Velocity, 0);
-//    }
-//
-//    private int toTicks(double inches)
-//    {
-//        elevatorTalon.set(ControlMode.Position, -1000000);
-//        return 0;
-//    }
-//
-//
-
-    public void periodic(){
-        elevatorMotionMagicTuner.periodic();
-    }
-
-}

@@ -19,7 +19,7 @@ public class HorizontalAlign extends Command {
     @Override
     protected void execute() {
         Robot.arm.moveTo90();
-        Robot.elevator.moveElevatorToPosition(8.75);
+       // Robot.elevator.moveElevatorToPosition(8.75);
         Robot.valveControl.hatchStart();
     }
 
