@@ -113,7 +113,7 @@ public class PixyVision extends PIDSubsystem {
         m_num_objects_entry = debug_tab.add("Number of objects seen", 0).getEntry();
         m_dbg1_entry = debug_tab.add("TargetByMode Objects", 0).getEntry();
         m_dbg2_entry = debug_tab.add("New lock Center", 0.0).getEntry();
-
+        SmartDashboard.getNumber("Pixy PID Value", get_pid_output());
 
     }
 

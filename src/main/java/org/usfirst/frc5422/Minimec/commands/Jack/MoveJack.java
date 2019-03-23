@@ -19,12 +19,6 @@ import org.usfirst.frc5422.Minimec.Robot;
  *
  */
 public class MoveJack extends Command {
-    private static MoveJack instance;
-    public static MoveJack getInstance() {
-        if(instance == null) instance = new MoveJack();
-        return instance;
-    }
-
     public MoveJack() {
         System.out.println("MoveJack()");
         requires(Robot.backjack);
@@ -39,8 +33,8 @@ public class MoveJack extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        //System.out.println("MoveJack.initialize()");
         Robot.backjack.move();
+        //Robot.drive.driveArcade(.1, .1, .1);
     }
 
     // Make this return true when this Command no longer needs to run execute()
