@@ -83,72 +83,72 @@ public class Elevator extends Subsystem {
 //        return elevatorTalon.getOutputCurrent();
 //    }
 //
-//    public void moveElevatorToPosition(double position)
-//    {
-//        boolean lowering = false;
-//        int multiplier = 1;
-//        int destination = toTicks(position);
-//        if(destination > getCurrentPositionTicks())
-//        {
-//            //TODO: add PID
-//            lowering = true;
-//            multiplier = -1;
-//        }else if(destination < getCurrentPositionTicks()) {
-//            //TODO: add PID
-//            lowering = false;
-//            multiplier = 1;
-//        }else {
-//            lowering = false;
-//            multiplier = 0;
-//        }
-//        double basePower;
-//        if(lowering) basePower = 0.7;
-//        else basePower =  1.0;
-//
-//        elevatorTalon.set(ControlMode.PercentOutput, basePower * multiplier);
-//
-//        boolean shouldStop;
-//        do{
-//            double cpt = getCurrentPositionTicks();
-//            elevatorTalon.set(ControlMode.PercentOutput, basePower * multiplier);
-//
-//            if(lowering)shouldStop = cpt > destination - 13000;
-//            else shouldStop = cpt < destination + 13000;
-//        }while (!shouldStop);
-//        //holdElevator();
-//    }
-//
-//    //returns (theta, elevatorheight)
-//    public double[] getPositions(int x, int y)
-//    {
-//        double theta = Math.atan(y/x);
-//        double height  = Math.sqrt(Math.pow(CLIMBER_RADIUS, 2) - Math.pow(x,2));
-//        double elevatorHeight = y - height;
-//        double values[] = {theta, elevatorHeight};
-//        return values;
-//    }
-//
-//
-//    public void moveUpManual()
-//    {
-//        elevatorTalon.set(ControlMode.MotionMagic, IDEAL_MAX);
-//    }
-//    public void moveDownManual()
-//    {
-//        elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
-//    }
-//
-//    public void stopElevator()
-//    {
-//        elevatorTalon.set(ControlMode.Velocity, 0);
-//    }
-//
-//    private int toTicks(double inches)
-//    {
-//        elevatorTalon.set(ControlMode.Position, -1000000);
-//        return 0;
-//    }
-//
-//
+    public void moveElevatorToPosition(double position)
+    {
+        boolean lowering = false;
+        int multiplier = 1;
+        int destination = toTicks(position);
+        if(destination > getCurrentPositionTicks())
+        {
+            //TODO: add PID
+            lowering = true;
+            multiplier = -1;
+        }else if(destination < getCurrentPositionTicks()) {
+            //TODO: add PID
+            lowering = false;
+            multiplier = 1;
+        }else {
+            lowering = false;
+            multiplier = 0;
+        }
+        double basePower;
+        if(lowering) basePower = 0.7;
+        else basePower =  1.0;
+
+        elevatorTalon.set(ControlMode.PercentOutput, basePower * multiplier);
+
+        boolean shouldStop;
+        do{
+            double cpt = getCurrentPositionTicks();
+            elevatorTalon.set(ControlMode.PercentOutput, basePower * multiplier);
+
+            if(lowering)shouldStop = cpt > destination - 13000;
+            else shouldStop = cpt < destination + 13000;
+        }while (!shouldStop);
+        //holdElevator();
+    }
+
+    //returns (theta, elevatorheight)
+    public double[] getPositions(int x, int y)
+    {
+        double theta = Math.atan(y/x);
+        double height  = Math.sqrt(Math.pow(CLIMBER_RADIUS, 2) - Math.pow(x,2));
+        double elevatorHeight = y - height;
+        double values[] = {theta, elevatorHeight};
+        return values;
+    }
+
+
+    public void moveUpManual()
+    {
+        elevatorTalon.set(ControlMode.MotionMagic, IDEAL_MAX);
+    }
+    public void moveDownManual()
+    {
+        elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
+    }
+
+    public void stopElevator()
+    {
+        elevatorTalon.set(ControlMode.Velocity, 0);
+    }
+
+    private int toTicks(double inches)
+    {
+        elevatorTalon.set(ControlMode.Position, -1000000);
+        return 0;
+    }
+
+
 
 }
