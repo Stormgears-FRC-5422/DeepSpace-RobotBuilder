@@ -70,7 +70,7 @@ object DSIO {
 
         if (Robot.useDrive) {
             buttonBoard.xboxA.whenPressed(JoyDrive())
-            buttonBoard.xboxY.whenPressed(DockDrive())
+//            buttonBoard.xboxY.whenPressed(DockDrive())
         }
 
         if (Robot.useCompressor) {

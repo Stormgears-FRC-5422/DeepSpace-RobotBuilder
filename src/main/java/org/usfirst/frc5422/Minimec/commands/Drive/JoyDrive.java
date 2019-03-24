@@ -47,6 +47,7 @@ public class JoyDrive extends Command {
     @Override
     protected void initialize() {
         if (Robot.useDrive) {
+            Robot.drive.setBrakeMode();
             joy = Robot.oi.getJoystick();
         }
     }
@@ -58,17 +59,16 @@ public class JoyDrive extends Command {
         // (oi.getJoystick().getRawAxis(3)-oi.getJoystick().getRawAxis(2))*-1,
         // oi.getJoystick().getRawAxis(4));
         if (Robot.useDrive) {
-            double joy_vals[] = Robot.oi.getJoyXYZ(joy);
+            double derate = 1;
+	        if (Robot.oi.getPrecisionDrive()) {
+                derate = .25;
+            }
+            double joy_vals[] = Robot.oi.getJoyXYZ(joy,derate);
             double x = joy_vals[0];
             double y = joy_vals[1];
             double z = joy_vals[2];
 
-	        if (Robot.oi.getPrecisionDrive()) {
-                Robot.drive.driveArcadeDeRate(x,y,z,.25);
-            }
-	        else {
-                Robot.drive.driveArcade(x,y,z);
-            }
+            Robot.drive.driveArcade(x,y,z);
         }
     }
 

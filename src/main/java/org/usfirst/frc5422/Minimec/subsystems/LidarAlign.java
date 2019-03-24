@@ -33,12 +33,12 @@ public class LidarAlign extends PIDSubsystem {
 
     // Initialize your subsystem here
     public LidarAlign() {
-        super("LidarAlign", .1, 0.00002, .1, 0.0, .01);
+        super("LidarAlign", 1, 0.00002, .1, 0.0, .01);
         getPIDController().setContinuous(false);
         getPIDController().setName("LidarAlign", "PIDSubsystem Controller");
         LiveWindow.add(getPIDController());
-        getPIDController().setAbsoluteTolerance(1);   // FIXME property LidarPidTolerance
-        getPIDController().setOutputRange(-0.3, 0.3);  // FIXME property LidarPidRange
+        getPIDController().setAbsoluteTolerance(5);   // FIXME property LidarPidTolerance
+        getPIDController().setOutputRange(-0.2 , 0.2);  // FIXME property LidarPidRange
         ShuffleboardTab debug_tab = Shuffleboard.getTab("LidarAlignDebug");
         m_raw_entry = debug_tab.add("Sensor Value (cm)", 0).getEntry();
         m_ena_entry = debug_tab.add("Enabled", false).getEntry();
@@ -78,8 +78,11 @@ public class LidarAlign extends PIDSubsystem {
         double offset = Robot.stormNetSubsystem.getLidarOffset();
         m_raw_entry.setDouble(offset);
         SmartDashboard.putNumber("Lidar Offset (cm)",offset);
-
-        return(-1 * offset);
+        if (Math.abs(offset) < 30) {
+            return(-1 * offset);
+        } else {
+            return(0);
+        }
     }
 
     public double get_pid_output() {

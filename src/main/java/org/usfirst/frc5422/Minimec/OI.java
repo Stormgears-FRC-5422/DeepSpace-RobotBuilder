@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
+
+import org.usfirst.frc5422.Minimec.commands.Drive.AutoDockApproach;
 import org.usfirst.frc5422.Minimec.commands.Drive.CargoDrive;
 import org.usfirst.frc5422.Minimec.commands.Drive.DockCloseDrive;
 import org.usfirst.frc5422.Minimec.commands.Drive.DockDrive;
@@ -81,6 +83,7 @@ public class OI {
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putData("JoyDrive", new JoyDrive());
+        SmartDashboard.putData("AutoDockApproach", new AutoDockApproach());
         SmartDashboard.putData("DockDrive", new DockDrive());
         SmartDashboard.putData("CargoDrive", new CargoDrive());
         SmartDashboard.putData("DockAlignDrive", new DockCloseDrive());
@@ -104,8 +107,10 @@ public class OI {
 
     public boolean getPrecisionDrive() {return dsio.getPrecisionDrive();}
 
-
     public double[] getJoyXYZ(Joystick joy) {
+        return getJoyXYZ(joy,1);
+    }
+    public double[] getJoyXYZ(Joystick joy, double rate) {
         double ret_vals[] = new double[3];
         double null_size = StormProp.getNumber("driveDeadZone");
 
@@ -117,9 +122,9 @@ public class OI {
         if (Math.abs(x) < null_size) x = 0;
         if (Math.abs(y) < null_size) y = 0;
         if (Math.abs(z) < null_size) z = 0;
-        ret_vals[0] = x;
-        ret_vals[1] = y;
-        ret_vals[2] = z;
+        ret_vals[0] = x * rate;
+        ret_vals[1] = y * rate;
+        ret_vals[2] = z * rate;
         return(ret_vals);
     }
 }

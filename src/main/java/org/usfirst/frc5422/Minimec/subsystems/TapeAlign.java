@@ -34,12 +34,12 @@ public class TapeAlign extends PIDSubsystem {
 
     // Initialize your subsystem here
     public TapeAlign() {
-        super("TapeAlign", .01, 0.0, .04, 0.0, .02);
+        super("TapeAlign", .2, 0.0, .04, 0.0, .02);
         getPIDController().setContinuous(false);
         getPIDController().setName("TapeAlign", "PIDSubsystem Controller");
         LiveWindow.add(getPIDController());
-        getPIDController().setAbsoluteTolerance(.02);   // FIXME property TapePidTolerance
-        getPIDController().setOutputRange(-0.4, 0.4);  // FIXME property TapePidRange
+        getPIDController().setAbsoluteTolerance(2);   // FIXME property TapePidTolerance
+        getPIDController().setOutputRange(-0.35, 0.35);  // FIXME property TapePidRange
 
         // Debug data
         m_debug_tab = Shuffleboard.getTab("TapeAlignDebug");

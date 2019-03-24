@@ -48,10 +48,12 @@ class DummyButtonBoard: IButtonBoard {
 
     override  val arm135 = DummyButton()
 
-    override val precisionButton = DummyButton();
-    override val xboxA = DummyButton();
-    override val xboxB = DummyButton();
-    override val xboxX = DummyButton();
-    override val xboxY = DummyButton();
+    override val precisionButton = EnhancedButton(drivingJoystick, ButtonIds.XBOX_BUTTON_RIGHT_STICK)
+
+    override val xboxA = EnhancedButton(drivingJoystick, ButtonIds.XBOX_BUTTON_A)
+    override val xboxB = EnhancedButton(drivingJoystick, ButtonIds.XBOX_BUTTON_B)
+    override val xboxX = EnhancedButton(drivingJoystick, ButtonIds.XBOX_BUTTON_X)
+    override val xboxY = EnhancedButton(drivingJoystick, ButtonIds.XBOX_BUTTON_Y)
+
 
 }

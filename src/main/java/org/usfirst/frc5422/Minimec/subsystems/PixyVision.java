@@ -8,6 +8,8 @@
 package org.usfirst.frc5422.Minimec.subsystems;
 
 import org.usfirst.frc5422.Minimec.commands.*;
+
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +24,7 @@ import org.usfirst.frc5422.Minimec.PixyObjectCollection;
 import org.usfirst.frc5422.Minimec.PixyObject.PixyType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import org.usfirst.frc5422.utils.StormProp;
 
 /**
  *
@@ -48,12 +51,15 @@ public class PixyVision extends PIDSubsystem {
     private double m_last_dock_pair_separation = 0; // Track the distance between dock pairs to filter out bad data
     private int m_lost_track_count = 0;
     private boolean m_inverted = true;
+    private static final double m_strafe_pid = .02;
+    private static final double m_turn_pid = .005;
 
     private NetworkTableEntry m_dockmode_entry;
     private NetworkTableEntry m_mode_entry;
     private NetworkTableEntry m_num_objects_entry;
     private NetworkTableEntry m_dbg1_entry;
     private NetworkTableEntry m_dbg2_entry;
+    private int m_dock_brightness;
 
     public enum ObjectType {
         CARGO,DOCK
@@ -93,12 +99,14 @@ public class PixyVision extends PIDSubsystem {
 
     // Initialize your subsystem here
     public PixyVision(String vision_table,boolean camera_inverted) {
-        super("PixyVision", .005, 0.0, .04, 0.0, .02);
+        super("PixyVision", m_turn_pid, 0.0, .04, 0.0, .02);
         getPIDController().setContinuous(false);
         getPIDController().setName("PixyVision", "PIDSubsystem Controller");
         LiveWindow.add(getPIDController());
         getPIDController().setAbsoluteTolerance(.03);
-        getPIDController().setOutputRange(-0.4, 0.4);
+        getPIDController().setOutputRange(-1, 1);
+
+        m_dock_brightness = StormProp.getInt("dock_brightness");
         m_vision_table_name = vision_table;
         m_nt_inst = NetworkTableInstance.getDefault();
         m_entry_brightness = m_nt_inst.getTable(m_vision_table_name).getEntry("brightness");
@@ -126,6 +134,16 @@ public class PixyVision extends PIDSubsystem {
 
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
+    }
+
+    public void set_turn_mode() {
+        getPIDController().setP(m_turn_pid);
+        getPIDController().setD(.04);
+    }
+
+    public void set_strafe_mode() {
+        getPIDController().setP(m_strafe_pid);
+        getPIDController().setD(.1);
     }
 
     public void clearLastTracked() {
@@ -175,7 +193,7 @@ public class PixyVision extends PIDSubsystem {
         }
 	    else {
             m_vision_table = m_nt_inst.getTable(String.format("%s/dock",m_vision_table_name));
-            m_entry_brightness.setNumber(14);
+            m_entry_brightness.setNumber(m_dock_brightness);
             m_dockmode_entry.setString(m_dock_mode.toString());
         }
 
@@ -279,6 +297,7 @@ public class PixyVision extends PIDSubsystem {
                 PixyObject dock0 = targets.get(0);
                 PixyObject dock1 = targets.get(1);
                 double center = (dock0.getX() + dock1.getX())/2;
+                m_last_dock_pair_separation = Math.abs(dock0.getX() - dock1.getX());
                 if (m_last_item_tracked == null) { 
                     m_dbg2_entry.setDouble(center);
                 }
@@ -298,6 +317,10 @@ public class PixyVision extends PIDSubsystem {
         }
         return(0); // Return no error if nothing seen
     }
+
+    public double getDockDistance() {
+        return(800/m_last_dock_pair_separation);
+    } 
 
     public double get_pid_output() {
         return(m_pid_out);
