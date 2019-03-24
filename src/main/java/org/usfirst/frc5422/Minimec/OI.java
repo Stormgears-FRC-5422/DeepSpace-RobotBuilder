@@ -99,7 +99,7 @@ public class OI {
 
     public int getBackJackLevel() {return dsio.getBackJackLevel();}
 
-    public boolean getVenturiOverride() {return dsio.getVenturiOverride();}
+    public boolean getControlOverride() {return dsio.getVenturiOverride();}
 
     public boolean getPrecisionDrive() {return dsio.getPrecisionDrive();}
 

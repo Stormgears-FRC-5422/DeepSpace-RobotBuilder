@@ -3,6 +3,7 @@ package org.usfirst.frc5422.Minimec.subsystems.elevator;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorOverride;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.logging.TalonTuner;
@@ -90,8 +91,11 @@ public class Elevator extends Subsystem {
 
     public void moveDownManual()
     {
-        elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
-        //elevatorTalon.set(ControlMode.Velocity, -1000);
+        if (! Robot.oi.getControlOverride())
+            elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
+        else
+            elevatorTalon.set(ControlMode.Velocity, -1000);
+
         currentPosition = getCurrentPositionTicks();
     }
 
