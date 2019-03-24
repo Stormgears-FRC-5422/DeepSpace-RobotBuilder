@@ -27,7 +27,7 @@ public class Arm extends Subsystem {
 
      *///1850
     public final int INITIALTICKS = 150;
-    private final int MAX_POSITION = 2250;
+    private final int MAX_POSITION = 2180;
     private final int MIN_POSITION = 100;
 
     private WPI_TalonSRX armTalon;
@@ -123,11 +123,11 @@ public class Arm extends Subsystem {
     }
 
     public void moveTo90() {
-//        armTalon.selectProfileSlot(0, 0);
-//        armTalon.configMotionAcceleration(250);
-//        armTalon.configMotionCruiseVelocity(2500);
-//        armTalon.set(ControlMode.MotionMagic, 1024 * 2.5);
-//        curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
+        armTalon.selectProfileSlot(0, 0);
+        armTalon.configMotionAcceleration(250);
+        armTalon.configMotionCruiseVelocity(2500);
+        armTalon.set(ControlMode.MotionMagic, 1024 * 2.5);
+        curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
     }
 
 
@@ -170,10 +170,10 @@ public class Arm extends Subsystem {
     }
 
     public void moveToRest() {
-//        armTalon.selectProfileSlot(1, 0);
-//        armTalon.configMotionAcceleration(250);
-//        armTalon.configMotionCruiseVelocity(2500);
-//        armTalon.set(ControlMode.MotionMagic, INITIALTICKS);
+        armTalon.selectProfileSlot(1, 0);
+        armTalon.configMotionAcceleration(250);
+        armTalon.configMotionCruiseVelocity(2500);
+        armTalon.set(ControlMode.MotionMagic, INITIALTICKS);
     }
 
     public double getArmEnc() {
