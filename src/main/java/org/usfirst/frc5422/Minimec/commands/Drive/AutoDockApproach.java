@@ -61,18 +61,8 @@ public class AutoDockApproach extends Command {
     }
 
     private void set_navx_target() {
-        double cur_heading = Robot.navX.getHeading();
-        Robot.navX.enable(align_to_closest(cur_heading, 45));
+        Robot.navX.enable(Robot.navX.align_to_closest(45));
     }
-    // Move to the closest angle in steps of angle_step
-    private double align_to_closest(double heading,double angle_step) {
-        heading += angle_step/2;
-        heading = heading % 360;
-        int num_steps = (int) (360/angle_step);
-        int target_step = (int) (heading / angle_step);
-        return(360 * ((1.0 * target_step)/num_steps));
-    }
-
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {

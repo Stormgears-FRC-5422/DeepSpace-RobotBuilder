@@ -130,6 +130,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         System.out.println("autonomousInit()");
         onInitCheck();
+        navX.calibrate();
     }
 
     /**
@@ -144,7 +145,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         System.out.println("teleopInit()");
         onInitCheck();
-        navX.calibrate();
     }
 
     /**

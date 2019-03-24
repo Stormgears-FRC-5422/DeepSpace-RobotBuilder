@@ -73,6 +73,9 @@ public class NavX extends PIDSubsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
 
+    public Boolean is_enabled() {
+        return(getPIDController().isEnabled());
+    }
 
     public void enable(double req_heading) {
         set_gyro_target(req_heading);
@@ -81,6 +84,20 @@ public class NavX extends PIDSubsystem {
         SmartDashboard.putString("NavX Heading Subsystem", "ENABLED");
         m_ena_entry.setBoolean(true);
     }
+
+    // find closest angle in steps of angle_step
+    public double align_to_closest(double heading,double angle_step) {
+        heading += angle_step/2;
+        heading = heading % 360;
+        int num_steps = (int) (360/angle_step);
+        int target_step = (int) (heading / angle_step);
+        return(360 * ((1.0 * target_step)/num_steps));
+    }
+
+    public double align_to_closest(double angle_step) {
+        return align_to_closest(getHeading(),angle_step);
+    }
+
 
     public void set_gyro_target(double req_heading) {
         double cur_angle = m_ahrs.getAngle();
