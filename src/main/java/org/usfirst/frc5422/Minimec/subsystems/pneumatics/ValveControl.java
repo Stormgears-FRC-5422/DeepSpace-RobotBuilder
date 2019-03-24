@@ -8,7 +8,6 @@ import org.usfirst.frc5422.Minimec.commands.Pneumatics.DisableAllPneumatics;
 import org.usfirst.frc5422.utils.StormProp;
 
 public class ValveControl extends Subsystem {
-
     private Solenoid cargoValve;
     private Solenoid hatchValve;
     private Solenoid armValve;
@@ -22,11 +21,8 @@ public class ValveControl extends Subsystem {
 
     private AnalogInput vacPressureSensor;
 
-
     private boolean cargoOpen;
     private boolean hatchOpen;
-
-    public boolean getHatchOpen(){return hatchOpen;}
 
     public ValveControl() {
         int mod = StormProp.getInt("CompressorModuleId");
@@ -35,22 +31,17 @@ public class ValveControl extends Subsystem {
         cargoValve.set(false);
         addChild("BALL_VALVE", cargoValve);
 
-
         hatchValve = new Solenoid(mod , StormProp.getInt("hatchValve"));
         hatchValve.set(false);
         addChild("HATCH_VALVE",hatchValve);
-
 
         armValve = new Solenoid(mod , StormProp.getInt("armValve"));
         armValve.set(false);
         addChild("ARM_VALVE",armValve);
 
-
         vacValve = new Solenoid(mod , StormProp.getInt("vacValve"));
         vacValve.set(false);
         addChild("VAC_VALVE",vacValve);
-
-        // TODO: Magic Numbers
 
         ballProxSensor = new DigitalInput(StormProp.getInt("ballProxSensorDIO" ));
         addChild("Ball Proximity Sensor", ballProxSensor);
@@ -64,29 +55,20 @@ public class ValveControl extends Subsystem {
         vacPressureSensor = new AnalogInput(StormProp.getInt("vacPressureSensor"));
         addChild("Pressure Sensor", vacPressureSensor);
 
-        // 1 - 5 V maps to 0 to -14 psi
-
         cargoOpen = false;
         hatchOpen = false;
     }
 
     @Override
     public void initDefaultCommand() {
-
         // Set the default command for a subsystem here.
         setDefaultCommand(new DisableAllPneumatics());
     }
 
     @Override
     public void periodic() {
-//        if (Robot.oi.getJoystick1().getRawButton(3))
-//            vacStop();
-//        else
-//            manageVac();
-
         manageVac();
     }
-
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -134,6 +116,8 @@ public class ValveControl extends Subsystem {
         vacValve.set(false);
     }
 
+    public boolean getHatchOpen(){return hatchOpen;}
+
     public boolean getHatchProxSensor() {
         System.out.println("Sense Hatch?: " + ! hatchProxSensor.get());
         return hatchProxSensor.get();
@@ -158,14 +142,12 @@ public class ValveControl extends Subsystem {
         double highVacuum = StormProp.getNumber("highVacuumKPa");
         double lowVacuum = StormProp.getNumber("lowVacuumKPa");
         double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
-//        System.out.println("Vacuum level: " + currentVac);
 
         if (Robot.oi.getVenturiOverride() || currentVac > highVacuum) {
             vacStop();
-        } else if ( currentVac < lowVacuum ) {
+        } else if ( currentVac < lowVacuum && Robot.compressor.hasCycled() ) {
             vacStart();
         }
-
     }
 }
 
