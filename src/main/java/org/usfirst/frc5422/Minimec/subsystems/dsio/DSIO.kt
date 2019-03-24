@@ -40,14 +40,10 @@ object DSIO {
     }
 
     fun getBackJackLevel() : Int {
-//        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
-//        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
 
-        // Test code for bench testing backjack with Xbox controller
-        // 1 is forward, -1 is backwards
-        // 0 is stop
-        if (getJoystick().getRawButton(1)) return 1;
-        if (getJoystick().getRawButton(2)) return -1;
+        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+
         return 0
     }
 
@@ -55,18 +51,18 @@ object DSIO {
         return precision
     }
 
-    fun getVenturiOverride(): Boolean {
+    fun controlOverride(): Boolean {
         return getJoystick().getRawButton(1)
     }
 
     private fun setupControls()
     {
-        System.out.println("setupControls()");
+        System.out.println("setupControls()")
         buttonBoard.resetCode.whenPressed(ResetCode())
 
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {
-            buttonBoard.moveBackjack.whenPressed(MoveJack())
+            buttonBoard.moveBackjack.whileHeld(MoveJack(true))
         }
 
         if (Robot.useCompressor) {

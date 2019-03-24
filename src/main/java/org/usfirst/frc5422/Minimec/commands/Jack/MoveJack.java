@@ -19,8 +19,10 @@ import org.usfirst.frc5422.Minimec.Robot;
  *
  */
 public class MoveJack extends Command {
-    public MoveJack() {
-        System.out.println("MoveJack()");
+    private boolean m_active;
+    public MoveJack(boolean active) {
+        System.out.println("MoveJack()" + active);
+        m_active = active;
         requires(Robot.backjack);
     }
 
@@ -33,7 +35,7 @@ public class MoveJack extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.backjack.move();
+        Robot.backjack.move(m_active);
         //Robot.drive.driveArcade(.1, .1, .1);
     }
 

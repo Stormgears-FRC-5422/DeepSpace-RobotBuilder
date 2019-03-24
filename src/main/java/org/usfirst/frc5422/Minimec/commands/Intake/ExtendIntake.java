@@ -45,7 +45,6 @@ public class ExtendIntake extends Command {
     @Override
     protected void initialize() {
         Robot.valveControl.armExtend();
-        Robot.intake.moveIntakeWheelsIn();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -71,6 +70,5 @@ public class ExtendIntake extends Command {
     protected void interrupted() {
         System.out.println("ExtendIntakeCommand.interrupted()");
         Robot.valveControl.armRetract();
-        Robot.intake.wheelsOff();
     }
 }

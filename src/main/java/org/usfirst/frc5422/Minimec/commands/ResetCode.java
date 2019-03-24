@@ -22,6 +22,7 @@ public class ResetCode extends Command {
     public ResetCode() {
         if (Robot.useElevator) requires(Robot.elevator);
         if (Robot.useArm) requires(Robot.arm);
+        if (Robot.useBackjack) requires(Robot.backjack);
     }
 
     // Called just before this Command runs the first time
@@ -30,6 +31,7 @@ public class ResetCode extends Command {
         System.out.println("In resetCode.initialize()");
         if (Robot.useElevator) Robot.elevator.reset();
         if (Robot.useArm) Robot.arm.reset();
+        if (Robot.useBackjack) Robot.backjack.reset();
     }
 
     // Called repeatedly when this Command is scheduled to run
