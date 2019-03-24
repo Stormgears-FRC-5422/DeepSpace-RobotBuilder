@@ -11,8 +11,6 @@
 
 package org.usfirst.frc5422.Minimec;
 
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -22,7 +20,6 @@ import org.usfirst.frc5422.Minimec.commands.Drive.DockCloseDrive;
 import org.usfirst.frc5422.Minimec.commands.Drive.DockDrive;
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive;
 
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.RunCompressor;
 import org.usfirst.frc5422.Minimec.subsystems.dsio.DSIO;
 import org.usfirst.frc5422.utils.StormProp;
 
@@ -103,7 +100,7 @@ public class OI {
 
     public int getBackJackLevel() {return dsio.getBackJackLevel();}
 
-    public boolean getVenturiOverride() {return dsio.getVenturiOverride();}
+    public boolean getControlOverride() {return dsio.controlOverride();}
 
     public boolean getPrecisionDrive() {return dsio.getPrecisionDrive();}
 

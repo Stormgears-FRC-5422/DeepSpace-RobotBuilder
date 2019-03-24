@@ -12,6 +12,7 @@
 package org.usfirst.frc5422.Minimec.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -66,8 +67,12 @@ public class Drive extends Subsystem {
 
             rightBack = new WPI_TalonSRX(StormProp.getInt("rearRightTalonId"));
             
-            
-            
+            leftFront.setNeutralMode(NeutralMode.Brake);
+            leftBack.setNeutralMode(NeutralMode.Brake);
+            rightBack.setNeutralMode(NeutralMode.Brake);
+            rightFront.setNeutralMode(NeutralMode.Brake);
+
+
             mecanumDrive1 = new MecanumDrive(leftFront, leftBack,
                     rightFront, rightBack);
             addChild("Mecanum Drive 1",mecanumDrive1);

@@ -59,6 +59,7 @@ public class TalonTuner {
         iZoneEntry = tab.add("iZone", slotConfig.integralZone).getEntry();
         allowableClosedLoopErrorEntry = tab.add("ACLE", slotConfig.allowableClosedloopError).getEntry();
         closedLoopPeakOutputEntry = tab.add("CLPO", slotConfig.closedLoopPeakOutput).getEntry();
+
         updatePIDEntry = tab.add("Apply", 0).getEntry();
 
     }

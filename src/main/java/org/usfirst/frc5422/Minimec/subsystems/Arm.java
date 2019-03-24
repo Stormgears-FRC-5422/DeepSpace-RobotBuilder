@@ -2,14 +2,9 @@ package org.usfirst.frc5422.Minimec.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmOverride;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.logging.TalonTuner;
@@ -32,14 +27,15 @@ public class Arm extends Subsystem {
 
      *///1850
     public final int INITIALTICKS = 150;
-    private final int MAX_POSITION = 2250;
+    private final int MAX_POSITION = 2180;
     private final int MIN_POSITION = 100;
 
     private WPI_TalonSRX armTalon;
     private WPI_TalonSRX pivotTalon;
 
-    private int armPositionSlotIdx = 1;
-    private int armMotionMagicSlotIdx = 0;
+    private final int armMotionMagicSlotIdx = 0;
+    private final int armPositionSlotIdx = 1;
+//    private final int armHatchOnIdx = 3;
 
     double curArmPos;
     double curPivPos;
@@ -52,31 +48,34 @@ public class Arm extends Subsystem {
         armTalon = new WPI_TalonSRX(StormProp.getInt("armTalonId"));  // SHOULDER   TODO
         pivotTalon = new WPI_TalonSRX(StormProp.getInt("wristTalonId"));  // WRIST TODO
 
-        // TODO - something more sensible here
-        armTalon.setSelectedSensorPosition(0);
-        pivotTalon.setSelectedSensorPosition(0);
+        reset();
+        armTalon.configClosedloopRamp(0.0);
+
+//        armTalon.config_kD(armHatchOnIdx , 60);
+//        armTalon.config_kI(armHatchOnIdx , 0.001);
+//        armTalon.config_kP(armHatchOnIdx , 10.0);
+//        armTalon.config_kF(armHatchOnIdx , 2.5);
+//        armTalon.config_IntegralZone(armHatchOnIdx , 100);
+//        armTalon.configClosedLoopPeakOutput(armHatchOnIdx, .5);
+
 
         armTalon.config_kD(armMotionMagicSlotIdx , 60);
-        armTalon.config_kI(armMotionMagicSlotIdx , 0.01);
+        armTalon.config_kI(armMotionMagicSlotIdx , 0.001);
         armTalon.config_kP(armMotionMagicSlotIdx , 5.0);
         armTalon.config_kF(armMotionMagicSlotIdx , 2.5);
         armTalon.config_IntegralZone(armMotionMagicSlotIdx , 100);
-        /*armTalon.config_kD(armMotionMagicSlotIdx , 0);
-        armTalon.config_kI(armMotionMagicSlotIdx , 0);
-        armTalon.config_kP(armMotionMagicSlotIdx , 0);
-        armTalon.config_kF(armMotionMagicSlotIdx , 0);
-        armTalon.config_IntegralZone(armMotionMagicSlotIdx , 0);*/
+        armTalon.configClosedLoopPeakOutput(armMotionMagicSlotIdx, .5);
         armTalon.configAllowableClosedloopError(armMotionMagicSlotIdx , 25);
-        armTalon.configClosedLoopPeakOutput(armMotionMagicSlotIdx ,0.10);
+        armTalon.configClosedLoopPeakOutput(armMotionMagicSlotIdx ,0.50);
         armMotionMagicTuner = new TalonTuner("Arm MotionMagic", armTalon, ControlMode.MotionMagic, armMotionMagicSlotIdx );
 
-//        armTalon.config_kD(armPositionSlotIdx , 1);
-//        armTalon.config_kI(armPositionSlotIdx , 0.01);
-//        armTalon.config_kP(armPositionSlotIdx , 0.2);
-//        armTalon.config_kF(armPositionSlotIdx , 0.0);
-//        armTalon.config_IntegralZone(armPositionSlotIdx , 100);
-        armTalon.configAllowableClosedloopError(armPositionSlotIdx , 25);
-        armTalon.configClosedLoopPeakOutput(armPositionSlotIdx ,0.10);
+        armTalon.config_kD(armPositionSlotIdx , 5);
+        armTalon.config_kI(armPositionSlotIdx , 0.1);
+        armTalon.config_kP(armPositionSlotIdx , 2.5);
+        armTalon.config_kF(armPositionSlotIdx , 0.0);
+        armTalon.config_IntegralZone(armPositionSlotIdx , 100);
+        armTalon.configAllowableClosedloopError(armPositionSlotIdx , 100);
+        armTalon.configClosedLoopPeakOutput(armPositionSlotIdx ,0.50);
         armPositionTuner = new TalonTuner("Arm Position", armTalon, ControlMode.Position, armPositionSlotIdx );
 
         armTalon.setNeutralMode(NeutralMode.Brake);
@@ -84,25 +83,28 @@ public class Arm extends Subsystem {
         armTalon.configMotionAcceleration(750);
         armTalon.configMotionCruiseVelocity(2500);
 
-        pivotTalon.setNeutralMode(NeutralMode.Brake);
-
-        curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
-        curPivPos = pivotTalon.getSensorCollection().getQuadraturePosition();
-        Shuffleboard.getTab("Arm").add("Min Position:", INITIALTICKS);
-        Shuffleboard.getTab("Arm").add("Max Position:", MAX_POSITION);
-        addChild("armTalon", armTalon);
-        addChild("pivotTalon", pivotTalon);
+//        pivotTalon.setNeutralMode(NeutralMode.Brake);
+//        pivotTalon.config_kD(0, 0);
+//        pivotTalon.config_IntegralZone(0, 1000);
+//        pivotTalon.config_kP(0, .25);
+//        pivotTalon.config_kI(0, .00005);
+//        pivotTalon.configAllowableClosedloopError(0, 23);
     }
 
+    public void reset() {
+        // TODO - something more sensible here
+        armTalon.setSelectedSensorPosition(0);
+        pivotTalon.setSelectedSensorPosition(0);
+        curArmPos = 0;
+        curPivPos = 0;
+
+    }
     public double getWristPosition(){return pivotTalon.getSensorCollection().getQuadraturePosition();}
     public double getWristVelocity(){return pivotTalon.getSensorCollection().getQuadratureVelocity();}
     public double getCurrentPositionTicks(){
         return armTalon.getSensorCollection().getQuadraturePosition();
     }
 
-
-    public static void init() {
-    }
 
     public void moveToBottom() {
 //
@@ -121,11 +123,11 @@ public class Arm extends Subsystem {
     }
 
     public void moveTo90() {
-//        armTalon.selectProfileSlot(0, 0);
-//        armTalon.configMotionAcceleration(250);
-//        armTalon.configMotionCruiseVelocity(2500);
-//        armTalon.set(ControlMode.MotionMagic, 1024 * 2.5);
-//        curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
+        armTalon.selectProfileSlot(0, 0);
+        armTalon.configMotionAcceleration(250);
+        armTalon.configMotionCruiseVelocity(2500);
+        armTalon.set(ControlMode.MotionMagic, 1024 * 2.5);
+        curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
     }
 
 
@@ -168,10 +170,10 @@ public class Arm extends Subsystem {
     }
 
     public void moveToRest() {
-//        armTalon.selectProfileSlot(1, 0);
-//        armTalon.configMotionAcceleration(250);
-//        armTalon.configMotionCruiseVelocity(2500);
-//        armTalon.set(ControlMode.MotionMagic, INITIALTICKS);
+        armTalon.selectProfileSlot(1, 0);
+        armTalon.configMotionAcceleration(250);
+        armTalon.configMotionCruiseVelocity(2500);
+        armTalon.set(ControlMode.MotionMagic, INITIALTICKS);
     }
 
     public double getArmEnc() {
@@ -208,23 +210,29 @@ public class Arm extends Subsystem {
 
     public void moveUpManual()
     {
-        currentPosition = getCurrentPositionTicks();
-        armTalon.selectProfileSlot(armMotionMagicSlotIdx,0);
+        armTalon.selectProfileSlot(armMotionMagicSlotIdx, 0);
         armTalon.set(ControlMode.MotionMagic, INITIALTICKS);
+        currentPosition = getCurrentPositionTicks();
     }
 
     public void moveDownManual()
     {
-        currentPosition = getCurrentPositionTicks();
-        armTalon.selectProfileSlot(armMotionMagicSlotIdx,0);
+        armTalon.selectProfileSlot(armMotionMagicSlotIdx, 0);
         armTalon.set(ControlMode.MotionMagic, MAX_POSITION);
+        currentPosition = getCurrentPositionTicks();
     }
 
     public void hold()
     {
-//        System.out.println("TRYING TO HOLD POSITION: " + currentPosition);
-        armTalon.selectProfileSlot(armPositionSlotIdx,0);
-        armTalon.set(ControlMode.Position, currentPosition);
+//        System.out.println("Wrist HOLD POSITION: " + pivotTalon.getSensorCollection().getQuadraturePosition());
+//        armTalon.selectProfileSlot(armPositionSlotIdx,0);
+//        armTalon.set(ControlMode.Position, currentPosition);
+        armTalon.set(ControlMode.MotionMagic, currentPosition);
+//        holdWrist();
+    }
+
+    public void holdWrist(){
+//        pivotTalon.set(ControlMode.Position, 0);
     }
 
     public void initDefaultCommand(){
@@ -233,6 +241,7 @@ public class Arm extends Subsystem {
 
     public void periodic(){
         armMotionMagicTuner.periodic();
+        armPositionTuner.periodic();
     }
 }
 

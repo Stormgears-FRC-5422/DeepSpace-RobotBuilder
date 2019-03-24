@@ -8,54 +8,52 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-package org.usfirst.frc5422.Minimec.commands.Jack;
 
+package org.usfirst.frc5422.Minimec.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
-import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc5422.Minimec.Robot;
+
+//push
 
 /**
  *
  */
-public class MoveJack extends Command {
-    private boolean m_active;
-    public MoveJack(boolean active) {
-        System.out.println("MoveJack()" + active);
-        m_active = active;
-        requires(Robot.backjack);
+public class ResetCode extends Command {
+    public ResetCode() {
+        if (Robot.useElevator) requires(Robot.elevator);
+        if (Robot.useArm) requires(Robot.arm);
+        if (Robot.useBackjack) requires(Robot.backjack);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        System.out.println("MoveJack.initialize()");
+        System.out.println("In resetCode.initialize()");
+        if (Robot.useElevator) Robot.elevator.reset();
+        if (Robot.useArm) Robot.arm.reset();
+        if (Robot.useBackjack) Robot.backjack.reset();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.backjack.move(m_active);
-        //Robot.drive.driveArcade(.1, .1, .1);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        System.out.println("MoveJack.interrupted()");
-        Robot.backjack.stop();
+        System.out.println("ResetCode interrupted");
     }
 }

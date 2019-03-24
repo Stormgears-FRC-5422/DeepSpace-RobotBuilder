@@ -10,7 +10,7 @@ class DummyButtonBoard: IButtonBoard {
     override val joy1 = Joystick(1)
     override val joy2 = Joystick(2)
 
-    override val elevatorSwitch = DummySwitch()
+    override val resetCode = DummySwitch()
 
     override val backJackLevel2 = DummyButton()
 

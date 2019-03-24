@@ -2,9 +2,11 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.Minimec.Robot
+import org.usfirst.frc5422.Minimec.commands.ResetCode
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
+import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
@@ -13,12 +15,11 @@ import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
-import org.usfirst.frc5422.Minimec.subsystems.pneumatics.Compression
-import org.usfirst.frc5422.utils.dsio.ButtonBoardSwitchedException
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
-    private val buttonBoard:IButtonBoard
+
+    private var buttonBoard:IButtonBoard
     var precision = false
 
     init{
@@ -41,14 +42,10 @@ object DSIO {
     }
 
     fun getBackJackLevel() : Int {
-//        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
-//        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
 
-        // Test code for bench testing backjack with Xbox controller
-        // 1 is forward, -1 is backwards
-        // 0 is stop
-        //if (getJoystick().getRawButton(1)) return 1;
-        //if (getJoystick().getRawButton(2)) return -1;
+        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+
         return 0
     }
 
@@ -56,16 +53,18 @@ object DSIO {
         return precision
     }
 
-    fun getVenturiOverride(): Boolean {
+    fun controlOverride(): Boolean {
         return getJoystick().getRawButton(1)
     }
 
     private fun setupControls()
     {
-        System.out.println("setupControls()");
+        System.out.println("setupControls()")
+        buttonBoard.resetCode.whenPressed(ResetCode())
+
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {
-            buttonBoard.moveBackjack.whenPressed(MoveJack());
+            buttonBoard.moveBackjack.whileHeld(MoveJack(true))
         }
 
         if (Robot.useDrive) {
@@ -103,17 +102,12 @@ object DSIO {
             println("ELEVATOR GROUND")
         }
 
-        buttonBoard.elevatorLevelOne.whenPressed{
-            println("ELEVATOR LEVEL ONE")
-        }
+        buttonBoard.elevatorLevelOne.whileHeld(ElevatorMove(1))
 
-        buttonBoard.elevatorLevelTwo.whenPressed{
-            println("ELEVATOR LEVEL TWO")
-        }
+        buttonBoard.elevatorLevelTwo.whileHeld(ElevatorMove(2))
 
-        buttonBoard.elevatorLevelThree.whenPressed{
-            println("ELEVATOR LEVEL THREE")
-        }
+        buttonBoard.elevatorLevelThree.whileHeld(ElevatorMove(3))
+
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision

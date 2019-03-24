@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -21,15 +22,24 @@ public class Backjack extends Subsystem {
     //private TalonSRX jackTalon;
     private WPI_TalonSRX jackTalon;
 
+    private static final int MAX_POSITION = 32600;
+    private DigitalInput fLightR;
+    private DigitalInput fLightL;
     private int nextLevel;
     private boolean moving = false;
     private NetworkTableEntry encoderEntry;
+    private NetworkTableEntry rightEntry;
+    private NetworkTableEntry leftEntry;
     private ShuffleboardTab tab;
 
     public Backjack() {
         int kTimeoutMs = StormProp.getInt("canTimeout");
-        //NetworkTableEntry currentEntry = Shuffleboard.getTab("LiveWindow").add("Current", 0).getEntry();
-
+        Shuffleboard.selectTab("Backjack");
+        tab = Shuffleboard.getTab("Backjack");
+        fLightR = new DigitalInput(9);
+        fLightL = new DigitalInput(8);
+        rightEntry = tab.add("Right Light", (fLightR).get()).getEntry();
+        leftEntry = tab.add("Left Light", (fLightL).get()).getEntry();
 
         // backjack gear radius is 1 inches
         // two seconds per rotation
@@ -40,7 +50,15 @@ public class Backjack extends Subsystem {
 
         jackTalon = new WPI_TalonSRX(StormProp.getInt("jackTalonId"));
         jackTalon.setNeutralMode(NeutralMode.Brake);
-        jackTalon.getSensorCollection().setQuadraturePosition(0, 20);
+
+
+        reset();
+
+        jackTalon.setInverted(true);
+        jackTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
+        jackTalon.configForwardSoftLimitEnable(true);
+
+        //        jackTalon.getSensorCollection().setQuadraturePosition(0, 20);
         //jackTalon.configPeakCurrentLimit((StormProp.getInt("armCurrentLimit")));
 
 //        jackTalon.selectProfileSlot(0, 0);
@@ -53,17 +71,17 @@ public class Backjack extends Subsystem {
 //        jackTalon.configMotionAcceleration(500);
 //        jackTalon.configMotionCruiseVelocity(500);
 
-        jackTalon.setInverted(true);
-//        jackTalon.setSensorPhase(false);
-
-        addChild("JackTalon", jackTalon);
-
-        nextLevel = 0;
-
+        nextLevel = -1;
 
         tab = Shuffleboard.getTab("Backjack");
         Shuffleboard.selectTab("Backjack");
         encoderEntry = tab.add("encoder ticks", getCurrentPositionTicks()).getEntry();
+    }
+
+
+
+    public void reset() {
+        jackTalon.setSelectedSensorPosition(0);
     }
 
     public double getCurrentPositionTicks(){
@@ -72,28 +90,37 @@ public class Backjack extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new MoveJack());
+        setDefaultCommand(new MoveJack(false));
     }
 
     @Override
     public void periodic() {
         //currentEntry.setDouble(jackTalon.getOutputCurrent());
         encoderEntry.setDouble(getCurrentPositionTicks());
+        rightEntry.setBoolean((fLightR).get());
+        leftEntry.setBoolean((fLightL).get());
     }
 
-    public void move() {
-        nextLevel = Robot.oi.getBackJackLevel();
+    public void move(boolean active) {
+        if (active) {
+            nextLevel = Robot.oi.getBackJackLevel();
+        } else {
+            nextLevel = -1;
+        }
+
+        //System.out.println("Move() :" + nextLevel);
 
         switch(nextLevel) {
-            case 1:  // Extend
+            case 2:  // Extend
+            case 3:  // Extend
                 moving = true;
                 jackTalon.set(ControlMode.PercentOutput, 1.0);
                 break;
-            case -1:  // retract
+            case 0:  // retract
                 moving = true;
                 jackTalon.set(ControlMode.PercentOutput, -1.0);
                 break;
-            case 0:
+            case -1:
             default:
                 stop();
                 break;
