@@ -4,10 +4,11 @@ package org.usfirst.frc5422.Minimec.subsystems.pneumatics;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.DisableAllPneumatics;
+import org.usfirst.frc5422.Minimec.commands.Pneumatics.EnableVacuum;
 import org.usfirst.frc5422.utils.StormProp;
 
 public class ValveControl extends Subsystem {
+    boolean vacRunning;
     private Solenoid cargoValve;
     private Solenoid hatchValve;
     private Solenoid armValve;
@@ -21,10 +22,16 @@ public class ValveControl extends Subsystem {
 
     private AnalogInput vacPressureSensor;
 
+    Timer timer;
+    double maxVenturiTime;
+
     private boolean cargoOpen;
     private boolean hatchOpen;
 
     public ValveControl() {
+        timer = new Timer();
+        maxVenturiTime = StormProp.getNumber("maxVenturiTime");
+
         int mod = StormProp.getInt("CompressorModuleId");
 
         cargoValve = new Solenoid(mod, StormProp.getInt("cargoValve"));
@@ -57,12 +64,13 @@ public class ValveControl extends Subsystem {
 
         cargoOpen = false;
         hatchOpen = false;
+        vacRunning = false;
     }
 
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new DisableAllPneumatics());
+        setDefaultCommand(new EnableVacuum());
     }
 
     @Override
@@ -109,11 +117,23 @@ public class ValveControl extends Subsystem {
     }
 
     public void vacStart() {
-        vacValve.set(true);
+        // Don't bother doing anything if we are already running
+        if (!vacRunning) {
+            timer.reset();
+            timer.start();
+            vacValve.set(true);
+            vacRunning = true;
+            System.out.println("Vacuum running");
+        }
     }
 
     public void vacStop(){
-        vacValve.set(false);
+        if (vacRunning) {
+            vacValve.set(false);
+            timer.stop();
+            vacRunning = false;
+            System.out.println("Vacuum stopped");
+        }
     }
 
     public boolean getHatchOpen(){return hatchOpen;}
@@ -143,9 +163,14 @@ public class ValveControl extends Subsystem {
         double lowVacuum = StormProp.getNumber("lowVacuumKPa");
         double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
 
-        if (Robot.oi.getControlOverride() || currentVac > highVacuum) {
+        if (!Robot.compressor.isActiveAndCharged() && timer.get() > maxVenturiTime) {
+            // conservative stop. Let the compressor charge up first
             vacStop();
-        } else if ( currentVac < lowVacuum && Robot.compressor.hasCycled() ) {
+        } else if (currentVac > highVacuum ||  Robot.oi.getControlOverride() ) {
+            // normal stop
+            vacStop();
+        } else if ( currentVac < lowVacuum) {
+            // OK to go
             vacStart();
         }
     }

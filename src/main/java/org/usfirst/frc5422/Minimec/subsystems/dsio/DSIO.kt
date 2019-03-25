@@ -2,15 +2,15 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.Minimec.Robot
-import org.usfirst.frc5422.Minimec.commands.ResetCode
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
+import org.usfirst.frc5422.Minimec.commands.AutoHome
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
-import org.usfirst.frc5422.Minimec.commands.Drive.DockDrive
+import org.usfirst.frc5422.Minimec.commands.Jack.BackjackReset
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
@@ -60,7 +60,7 @@ object DSIO {
     private fun setupControls()
     {
         System.out.println("setupControls()")
-        buttonBoard.resetCode.whenPressed(ResetCode())
+        buttonBoard.resetCode.whenPressed(AutoHome(true));
 
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {

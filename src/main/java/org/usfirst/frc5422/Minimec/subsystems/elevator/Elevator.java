@@ -9,10 +9,7 @@ import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.logging.TalonTuner;
 
 public class Elevator extends Subsystem {
-    private static Elevator instance;
     private double currentPosition;
-
-    private final int TICKS_PER_INCH = 512;
 
     public final int REST_POSITION = 0;
     private final int MAX_POSITION = 27500;
@@ -22,7 +19,7 @@ public class Elevator extends Subsystem {
 
     public Elevator()
     {
-        int kTimeoutMs = 10;
+        int kTimeoutMs = StormProp.getInt("canTimeout");
         int slotIdx = 0;
         elevatorTalon = new WPI_TalonSRX(StormProp.getInt("elevatorTalonId"));
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
@@ -68,17 +65,14 @@ public class Elevator extends Subsystem {
 
     public void hold(double position)
     {
-
         //elevatorTalon.set(ControlMode.Position, position);
         elevatorTalon.set(ControlMode.Velocity, 0);
-
         //System.out.println("TRYING TO HOLD POSITION: " + position + "  current Position: " + getCurrentPositionTicks());
     }
 
     public void moveUpManual()
     {
         elevatorTalon.set(ControlMode.MotionMagic, MAX_POSITION);
-        //elevatorTalon.set(ControlMode.Velocity, 1000);
         currentPosition = getCurrentPositionTicks();
     }
 
@@ -91,6 +85,8 @@ public class Elevator extends Subsystem {
 
     public void moveDownManual()
     {
+        // Allow override by pressing the right button - in case position gets messed up.
+        // probably not necessary after returnHome was implemented, but safe to leave here.
         if (! Robot.oi.getControlOverride())
             elevatorTalon.set(ControlMode.MotionMagic, REST_POSITION);
         else
@@ -101,6 +97,24 @@ public class Elevator extends Subsystem {
 
     public void periodic(){
         //elevatorMotionMagicTuner.periodic();
+        if (isHome()) {
+            reset();
+        }
+
+    }
+
+    public void returnHome(boolean go) {
+        if (go) {
+            elevatorTalon.set(ControlMode.Velocity, -1000);
+        } else {  // Stop returning
+            elevatorTalon.set(ControlMode.Velocity, 0);
+        }
+
+    }
+
+    public boolean isHome() {
+        // Switches are normally closed - triggered means they would be open
+        return !elevatorTalon.getSensorCollection().isRevLimitSwitchClosed();
     }
 
 }

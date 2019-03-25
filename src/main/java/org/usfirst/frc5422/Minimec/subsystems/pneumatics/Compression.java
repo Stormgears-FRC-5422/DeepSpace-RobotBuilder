@@ -22,14 +22,14 @@ import org.usfirst.frc5422.utils.StormProp;
  *
  */
 public class Compression extends Subsystem {
-    private boolean m_hasCycled = false;
-    private boolean running = true;
+    private boolean running;
     private Compressor mainCompressor;
 
     public Compression() {
         mainCompressor = new Compressor(StormProp.getInt("CompressorModuleId"));
         addChild("MainCompressor",mainCompressor);
         mainCompressor.setClosedLoopControl(false);
+        running = false;
     }
 
     @Override
@@ -39,17 +39,10 @@ public class Compression extends Subsystem {
 
     @Override
     public void periodic() {
-        // Put code here to be run every loop
-        if (running && !m_hasCycled) {
-            if (mainCompressor.enabled() == false) m_hasCycled = true;
-        }
     }
 
-    // We don't want to run the venturi until the compressor has cycled once
-    public boolean hasCycled() {return m_hasCycled;}
-
-    public void reset() {
-        m_hasCycled = false;
+    public boolean isActiveAndCharged() {
+        return (running && mainCompressor.getPressureSwitchValue());
     }
 
     // Put methods for controlling this subsystem
@@ -58,18 +51,16 @@ public class Compression extends Subsystem {
         running = true;
         mainCompressor.setClosedLoopControl(true);
         mainCompressor.start();
-        boolean enabled = mainCompressor.enabled();
-        System.out.println("Compressor status: " + enabled);
-        boolean pressureValue = mainCompressor.getPressureSwitchValue();
-        System.out.println("Compressor value: " + pressureValue);
-        double current = mainCompressor.getCompressorCurrent();
-        System.out.println("Compressor current: " + current);
+
+        System.out.println("Compressor status: " + mainCompressor.enabled());
+        System.out.println("Compressor value: " + mainCompressor.getPressureSwitchValue());
+        System.out.println("Compressor current: " + mainCompressor.getCompressorCurrent());
     }
 
     public void stopCompressor(){
         mainCompressor.setClosedLoopControl(false);
-        boolean off = !mainCompressor.enabled();
-        System.out.println("Compressor off: " + off);
+        mainCompressor.stop();
+        System.out.println("Compressor off: " + !mainCompressor.enabled());
         running = false;
     }
 }

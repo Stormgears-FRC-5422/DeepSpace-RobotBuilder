@@ -32,6 +32,7 @@ public class ArmOverride extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        System.out.println("ArmOverride initialize()");
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -57,6 +58,7 @@ public class ArmOverride extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        System.out.println("ArmOverride end()");
         Robot.arm.hold();
     }
 
@@ -64,6 +66,7 @@ public class ArmOverride extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        System.out.println("ArmOverride interrupted()");
         Robot.arm.hold();
     }
 

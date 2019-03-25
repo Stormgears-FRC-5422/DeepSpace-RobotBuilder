@@ -55,7 +55,7 @@ public class ArmToRest extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(Robot.arm.getPivotEnc() > 0){
+        if(Robot.arm.getArmPositionTicks() > 0){
             Robot.arm.movePivotUp();
         }
         Robot.arm.moveToRest();

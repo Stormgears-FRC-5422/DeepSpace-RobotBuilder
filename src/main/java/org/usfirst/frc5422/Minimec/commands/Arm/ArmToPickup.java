@@ -55,7 +55,7 @@ public class ArmToPickup extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(Robot.arm.getPivotEnc() < 100){
+        if(Robot.arm.getWristPositionTicks() < 100){
             Robot.arm.movePivot();
         }
         Robot.arm.moveTo135();
