@@ -12,7 +12,7 @@ public class ElevatorMove extends Command {
     private int level;
     public ElevatorMove(int level){
         this.level = level;
-        requires(Robot.elevator);
+        if (Robot.useElevator) requires(Robot.elevator);
     }
 
     @Override

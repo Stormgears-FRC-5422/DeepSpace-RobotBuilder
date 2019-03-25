@@ -71,11 +71,16 @@ public class JoyDrive extends Command {
             double z = joy_vals[2];
 
             // momentary tape alignment 
-            if (joy.getRawButton(6)) { // Button 5/6 is pid override
+            Boolean align90 = joy.getRawButton(5);
+            Boolean align30 = joy.getRawButton(6);
+            if (align90 || align30) { // Button 5/6 is pid override
                 if (!m_alignment_enabled) {
                     Robot.tapeAlignSys.enable();
-                    if (!Robot.navX.is_enabled()) Robot.navX.enable(Robot.navX.align_to_closest(90));
-                    m_alignment_enabled = true;
+                    if (!Robot.navX.is_enabled()) { 
+                        if (align90) Robot.navX.enable(Robot.navX.align_to_closest(90));
+                        if (align30) Robot.navX.enable(Robot.navX.align_to_closest(30));
+                        m_alignment_enabled = true;
+                    }   
                 }
             } else  if (m_alignment_enabled) {
                 Robot.tapeAlignSys.disable();
