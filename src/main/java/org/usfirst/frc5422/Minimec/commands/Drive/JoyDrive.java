@@ -96,7 +96,7 @@ public class JoyDrive extends Command {
                 // Get  sensor feedback for strafe
                 double tape_pid_output = Robot.tapeAlignSys.get_pid_output();
                 if (tape_pid_output == 0) {
-                    joy.setRumble(RumbleType.kLeftRumble, 1);
+                    joy.setRumble(RumbleType.kLeftRumble, .25);
                 } else {
                     joy.setRumble(RumbleType.kLeftRumble, 0);
                 }
@@ -106,7 +106,7 @@ public class JoyDrive extends Command {
 
                 double navx_pid_output = Robot.navX.get_pid_output();
 
-                z += .5 + navx_pid_output;
+                z += navx_pid_output;
                 if (z > 1) { z = 1; }
                 if (z < -1) { z= -1; }
             }

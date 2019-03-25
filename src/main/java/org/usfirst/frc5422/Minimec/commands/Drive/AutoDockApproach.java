@@ -106,7 +106,7 @@ public class AutoDockApproach extends Command {
                 m_pause = false;
 
                 // Button 5 will disable PID input to drive
-                x += .55 * Robot.pixyVision.get_pid_output(); // vision controls strafing
+                x += .65 * Robot.pixyVision.get_pid_output(); // vision controls strafing
                 z += Robot.navX.get_pid_output();  // NavX controls turning
             } else {
                 Robot.pixyVision.clearLastTracked();
@@ -155,11 +155,11 @@ public class AutoDockApproach extends Command {
 
     private void set_rumble(Boolean enable) {
         if (enable && !m_rumble_left) {
-            joy.setRumble(RumbleType.kLeftRumble, 1);
+            joy.setRumble(RumbleType.kLeftRumble, .5);
             m_rumble_left = true;
         }
         if (!enable && m_rumble_left) {
-            joy.setRumble(RumbleType.kLeftRumble, 1);
+            joy.setRumble(RumbleType.kLeftRumble, 0);
         }
     }
     // Make this return true when this Command no longer needs to run execute()
