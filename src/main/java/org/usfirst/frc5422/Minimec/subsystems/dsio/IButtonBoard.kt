@@ -51,4 +51,9 @@ interface IButtonBoard {
 
     val precisionButton: IButton
 
+    val xboxA: IButton
+    val xboxB: IButton
+    val xboxX: IButton
+    val xboxY: IButton
+
 }

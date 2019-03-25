@@ -47,4 +47,10 @@ public class ButtonIds {
     public static final int EXTRA_BUTTON_4 = 3;
     public static final int EXTRA_BUTTON_5 = 3;
 
+    public static final int XBOX_BUTTON_RIGHT_STICK = 10;
+    public static final int XBOX_BUTTON_A = 1;
+    public static final int XBOX_BUTTON_B = 2;
+    public static final int XBOX_BUTTON_X = 3;
+    public static final int XBOX_BUTTON_Y = 4;
+
 }

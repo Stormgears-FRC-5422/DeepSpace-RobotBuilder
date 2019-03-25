@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DockCloseDrive extends Command {
     private static DockCloseDrive instance;
     private static double m_distance_scale_factor = 30;  // Used determine at what distance from target to start de-rating joystick input
-    private static double m_target_distance = 10;
+    private static double m_target_distance = 15;
     private static double m_forward_speed_limit = .35;
 //    public static DockCloseDrive getInstance() {
 //        if(instance == null) instance = new DockCloseDrive();
@@ -58,6 +58,8 @@ public class DockCloseDrive extends Command {
         if (Robot.useDrive) {
             joy = Robot.oi.getJoystick();
         }
+        Robot.drive.setBrakeMode();
+
     }
     // Called repeatedly when this Command is scheduled to run
     @Override
@@ -68,10 +70,15 @@ public class DockCloseDrive extends Command {
             //driveCartesian(oi.getJoystick().getRawAxis(0)*-1,
             // (oi.getJoystick().getRawAxis(3)-oi.getJoystick().getRawAxis(2))*-1,
             // oi.getJoystick().getRawAxis(4));
-            double joy_vals[] = Robot.oi.getJoyXYZ(joy);
+            double derate = 1;
+	        if (Robot.oi.getPrecisionDrive()) {
+                derate = .25;
+            }
+            double joy_vals[] = Robot.oi.getJoyXYZ(joy,derate);
+
             double x = joy_vals[0];
             double y = joy_vals[1] * m_forward_speed_limit;
-            double z = joy_vals[2];
+            double z = joy_vals[2] * .5;
 
             if (!joy.getRawButton(5)) { // Button 5 is pid override
                 // Get  sensor feedback for strafe
@@ -79,18 +86,21 @@ public class DockCloseDrive extends Command {
                 if (x > 1) { x = 1; }
                 if (x < -1) { x= -1; }
 
-                // Get Lidar alignment for Z axis
-                z = .5 * z + Robot.lidarAlignSys.get_pid_output();
-                if (z > 1) { z = 1; }
-                if (z < -1) { z= -1; }
-
                 double distance = Robot.stormNetSubsystem.getLidarDistance();
                 SmartDashboard.putNumber("Lidar distance (cm)",distance);
+
+                // Get Lidar alignment for Z axis
+//                if (z < 100) { // only align if close
+//                    z = z + Robot.lidarAlignSys.get_pid_output();
+//                    if (z > 1) { z = 1; }
+//                    if (z < -1) { z= -1; }
+//                }
 
                 if (distance < m_distance_scale_factor) {
                     // Modulate driver forward input
                     if (y > 0 && distance < (m_target_distance + m_distance_scale_factor)) {
                         y = y * ((distance - m_target_distance)/(m_distance_scale_factor)) ;
+                        if (y<0) y = 0;
                     }   
                 }	
             }
@@ -107,6 +117,7 @@ public class DockCloseDrive extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        Robot.drive.setCoastMode();
         Robot.tapeAlignSys.disable();
         Robot.lidarAlignSys.disable();
     }
@@ -115,6 +126,7 @@ public class DockCloseDrive extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+        Robot.drive.setCoastMode();
         Robot.tapeAlignSys.disable();
         Robot.lidarAlignSys.disable();
     }

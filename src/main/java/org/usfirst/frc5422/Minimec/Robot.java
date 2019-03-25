@@ -46,12 +46,14 @@ public class Robot extends TimedRobot {
     public static final boolean useBackjack = StormProp.getBoolean("useBackjack");
     public static final boolean useIntake = StormProp.getBoolean("useIntake");
     public static final boolean useVision = StormProp.getBoolean("useVision");
+    public static final boolean useNavX = StormProp.getBoolean("useNavX");
 
     public static Arm arm;
     public static Drive drive;
     public static StormNetSubsystem stormNetSubsystem;
     public static Backjack backjack;
     public static PixyVision pixyVision;
+    public static NavX navX;
     public static Compression compressor;
     public static ValveControl valveControl;
     public static Intake intake;
@@ -91,6 +93,9 @@ public class Robot extends TimedRobot {
 
         if (useVision) pixyVision = new PixyVision(StormProp.getString("visionTable"), true);
 
+        if (useNavX) navX = new NavX();
+
+
         if (useStormNet) {
     	    stormNetSubsystem = new StormNetSubsystem();
 	        tapeAlignSys = new TapeAlign();
@@ -125,6 +130,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         System.out.println("autonomousInit()");
         onInitCheck();
+        navX.calibrate();
     }
 
     /**
