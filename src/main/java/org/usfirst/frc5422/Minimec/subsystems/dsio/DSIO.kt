@@ -7,6 +7,7 @@ import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
+import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorReset
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
@@ -58,7 +59,8 @@ object DSIO {
     private fun setupControls()
     {
         System.out.println("setupControls()")
-        buttonBoard.resetCode.whenPressed(ResetCode())
+        //buttonBoard.resetCode.whenPressed(ResetCode())
+        buttonBoard.resetCode.whenPressed(ElevatorReset(true));
 
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {

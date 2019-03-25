@@ -7,7 +7,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import org.usfirst.frc5422.Minimec.Robot;
@@ -20,6 +19,7 @@ import org.usfirst.frc5422.utils.StormProp;
  */
 public class Backjack extends Subsystem {
     //private TalonSRX jackTalon;
+
     private WPI_TalonSRX jackTalon;
 
     private static final int MAX_POSITION = 32600;
@@ -58,27 +58,12 @@ public class Backjack extends Subsystem {
         jackTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
         jackTalon.configForwardSoftLimitEnable(true);
 
-        //        jackTalon.getSensorCollection().setQuadraturePosition(0, 20);
-        //jackTalon.configPeakCurrentLimit((StormProp.getInt("armCurrentLimit")));
-
-//        jackTalon.selectProfileSlot(0, 0);
-//        jackTalon.config_kF(0, 5.0, kTimeoutMs);  // 1023 / 200
-//        jackTalon.config_kP(0, 0.2, kTimeoutMs);
-//        jackTalon.config_kI(0, 0, kTimeoutMs);
-//        jackTalon.config_kD(0, 0, kTimeoutMs);
-//        jackTalon.config_IntegralZone(0, 1000, kTimeoutMs);
-//
-//        jackTalon.configMotionAcceleration(500);
-//        jackTalon.configMotionCruiseVelocity(500);
-
         nextLevel = -1;
 
         tab = Shuffleboard.getTab("Backjack");
         Shuffleboard.selectTab("Backjack");
         encoderEntry = tab.add("encoder ticks", getCurrentPositionTicks()).getEntry();
     }
-
-
 
     public void reset() {
         jackTalon.setSelectedSensorPosition(0);
@@ -99,6 +84,7 @@ public class Backjack extends Subsystem {
         encoderEntry.setDouble(getCurrentPositionTicks());
         rightEntry.setBoolean((fLightR).get());
         leftEntry.setBoolean((fLightL).get());
+        if (isHome()) reset();
     }
 
     public void move(boolean active) {
@@ -107,8 +93,6 @@ public class Backjack extends Subsystem {
         } else {
             nextLevel = -1;
         }
-
-        //System.out.println("Move() :" + nextLevel);
 
         switch(nextLevel) {
             case 2:  // Extend
@@ -130,5 +114,19 @@ public class Backjack extends Subsystem {
     public void stop() {
         jackTalon.set(ControlMode.PercentOutput, 0);
         moving = false;
+    }
+
+    public void returnHome(boolean go) {
+        if (go) {
+            jackTalon.set(ControlMode.Velocity, -1000);
+        } else {  // Stop returning
+            jackTalon.set(ControlMode.Velocity, 0);
+        }
+
+    }
+
+    public boolean isHome() {
+        // Switches are normally open - triggered means they would be open
+        return jackTalon.getSensorCollection().isRevLimitSwitchClosed();
     }
 }

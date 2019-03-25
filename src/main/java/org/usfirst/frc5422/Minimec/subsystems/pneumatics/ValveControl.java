@@ -21,10 +21,16 @@ public class ValveControl extends Subsystem {
 
     private AnalogInput vacPressureSensor;
 
+    Timer timer;
+    double maxVenturiTime;
+
     private boolean cargoOpen;
     private boolean hatchOpen;
 
     public ValveControl() {
+        timer = new Timer();
+        maxVenturiTime = StormProp.getNumber("maxVenturiTime");
+
         int mod = StormProp.getInt("CompressorModuleId");
 
         cargoValve = new Solenoid(mod, StormProp.getInt("cargoValve"));
@@ -109,11 +115,15 @@ public class ValveControl extends Subsystem {
     }
 
     public void vacStart() {
+
+        timer.reset();
+        timer.start();
         vacValve.set(true);
     }
 
     public void vacStop(){
         vacValve.set(false);
+        timer.stop();
     }
 
     public boolean getHatchOpen(){return hatchOpen;}
@@ -142,10 +152,15 @@ public class ValveControl extends Subsystem {
         double highVacuum = StormProp.getNumber("highVacuumKPa");
         double lowVacuum = StormProp.getNumber("lowVacuumKPa");
         double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
-
-        if (Robot.oi.getControlOverride() || currentVac > highVacuum) {
+        if (timer.get() > maxVenturiTime) {
+            // emergency stop
+            vacStop();
+            Robot.compressor.reset();  // not sure this state machine is right
+        } else if (currentVac > highVacuum ||  Robot.oi.getControlOverride() ) {
+            // normal stop
             vacStop();
         } else if ( currentVac < lowVacuum && Robot.compressor.hasCycled() ) {
+            // OK to go
             vacStart();
         }
     }
