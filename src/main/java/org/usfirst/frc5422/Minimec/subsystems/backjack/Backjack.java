@@ -118,9 +118,9 @@ public class Backjack extends Subsystem {
 
     public void returnHome(boolean go) {
         if (go) {
-            jackTalon.set(ControlMode.Velocity, -1000);
+            jackTalon.set(ControlMode.PercentOutput, -1.0);
         } else {  // Stop returning
-            jackTalon.set(ControlMode.Velocity, 0);
+            stop();
         }
 
     }

@@ -4,29 +4,21 @@ package org.usfirst.frc5422.Minimec.commands.Pneumatics;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
 
-public class DisableAllPneumatics extends Command {
+public class EnableVacuum extends Command {
 
-
-    public DisableAllPneumatics() {
-
-
+    public EnableVacuum() {
         requires(Robot.valveControl);
-
-
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-
-
-
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-
+        Robot.valveControl.manageVac();
     }
 
     // Make this return true when this Command no longer needs to run execute()
