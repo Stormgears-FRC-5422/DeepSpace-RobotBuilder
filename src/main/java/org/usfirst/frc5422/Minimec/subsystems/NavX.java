@@ -43,7 +43,7 @@ public class NavX extends PIDSubsystem {
 
     // Initialize your subsystem here
     public NavX() {
-        super("NavX", .02, 0.0, .04, 0.0, .02);
+        super("NavX", .03, 0.0, .04, 0.0, .02);
         getPIDController().setContinuous(false);
         getPIDController().setName("NavX", "PIDSubsystem Controller");
         LiveWindow.add(getPIDController());

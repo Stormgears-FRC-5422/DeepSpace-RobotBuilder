@@ -9,7 +9,7 @@ public class ArmReset extends Command {
 
     public ArmReset(boolean active){
         m_active = active;
-        requires(Robot.arm);
+        if (Robot.useArm) requires(Robot.arm);
     }
 
     @Override
