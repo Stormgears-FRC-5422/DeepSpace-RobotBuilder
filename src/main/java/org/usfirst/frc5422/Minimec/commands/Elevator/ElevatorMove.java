@@ -6,7 +6,7 @@ import org.usfirst.frc5422.Minimec.Robot;
 public class ElevatorMove extends Command {
 
     private final double LEVELTWOHEIGHT = 15023.0;
-    private final double LEVELTHREEHEIGHT = 27251.0;
+    private final double LEVELTHREEHEIGHT = 27500.0;
 
 
     private int level;
