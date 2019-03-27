@@ -15,9 +15,13 @@ public class StormProp {
     private static final String path = "/home/lvuser/deploy";
     private static final String name = "config.properties";
     private static final String backUP = "config_backup.properties";
+    private static String overrideName = null;
     private static File configFile = new File(path, name);
+    private static File overrideConfigFile;
     private static Properties properties;
+    private static Properties overrideProperties;
     private static boolean initialized = false;
+    private static boolean overrideInit = false;
 
     public static void init() {
         properties = new Properties();
@@ -44,37 +48,60 @@ public class StormProp {
             }
         }
         initialized = true;
+        if(!overrideInit){
+            overrideInit();
+        }
     }
 
+    public static void overrideInit() {
+        overrideName = properties.getProperty("override");
+        overrideConfigFile = new File(path, overrideName);
+        overrideProperties = new Properties();
+        FileInputStream OverrideInputStream = null;
+        try {
+            OverrideInputStream = new FileInputStream(overrideConfigFile);
+            overrideProperties.load(OverrideInputStream);
+        } catch (IOException e){
+            System.out.println("No override file detected");
+        }
+        if (OverrideInputStream != null) {
+                try {
+                    OverrideInputStream.close();
+                } catch (IOException e) {
+                    System.out.println("Error coming from override config. This should not run");
+                }
+            }
+        overrideInit = true;
+
+    }
     public static String getString(String key) {
         if (!initialized) {
             init();
         }
-        return properties.getProperty(key);
+        if (!overrideInit) {
+            overrideInit();
+        }
+        if (overrideProperties.containsKey(key)){
+            return overrideProperties.getProperty(key);
+        }
+        else {
+            return properties.getProperty(key);
+        }
     }
 
     //This was failing and I have no idea why
     public static double getNumber(String key) {
-        if (!initialized) {
-            init();
-        }
         return Double.parseDouble(getString(key));
     }
-
     public static int getInt(String key) {
-        if (!initialized) {
-            init();
-        }
         return Integer.parseInt(getString(key));
     }
 
     //untested but should work
     public static boolean getBoolean(String key) {
-        if (!initialized) {
-            init();
-        }
-        String str = properties.getProperty(key);
-        return str.toLowerCase().equals("true");
+            String str = getString(key);
+            return str.toLowerCase().equals("true");
+
     }
 
     //puts all values to Smartdashboard except for values that should not change like talon ids.
@@ -82,11 +109,15 @@ public class StormProp {
         if (!initialized) {
             init();
         }
+        if (!overrideInit) {
+            overrideInit();
+        }
         String[] Blacklist = {"robotName", "hasNavX", "rearRightTalonId", "rearLeftTalonId", "frontRightTalonId", "frontLeftTalonId", "wheelRadius"};
         Set<String> keys = properties.stringPropertyNames();
         for (String key : keys) {
-            if (!Arrays.asList(Blacklist).contains(key))
-                SmartDashboard.putString(key, properties.getProperty(key));
+            if (!Arrays.asList(Blacklist).contains(key)) {
+                SmartDashboard.putString(key, getString(key));
+            }
         }
     }
 
@@ -95,9 +126,12 @@ public class StormProp {
         if (!initialized) {
             init();
         }
-        Set<String> keys = properties.stringPropertyNames();
+        Set<String> keys = overrideProperties.stringPropertyNames();
         for (String key : keys) {
-            properties.setProperty(key, SmartDashboard.getString(key, properties.getProperty(key)));
+            String str  = SmartDashboard.getString(key, "MISSING");
+            if (!str.equals("MISSING")) {
+                properties.setProperty(key, str);
+            }
         }
     }
 }
