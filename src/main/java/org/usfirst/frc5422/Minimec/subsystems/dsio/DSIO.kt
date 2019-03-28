@@ -6,11 +6,10 @@ import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
 import org.usfirst.frc5422.Minimec.commands.AutoHome
+import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
-import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
-import org.usfirst.frc5422.Minimec.commands.Jack.BackjackReset
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
@@ -60,7 +59,7 @@ object DSIO {
     private fun setupControls()
     {
         System.out.println("setupControls()")
-        buttonBoard.resetCode.whenPressed(AutoHome(true));
+        buttonBoard.resetCode.whenPressed(AutoHome(true))
 
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {
@@ -90,24 +89,19 @@ object DSIO {
             buttonBoard.arm135.whenPressed(ArmTo135())
         }
 
+        if (Robot.useElevator) {
+            //ignore this button. It really means "let go of the override" which is handled
+            //buttonBoard.elevatorRest.whenPressed(???);
+
+            buttonBoard.elevatorGround.whenPressed(ElevatorMove(0))
+            buttonBoard.elevatorLevelOne.whenPressed(ElevatorMove(0))
+            buttonBoard.elevatorLevelTwo.whenPressed(ElevatorMove(2))
+            buttonBoard.elevatorLevelThree.whenPressed(ElevatorMove(3))
+        }
+
         buttonBoard.wristSwitch.whenFlipped {
             println("WRIST SWITCH")
         }
-
-        buttonBoard.elevatorRest.whenPressed{
-            println("ELEVATOR REST")
-        }
-
-        buttonBoard.elevatorGround.whenPressed{
-            println("ELEVATOR GROUND")
-        }
-
-        buttonBoard.elevatorLevelOne.whileHeld(ElevatorMove(1))
-
-        buttonBoard.elevatorLevelTwo.whileHeld(ElevatorMove(2))
-
-        buttonBoard.elevatorLevelThree.whileHeld(ElevatorMove(3))
-
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision

@@ -8,12 +8,15 @@ public class ElevatorOverride extends Command {
 
     public ElevatorOverride()
     {
+        System.out.println("ElevatorOverride()");
         requires(Robot.elevator);
     }
 
     @Override
     protected void initialize()
     {
+        System.out.println("ElevatorOverride.initialized()");
+
 //        joy = Robot.oi.getJoystick1();
     }
 
@@ -39,6 +42,7 @@ public class ElevatorOverride extends Command {
     @Override
     protected void interrupted()
     {
+        System.out.println("ElevatorOverride.interrupted()");
         Robot.elevator.hold();
     }
 
