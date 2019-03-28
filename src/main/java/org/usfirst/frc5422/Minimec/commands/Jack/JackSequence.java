@@ -8,4 +8,5 @@ public class JackSequence extends CommandGroup {
         addParallel (new MoveJack(active));
         addParallel (new JackDrive(active));
     }
+    //
 }

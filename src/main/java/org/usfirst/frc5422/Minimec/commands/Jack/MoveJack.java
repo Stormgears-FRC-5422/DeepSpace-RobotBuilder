@@ -26,7 +26,7 @@ public class MoveJack extends Command {
         requires(Robot.backjack);
     }
 
-    // Called just before this Command runs the first time
+    // Called  before this Command runs the first time
     @Override
     protected void initialize() {
         System.out.println("MoveJack.initialize()");

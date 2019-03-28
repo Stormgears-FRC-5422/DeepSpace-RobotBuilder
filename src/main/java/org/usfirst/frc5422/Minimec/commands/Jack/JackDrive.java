@@ -5,6 +5,7 @@ import org.usfirst.frc5422.Minimec.Robot;
 
 public class JackDrive extends Command {
 
+    //
     private boolean m_active;
     private boolean driveOff = true;
     public JackDrive(boolean active) {
