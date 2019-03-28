@@ -23,6 +23,8 @@ public class Backjack extends Subsystem {
     private WPI_TalonSRX jackTalon;
 
     private static final int MAX_POSITION = 32600;
+    private static final int MIN_POSITION = 0;
+    private static final int SECONDLEVEL = 15000;
     private DigitalInput fLightR;
     private DigitalInput fLightL;
     private int nextLevel;
@@ -84,7 +86,25 @@ public class Backjack extends Subsystem {
         encoderEntry.setDouble(getCurrentPositionTicks());
         rightEntry.setBoolean((fLightR).get());
         leftEntry.setBoolean((fLightL).get());
+        if (!fLightL.get() && !fLightR.get()) {
+            Robot.drive.driveArcade(0, .15, 0);
+        }
+        else {
+            if (getCurrentPositionTicks() > MAX_POSITION){
+                returnHome(true);
+            }
+        }
         if (isHome()) reset();
+    }
+
+    public boolean atMax() {
+        if (nextLevel == 2) return (getCurrentPositionTicks() > SECONDLEVEL);
+        else if (nextLevel == 3) return (getCurrentPositionTicks() > MAX_POSITION);
+        else return false;
+    }
+
+    public boolean pastMin() {
+        return (getCurrentPositionTicks() > MIN_POSITION);
     }
 
     public void move(boolean active) {
@@ -114,6 +134,10 @@ public class Backjack extends Subsystem {
     public void stop() {
         jackTalon.set(ControlMode.PercentOutput, 0);
         moving = false;
+    }
+
+    public boolean getSensors() {
+        return (!fLightL.get() || !fLightR.get());
     }
 
     public void returnHome(boolean go) {
