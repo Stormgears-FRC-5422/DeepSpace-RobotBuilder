@@ -8,12 +8,15 @@ public class BackjackReset extends Command {
     boolean m_active;
 
     public BackjackReset(boolean active){
+        System.out.println("BackjackReset()");
+
         m_active = active;
         requires(Robot.backjack);
     }
 
     @Override
     protected void initialize(){
+        System.out.println("BackjackReset.initialize()");
         if (!m_active) {
             Robot.backjack.reset();
         }
@@ -28,6 +31,14 @@ public class BackjackReset extends Command {
 
     @Override
     protected void interrupted(){
+        System.out.println("BackjackReset.interrupted()");
+        if (m_active) {
+            Robot.backjack.returnHome(false);
+        }
+    }
+
+    protected void end(){
+        System.out.println("BackjackReset.end()");
         if (m_active) {
             Robot.backjack.returnHome(false);
         }

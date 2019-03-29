@@ -14,7 +14,7 @@ public class ArmReset extends Command {
 
     @Override
     protected void initialize(){
-        System.out.println("ArmReset initialize");
+        System.out.println("ArmReset.initialize()");
         if (!m_active) {
             Robot.arm.reset();
         }
@@ -29,7 +29,14 @@ public class ArmReset extends Command {
 
     @Override
     protected void interrupted(){
-        System.out.println("ArmReset interrupted");
+        System.out.println("ArmReset.interrupted()");
+        if (m_active) {
+            Robot.arm.returnHome(false);
+        }
+    }
+
+    protected void end(){
+        System.out.println("ArmReset.end()");
         if (m_active) {
             Robot.arm.returnHome(false);
         }
@@ -40,7 +47,6 @@ public class ArmReset extends Command {
         if (m_active) {
             if (Robot.arm.isHome()) {
                 System.out.println("Arm is home");
-                Robot.arm.returnHome(false);
                 return true;
             }
             else {

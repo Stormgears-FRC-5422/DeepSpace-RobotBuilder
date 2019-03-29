@@ -8,12 +8,14 @@ public class ElevatorReset extends Command {
     boolean m_active;
 
     public ElevatorReset (boolean active){
+        System.out.println("ElevatorReset() : active = " + active);
         m_active = active;
         requires(Robot.elevator);
     }
 
     @Override
     protected void initialize(){
+        System.out.println("ElevatorReset.initialized()");
         if (!m_active) {
             Robot.elevator.reset();
         }
@@ -28,6 +30,16 @@ public class ElevatorReset extends Command {
 
     @Override
     protected void interrupted(){
+        System.out.println("ElevatorReset.interrupted()");
+        if (m_active) {
+            Robot.elevator.returnHome(false);
+        }
+    }
+
+    @Override
+    protected void end(){
+        System.out.println("ElevatorReset.end()");
+
         if (m_active) {
             Robot.elevator.returnHome(false);
         }

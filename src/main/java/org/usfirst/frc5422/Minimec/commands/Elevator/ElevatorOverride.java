@@ -30,7 +30,7 @@ public class ElevatorOverride extends Command {
             Robot.elevator.moveDownManual();
         }
         else {
-            Robot.elevator.hold();
+            Robot.elevator.stop();
         }
     }
 
@@ -43,7 +43,7 @@ public class ElevatorOverride extends Command {
     protected void interrupted()
     {
         System.out.println("ElevatorOverride.interrupted()");
-        Robot.elevator.hold();
+        Robot.elevator.stop();
     }
 
     @Override

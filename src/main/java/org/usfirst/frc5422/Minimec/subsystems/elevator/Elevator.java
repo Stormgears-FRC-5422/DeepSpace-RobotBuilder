@@ -1,9 +1,6 @@
 package org.usfirst.frc5422.Minimec.subsystems.elevator;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.Minimec.Robot;
@@ -15,24 +12,35 @@ public class Elevator extends Subsystem {
     private int targetPosition;
     private int allowableError;
 
-    public final int REST_POSITION;
+    private final int REST_POSITION;
     private final int MAX_POSITION;
+    private final int LEVEL2_POSITION;
+    private final int NEG_INFINITY = Integer.MIN_VALUE;
+    private final int INFINITY = Integer.MAX_VALUE;
 
+    private final int kTimeoutMs;
     private WPI_TalonSRX elevatorTalon;
     //private TalonTuner elevatorMotionMagicTuner;
     public Elevator()
     {
         int slotIdx = 0;
-        int kTimeoutMs = StormProp.getInt("canTimeout");
+        kTimeoutMs = StormProp.getInt("canTimeout");
         REST_POSITION = StormProp.getInt("elevatorRestPosition");
         MAX_POSITION = StormProp.getInt("elevatorMaxPosition");
+        LEVEL2_POSITION = StormProp.getInt("elevatorLevelTwoHeight");
         elevatorTalon = new WPI_TalonSRX(StormProp.getInt("elevatorTalonId"));
 
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
+
         elevatorTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, kTimeoutMs);
+
+        elevatorTalon.configReverseSoftLimitThreshold(StormProp.getInt("elevatorLevelTwoHeight"), kTimeoutMs);
+        elevatorTalon.configReverseSoftLimitEnable(false);
+
         elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
         elevatorTalon.configForwardSoftLimitEnable(true);
 
+        // safety
         reset();
 
         elevatorTalon.configMotionAcceleration(StormProp.getInt("elevatorMMAcceleration"));
@@ -54,61 +62,81 @@ public class Elevator extends Subsystem {
         setDefaultCommand(new ElevatorOverride());
     }
 
+    private int getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
+
     public void reset() {
         elevatorTalon.setSelectedSensorPosition(0);
         currentPosition = 0;
         targetPosition = 0;
     }
 
-    public int getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
-    public double getCurrentVelocity(){return elevatorTalon.getSensorCollection().getQuadratureVelocity();}
-
-    // This elevator just doesn't move from gravity. No reason to hold position
-    public void hold() {
+    // This elevator just doesn't move from gravity. No reason to actively hold position
+    public void stop() {
+        currentPosition = getCurrentPositionTicks();
         targetPosition = currentPosition;
-        elevatorTalon.set(ControlMode.Velocity, 0);
+        elevatorTalon.set(ControlMode.PercentOutput, 0.0);
     }
 
-    public void moveToPosition(int position){
-        targetPosition = position;
-        elevatorTalon.set(ControlMode.MotionMagic, targetPosition);
+    public void moveToLevel(int level){
         currentPosition = getCurrentPositionTicks();
+        switch (level) {
+            case 3: // must be moving up
+                // Moving up - change the limit to level 3
+                targetPosition = MAX_POSITION;
+                elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
+                elevatorTalon.set(ControlMode.Velocity, StormProp.getInt("elevatorClimbVelocity"));
+                break;
+            case 2:
+                // what if these are changing when this gets called - ugh
+                targetPosition = LEVEL2_POSITION;
+                if ( currentPosition < targetPosition) {
+                    // Moving up - change the limit to level 2
+                    elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
+                    elevatorTalon.set(ControlMode.Velocity, StormProp.getInt("elevatorClimbVelocity"));
+                } else {
+                    // Moving down
+                    elevatorTalon.configReverseSoftLimitEnable(true);
+                    elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
+                }
+                break;
+            case 0:  // must be moving down
+            default:
+                targetPosition = REST_POSITION;
+                elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
+                elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
+        }
+
     }
 
     public void moveUpManual()
     {
-        targetPosition = MAX_POSITION;
-        elevatorTalon.set(ControlMode.MotionMagic, targetPosition);
+        // Moving up - change the limit to level 3
+        targetPosition = INFINITY;
+        elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
+        elevatorTalon.set(ControlMode.Velocity, StormProp.getInt("elevatorReturnVelocity"));
         currentPosition = getCurrentPositionTicks();
     }
 
     public void moveDownManual()
     {
-        // Allow override by pressing the right button - in case position gets messed up.
-        // probably not necessary after returnHome was implemented, but safe to leave here.
-        targetPosition = REST_POSITION;
-        if (! Robot.oi.getControlOverride())
-            elevatorTalon.set(ControlMode.MotionMagic, targetPosition );
-        else
-            elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorMMVelocity"));
-
+        targetPosition = NEG_INFINITY;
+        elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
+        elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
         currentPosition = getCurrentPositionTicks();
     }
 
     public void periodic(){
         currentPosition = getCurrentPositionTicks();
-
-        //elevatorMotionMagicTuner.periodic();
-        if (isHome()) {
-            reset();
-        }
+        if (isHome()) reset();
     }
 
     public void returnHome(boolean go) {
         if (go) {
-            elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorMMVelocity"));
+            targetPosition = NEG_INFINITY;
+            elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
+            elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
         } else {  // Stop returning
-            elevatorTalon.set(ControlMode.Velocity, 0);
+            stop();
         }
     }
 
@@ -117,6 +145,7 @@ public class Elevator extends Subsystem {
         return !elevatorTalon.getSensorCollection().isRevLimitSwitchClosed();
     }
 
+    // For elevatorMove commands
     public boolean isFinished() {
         return (Math.abs(getCurrentPositionTicks() - targetPosition) < allowableError);
     }

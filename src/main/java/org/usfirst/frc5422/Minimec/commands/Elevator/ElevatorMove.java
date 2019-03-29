@@ -8,36 +8,30 @@ public class ElevatorMove extends Command {
     private int level;
 
     public ElevatorMove(int level){
-        System.out.println("ElevatorMove()");
+        System.out.println("ElevatorMove() : " + level);
         this.level = level;
         if (Robot.useElevator) requires(Robot.elevator);
     }
 
     @Override
     protected void initialize(){
-        System.out.println("ElevatorMove.initialize()");
+        System.out.println("ElevatorMove.initialize() : " + level);
     }
 
     @Override
     protected void execute(){
-        if(level == 3){
-            Robot.elevator.moveToPosition(StormProp.getInt("elevatorLevelThreeHeight"));
-        }else if(level == 2){
-            Robot.elevator.moveToPosition(StormProp.getInt("elevatorLevelTwoHeight"));
-        }else{
-            Robot.elevator.moveToPosition(0);
-        }
+        Robot.elevator.moveToLevel(level);
     }
 
     @Override
     protected void interrupted(){
         System.out.println("ElevatorMove.interrupted()");
-        Robot.elevator.hold();
+        Robot.elevator.stop();
     }
 
     protected void end() {
         System.out.println("ElevatorMove.end()");
-        Robot.elevator.hold();
+        Robot.elevator.stop();
     }
 
     @Override
