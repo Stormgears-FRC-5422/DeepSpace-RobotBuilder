@@ -21,7 +21,7 @@ import org.usfirst.frc5422.Minimec.Robot;
 public class MoveJack extends Command {
     private boolean m_active;
     public MoveJack(boolean active) {
-        System.out.println("MoveJack()" + active);
+        if (Robot.debug) System.out.println("MoveJack()" + active);
         m_active = active;
         requires(Robot.backjack);
     }
@@ -29,7 +29,7 @@ public class MoveJack extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        System.out.println("MoveJack.initialize()");
+        if (Robot.debug) System.out.println("MoveJack.initialize()");
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -55,7 +55,7 @@ public class MoveJack extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        System.out.println("MoveJack.interrupted()");
+        if (Robot.debug) System.out.println("MoveJack.interrupted()");
         Robot.backjack.stop();
     }
 }

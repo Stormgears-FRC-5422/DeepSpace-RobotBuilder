@@ -53,11 +53,7 @@ public class CargoDrive extends Command {
     @Override
     protected void execute() {
         if (Robot.useDrive) {
-            double derate = 1;
-	        if (Robot.oi.getPrecisionDrive()) {
-                derate = .25;
-            }
-            double joy_vals[] = Robot.oi.getJoyXYZ(joy,derate);
+            double joy_vals[] = Robot.oi.getJoyXYZ(joy);
             double x = joy_vals[0];
             double y = joy_vals[1];
             double z = joy_vals[2];

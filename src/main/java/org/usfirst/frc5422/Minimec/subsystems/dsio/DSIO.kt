@@ -7,6 +7,7 @@ import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
 import org.usfirst.frc5422.Minimec.commands.AutoHome
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
+import org.usfirst.frc5422.Minimec.commands.Drive.AutoDockApproach
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
@@ -20,7 +21,7 @@ object DSIO {
 
     private var buttonBoard:IButtonBoard
     var precision = false
-
+    
     init{
         val detector = JoystickDetector()
         detector.detect()
@@ -68,7 +69,7 @@ object DSIO {
 
         if (Robot.useDrive) {
             buttonBoard.xboxA.whenPressed(JoyDrive())
-//            buttonBoard.xboxY.whenPressed(DockDrive())
+            buttonBoard.xboxY.whenPressed(AutoDockApproach())
         }
 
         if (Robot.useCompressor) {
@@ -105,7 +106,7 @@ object DSIO {
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision
-            println(precision)
+            if (Robot.debug) println(precision)
         }
 
     }

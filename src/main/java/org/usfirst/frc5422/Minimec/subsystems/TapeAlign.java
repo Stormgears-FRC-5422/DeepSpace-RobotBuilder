@@ -80,7 +80,6 @@ public class TapeAlign extends PIDSubsystem {
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         double offset = Robot.stormNetSubsystem.getLineIROffset();
         m_raw_entry.setDouble(offset);
-        SmartDashboard.putNumber("TapeOffset (cm)",offset);
 
         return(offset);
     }

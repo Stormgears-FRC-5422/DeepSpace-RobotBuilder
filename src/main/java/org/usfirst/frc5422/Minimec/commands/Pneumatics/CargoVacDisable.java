@@ -26,7 +26,7 @@ public class CargoVacDisable extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        System.out.println("Cargo Unsuck");
+        if (Robot.debug) System.out.println("Cargo Unsuck");
         Robot.valveControl.cargoStop();
     }
 

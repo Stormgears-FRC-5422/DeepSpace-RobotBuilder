@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.EnableVacuum;
 import org.usfirst.frc5422.utils.StormProp;
+import org.usfirst.frc5422.Minimec.Robot;
+
 
 public class ValveControl extends Subsystem {
     boolean vacRunning;
@@ -123,7 +125,7 @@ public class ValveControl extends Subsystem {
             timer.start();
             vacValve.set(true);
             vacRunning = true;
-            System.out.println("Vacuum running");
+            if (Robot.debug) System.out.println("Vacuum running");
         }
     }
 
@@ -132,19 +134,19 @@ public class ValveControl extends Subsystem {
             vacValve.set(false);
             timer.stop();
             vacRunning = false;
-            System.out.println("Vacuum stopped");
+            if (Robot.debug) System.out.println("Vacuum stopped");
         }
     }
 
     public boolean getHatchOpen(){return hatchOpen;}
 
     public boolean getHatchProxSensor() {
-        System.out.println("Sense Hatch?: " + ! hatchProxSensor.get());
+        if (Robot.debug) System.out.println("Sense Hatch?: " + ! hatchProxSensor.get());
         return hatchProxSensor.get();
     }
 
     public boolean getBallProxSensor() {
-        System.out.println("Sense Ball?: " + ! ballProxSensor.get());
+        if (Robot.debug) System.out.println("Sense Ball?: " + ! ballProxSensor.get());
         return ballProxSensor.get();
     }
 

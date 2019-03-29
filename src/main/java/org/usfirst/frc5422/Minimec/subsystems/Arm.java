@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.logging.TalonTuner;
+import org.usfirst.frc5422.Minimec.Robot;
 
 import static java.lang.Math.abs;
 
@@ -257,7 +258,7 @@ public class Arm extends Subsystem {
 
         if (go) {
             if (!isReturningHome) {
-                System.out.println("Starting to return");
+                if (Robot.debug) System.out.println("Starting to return");
                 count = 0;
                 avgPosition = getArmPositionTicks();
                 isReturningHome = true;
@@ -269,7 +270,7 @@ public class Arm extends Subsystem {
             armTalon.set(ControlMode.Velocity, -200);
             //armTalon.set(ControlMode.PercentOutput, -0.5);
         } else {  // Stop returning
-            System.out.println("Stop returning");
+            if (Robot.debug) System.out.println("Stop returning");
             isReturningHome = false;
             count = 0;
             stop();

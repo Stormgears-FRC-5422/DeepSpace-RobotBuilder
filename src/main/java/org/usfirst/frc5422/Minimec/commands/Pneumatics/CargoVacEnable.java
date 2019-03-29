@@ -23,7 +23,7 @@ public class CargoVacEnable extends Command {
     @Override
     protected void execute() {
         if(!Robot.valveControl.getBallProxSensor() ){
-            System.out.println("Cargo Suck");
+            if (Robot.debug) System.out.println("Cargo Suck");
             Robot.valveControl.cargoStart();
         }
         else {

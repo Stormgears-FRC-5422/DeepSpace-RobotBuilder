@@ -67,14 +67,7 @@ public class DockCloseDrive extends Command {
         Robot.tapeAlignSys.enable();
         Robot.lidarAlignSys.enable();
         if (Robot.useDrive) {
-            //driveCartesian(oi.getJoystick().getRawAxis(0)*-1,
-            // (oi.getJoystick().getRawAxis(3)-oi.getJoystick().getRawAxis(2))*-1,
-            // oi.getJoystick().getRawAxis(4));
-            double derate = 1;
-	        if (Robot.oi.getPrecisionDrive()) {
-                derate = .25;
-            }
-            double joy_vals[] = Robot.oi.getJoyXYZ(joy,derate);
+            double joy_vals[] = Robot.oi.getJoyXYZ(joy);
 
             double x = joy_vals[0];
             double y = joy_vals[1] * m_forward_speed_limit;

@@ -12,35 +12,29 @@ public class LidarDrive extends Command {
     }
 
     protected void initialize() {
-        joy = Robot.oi.getJoystick1();
+        joy = Robot.oi.getJoystick();
     }
 
     protected void execute() {
-        double null_size = .1;
-        double rate = 0.5 + (joy.getRawAxis(3) * .5);
-        double z_out = joy.getZ();
-        if (Math.abs(z_out) < null_size) z_out = 0;
 
-        z_out = rate * joy.getZ();
+        double joy_vals[] = Robot.oi.getJoyXYZ(joy);  // 
+        double x = joy_vals[0];
+        double y = joy_vals[1];
+        double z = joy_vals[2];
+
         if (joy.getRawButton(5) == false) {
             // Button 5 will disable PID input to drive
-            z_out += Robot.pixyVision.get_pid_output();
+            z += Robot.pixyVision.get_pid_output();
         } else {
             Robot.pixyVision.clearLastTracked();
         }
 
-        if (z_out > 1.0) z_out  = 1.0;
-        if (z_out < -1.0) z_out = -1.0;
+        if (z > 1.0) z  = 1.0;
+        if (z < -1.0) z = -1.0;
 
-        double x_out = rate * joy.getX();
-        double y_out = rate * -1 * joy.getY();
-
-        // Create a joystick null zone to reduce drift
-        if (Math.abs(x_out) < null_size) x_out = 0;
-        if (Math.abs(y_out) < null_size) y_out = 0;
 
         SmartDashboard.putNumber("PixyVisionPidOut",Robot.pixyVision.get_pid_output());
-        Robot.drive.driveArcade(x_out,y_out, z_out);
+        Robot.drive.driveArcade(x,y, z);
     }
 
     @Override
