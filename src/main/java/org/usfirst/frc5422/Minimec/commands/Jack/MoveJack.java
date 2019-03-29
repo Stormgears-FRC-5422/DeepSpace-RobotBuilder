@@ -26,7 +26,7 @@ public class MoveJack extends Command {
         requires(Robot.backjack);
     }
 
-    // Called just before this Command runs the first time
+    // Called  before this Command runs the first time
     @Override
     protected void initialize() {
         System.out.println("MoveJack.initialize()");
@@ -36,7 +36,10 @@ public class MoveJack extends Command {
     @Override
     protected void execute() {
         Robot.backjack.move(m_active);
-        //Robot.drive.driveArcade(.1, .1, .1);
+
+        if (Robot.backjack.atMax() && Robot.backjack.getSensors()){
+            Robot.backjack.returnHome(true);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
