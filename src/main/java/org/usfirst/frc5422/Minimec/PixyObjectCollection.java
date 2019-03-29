@@ -144,7 +144,6 @@ public class PixyObjectCollection {
             }
         }
         if (left != null && right != null) { 
-            System.out.println("Tracking left=" + left.getX() + " right=" + right.getX() + "based on " + x_pos);
             ret_list.add(left);  ret_list.add(right); 
         }
 
