@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
 import org.usfirst.frc5422.Minimec.subsystems.NavX;
+import org.usfirst.frc5422.Minimec.subsystems.TapeAlign;
 import org.usfirst.frc5422.utils.StormProp;
 
 /**
@@ -88,8 +89,7 @@ public class AutoDockApproach extends Command {
                     m_ship_mode = false;
                     set_navx_target();
                 }
-            }
-            else {
+            } else {
                 if (joy.getRawButton(7)) {
                     m_ship_mode = true;
                     set_navx_target();
@@ -102,16 +102,22 @@ public class AutoDockApproach extends Command {
                 m_pause = false;
 
                 // Button 5 will disable PID input to drive
-                x += .65 * Robot.pixyVision.get_pid_output(); // vision controls strafing
+                if(Robot.tapeAlignSys.tapeDetected()){
+                    Robot.tapeAlignSys.enable();
+                    x += Robot.tapeAlignSys.get_pid_output();
+                }
+                else{
+                    x += .65 * Robot.pixyVision.get_pid_output(); // vision controls strafing
+                }
                 z += Robot.navX.get_pid_output();  // NavX controls turning
             } else {
                 Robot.pixyVision.clearLastTracked();
                 m_pause = true;
-            } 
-            if (z > 1.0) z  = 1.0;
+            }
+            if (z > 1.0) z = 1.0;
             if (z < -1.0) z = -1.0;
 
-            if (x > 1.0) x  = 1.0;
+            if (x > 1.0) x = 1.0;
             if (x < -1.0) x = -1.0;
 
 
@@ -127,15 +133,15 @@ public class AutoDockApproach extends Command {
             }
 
             if (distance > 0 && distance < (m_target_distance + m_max_dist)) {
-                SmartDashboard.putNumber("PixyVisionDistance",distance);
+                SmartDashboard.putNumber("PixyVisionDistance", distance);
                 // Modulate driver forward input
                 if (y > 0) {
                     if (!m_rumble_left) {
                         set_rumble(true);
                         m_rumble_left = true;
                     }
-                    y = y * (distance - m_target_distance)/m_max_dist ;
-                    if (y<0) y = 0;
+                    y = y * (distance - m_target_distance) / m_max_dist;
+                    if (y < 0) y = 0;
                 } else {
                     set_rumble(true);
                 }
@@ -144,9 +150,10 @@ public class AutoDockApproach extends Command {
             }
 
 
-            Robot.drive.driveArcade(x,y, z);
+            Robot.drive.driveArcade(x, y, z);
+
+            SmartDashboard.putNumber("PixyVisionPidOut", Robot.pixyVision.get_pid_output());
         }
-        SmartDashboard.putNumber("PixyVisionPidOut",Robot.pixyVision.get_pid_output());
     }
 
     private void set_rumble(Boolean enable) {
