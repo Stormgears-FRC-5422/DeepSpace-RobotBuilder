@@ -85,8 +85,8 @@ object DSIO {
         if (Robot.useArm) {
             buttonBoard.armRest.whenPressed(ArmToPosition(Robot.arm.ARM_HOME_POSITION_TICKS))
             buttonBoard.armPickupPosition.whenPressed(ArmToPosition(Robot.arm.ARM_PICKUP_POSITION_TICKS))
-            //buttonBoard.arm90.whenPressed(ArmTo90())
-            //buttonBoard.arm135.whenPressed(ArmTo135())
+            buttonBoard.arm90.whenPressed(ArmToPosition(Robot.arm.ARM_90_POSITION_TICKS))
+            buttonBoard.arm135.whenPressed(ArmToPosition(Robot.arm.ARM_135_POSITION_TICKS))
         }
 
         if (Robot.useElevator) {

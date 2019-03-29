@@ -44,7 +44,8 @@ public class ArmToPosition extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        // Don't end unless someone grabs the manual override
+        return (getArmJoystick() != 0);
     }
 
     // Called once after isFinished returns true
@@ -61,4 +62,10 @@ public class ArmToPosition extends Command {
         System.out.println("ArmToPosition.interrupted() : " + m_position);
         Robot.arm.stop();
     }
+
+    private int getArmJoystick()
+    {
+        return (int) Math.round(-1 * Robot.oi.getJoystick2().getRawAxis(1));
+    }
+
 }

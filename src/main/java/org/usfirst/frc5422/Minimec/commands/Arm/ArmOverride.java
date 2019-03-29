@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.PixyObject.PixyType;
 import org.usfirst.frc5422.Minimec.PixyObject;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
 
@@ -23,7 +22,6 @@ import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
  *
  */
 public class ArmOverride extends Command {
-    Joystick joy;
 
     public ArmOverride() {
         System.out.println("ArmOverride()");
