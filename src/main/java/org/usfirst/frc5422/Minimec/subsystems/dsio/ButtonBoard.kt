@@ -41,7 +41,7 @@ class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoysti
 
     override val cargoRelease = EnhancedButton(joy1, ButtonIds.CARGO_STATUS_RELEASE_BUTTON_ID)
 
-    override val moveArm = EnhancedButton(joy1, ButtonIds.MOVE_ARM)
+    override val armPickupPosition = EnhancedButton(joy1, ButtonIds.ARM_PICKUP_POSITION)
 
     override val armRest = EnhancedButton(joy1, ButtonIds.ARM_REST_BUTTON_ID)
 

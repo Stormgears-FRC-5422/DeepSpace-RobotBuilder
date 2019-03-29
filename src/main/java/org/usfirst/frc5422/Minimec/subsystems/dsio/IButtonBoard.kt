@@ -41,7 +41,7 @@ interface IButtonBoard {
 
     val moveBackjack: IButton
 
-    val moveArm: IButton
+    val armPickupPosition: IButton
 
     val armRest: IButton
 

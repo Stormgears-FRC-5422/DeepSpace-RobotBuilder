@@ -26,7 +26,8 @@ public class ArmOverride extends Command {
     Joystick joy;
 
     public ArmOverride() {
-        requires(Robot.arm);
+        System.out.println("ArmOverride()");
+        if (Robot.useArm) requires(Robot.arm);
     }
 
     // Called just before this Command runs the first time
@@ -45,7 +46,7 @@ public class ArmOverride extends Command {
             Robot.arm.moveDownManual();
         }
         else {
-            Robot.arm.hold();
+            Robot.arm.hold(false);
         }
     }
 
@@ -58,16 +59,16 @@ public class ArmOverride extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        System.out.println("ArmOverride end()");
-        Robot.arm.hold();
+        System.out.println("ArmOverride.end()");
+        Robot.arm.hold(false);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        System.out.println("ArmOverride interrupted()");
-        Robot.arm.hold();
+        System.out.println("ArmOverride.interrupted()");
+        Robot.arm.hold(false);
     }
 
     private double getArmJoystick()

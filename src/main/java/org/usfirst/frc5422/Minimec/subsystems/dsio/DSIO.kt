@@ -2,16 +2,13 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.Minimec.Robot
-import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo135
-import org.usfirst.frc5422.Minimec.commands.Arm.ArmTo90
-import org.usfirst.frc5422.Minimec.commands.Arm.ArmToRest
+import org.usfirst.frc5422.Minimec.commands.Arm.ArmToPosition
 import org.usfirst.frc5422.Minimec.commands.AutoHome
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
 import org.usfirst.frc5422.Minimec.commands.Drive.AutoDockApproach
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.JackSequence
-import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
@@ -86,10 +83,10 @@ object DSIO {
         }
 
         if (Robot.useArm) {
-            buttonBoard.moveArm.whenPressed(ArmTo90())
-            buttonBoard.armRest.whenPressed(ArmToRest())
-            buttonBoard.arm90.whenPressed(ArmTo90())
-            buttonBoard.arm135.whenPressed(ArmTo135())
+            buttonBoard.armRest.whenPressed(ArmToPosition(Robot.arm.ARM_HOME_POSITION_TICKS))
+            buttonBoard.armPickupPosition.whenPressed(ArmToPosition(Robot.arm.ARM_PICKUP_POSITION_TICKS))
+            //buttonBoard.arm90.whenPressed(ArmTo90())
+            //buttonBoard.arm135.whenPressed(ArmTo135())
         }
 
         if (Robot.useElevator) {

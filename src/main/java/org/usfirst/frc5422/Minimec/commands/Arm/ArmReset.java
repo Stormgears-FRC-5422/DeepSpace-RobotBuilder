@@ -39,6 +39,7 @@ public class ArmReset extends Command {
         System.out.println("ArmReset.end()");
         if (m_active) {
             Robot.arm.returnHome(false);
+            Robot.arm.reset();
         }
     }
 

@@ -34,6 +34,7 @@ public class BackjackReset extends Command {
         System.out.println("BackjackReset.interrupted()");
         if (m_active) {
             Robot.backjack.returnHome(false);
+            Robot.backjack.reset();
         }
     }
 
@@ -41,6 +42,7 @@ public class BackjackReset extends Command {
         System.out.println("BackjackReset.end()");
         if (m_active) {
             Robot.backjack.returnHome(false);
+            Robot.backjack.reset();
         }
     }
 

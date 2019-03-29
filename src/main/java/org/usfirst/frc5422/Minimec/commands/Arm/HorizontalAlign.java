@@ -18,7 +18,7 @@ public class HorizontalAlign extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.arm.moveTo90();
+        Robot.arm.moveToPosition(Robot.arm.ARM_90_POSITION_TICKS);
        // Robot.elevator.moveElevatorToPosition(8.75);
         Robot.valveControl.hatchStart();
     }
