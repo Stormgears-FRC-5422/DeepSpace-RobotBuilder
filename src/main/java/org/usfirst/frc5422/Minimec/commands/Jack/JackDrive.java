@@ -12,7 +12,6 @@ public class JackDrive extends Command {
         System.out.println("JackDrive()" + active);
         m_active = active;
         requires(Robot.drive);
-        requires(Robot.backjack);
     }
 
     // Called just before this Command runs the first time
@@ -27,36 +26,31 @@ public class JackDrive extends Command {
     protected void execute() {
          // derate drive joystick for precision
 
-
         double z = Robot.navX.get_pid_output();
         if (z > 1) { z = 1; }
         if (z < -1) { z= -1; }
 
-        if (driveOff) {
-            Robot.drive.driveArcade(0, .1, z);
-            driveOff = false;
-        }
+        System.out.println("Z is " + z);
+
+        Robot.drive.driveArcade(0, .1, z);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        Robot.drive.driveArcade(0,0,0);
         return false;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        System.out.println("MoveJack.end()");
-        Robot.backjack.stop();
+        System.out.println("JackDrive.end()");
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        System.out.println("MoveJack.interrupted()");
-        Robot.backjack.stop();
+        System.out.println("JackDrive.interrupted()");
     }
 }
