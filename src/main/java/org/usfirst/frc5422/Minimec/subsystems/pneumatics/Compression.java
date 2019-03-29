@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Compressor;
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.RunCompressor;
 import org.usfirst.frc5422.utils.StormProp;
+import org.usfirst.frc5422.Minimec.Robot;
 
 
 /**
@@ -52,15 +53,15 @@ public class Compression extends Subsystem {
         mainCompressor.setClosedLoopControl(true);
         mainCompressor.start();
 
-        System.out.println("Compressor status: " + mainCompressor.enabled());
-        System.out.println("Compressor value: " + mainCompressor.getPressureSwitchValue());
-        System.out.println("Compressor current: " + mainCompressor.getCompressorCurrent());
+        if (Robot.debug) System.out.println("Compressor status: " + mainCompressor.enabled());
+        if (Robot.debug) System.out.println("Compressor value: " + mainCompressor.getPressureSwitchValue());
+        if (Robot.debug) System.out.println("Compressor current: " + mainCompressor.getCompressorCurrent());
     }
 
     public void stopCompressor(){
         mainCompressor.setClosedLoopControl(false);
         mainCompressor.stop();
-        System.out.println("Compressor off: " + !mainCompressor.enabled());
+        if (Robot.debug) System.out.println("Compressor off: " + !mainCompressor.enabled());
         running = false;
     }
 }

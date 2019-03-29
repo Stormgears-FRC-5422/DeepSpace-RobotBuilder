@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
     public static Elevator elevator;
     public static TapeAlign tapeAlignSys;
     public static LidarAlign lidarAlignSys;
+    public static Boolean debug;
 
     // DONT INSTANTIATE DSIO!!!!
     public static OI oi;
@@ -72,6 +73,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         System.out.println("robotInit()");
+        debug = StormProp.getBoolean("debug");
 
         // Ideally this would be handled uniformly using a subclass of SubSystem, but not now
         drive = new Drive();  // Drive always instanced, but will not instance talons if useDrive is false
@@ -83,7 +85,7 @@ public class Robot extends TimedRobot {
         if (useArm) arm = new Arm();
 
         if (useElevator){
-            System.out.println("Creating Elevator");
+            if (debug) System.out.println("Creating Elevator");
             elevator = new Elevator();
         }
 

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.logging.TalonTuner;
+import org.usfirst.frc5422.Minimec.Robot;
 
 import static java.lang.Math.abs;
 
@@ -195,10 +196,11 @@ public class Arm extends Subsystem {
 
     public void returnHome(boolean go) {
         if (go) {
+                System.out.println("Starting to return");
             armTalon.set(ControlMode.PercentOutput, -0.25);  // unloaded more like -0.15 - this may be fast
 
         } else {  // Stop returning
-            armTalon.set(ControlMode.PercentOutput, 0.0);
+            System.out.println("Stop returning");
         }
     }
 

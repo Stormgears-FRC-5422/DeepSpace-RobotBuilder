@@ -14,7 +14,7 @@ public class LineFollow extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        System.out.println("In execute");
+        if (Robot.debug) System.out.println("In execute");
         /*Robot.lineFollower.printValues();*/}
 
     // Make this return true when this Command no longer needs to run execute()

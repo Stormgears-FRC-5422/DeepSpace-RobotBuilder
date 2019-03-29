@@ -28,7 +28,7 @@ public class HatchVacEnable extends Command {
     @Override
     protected void execute() {
         if(!Robot.valveControl.getHatchProxSensor()) {
-            System.out.println("Hatch Suck");
+            if (Robot.debug) System.out.println("Hatch Suck");
             Robot.valveControl.hatchStart();
         }
         else {
