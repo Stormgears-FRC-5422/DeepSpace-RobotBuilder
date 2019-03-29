@@ -17,7 +17,11 @@ public class ValveControl extends Subsystem {
     private Solenoid vacValve;
 
     private DigitalInput ballProxSensor;
-    private DigitalInput hatchProxSensor;
+    private DigitalInput hatchProxSensor1;
+    private DigitalInput hatchProxSensor2;
+    private DigitalInput hatchProxSensor3;
+
+    boolean hatchProxStrategyOR;
 
     private DigitalInput vacPressureSensorHigh;  // Most vacuum - run to this limit
     private DigitalInput vacPressureSensorLow;   // low vacuum - turn on when we get here
@@ -55,8 +59,19 @@ public class ValveControl extends Subsystem {
         ballProxSensor = new DigitalInput(StormProp.getInt("ballProxSensorDIO" ));
         addChild("Ball Proximity Sensor", ballProxSensor);
 
-        hatchProxSensor = new DigitalInput(StormProp.getInt("hatchProxSensorDIO"));
-        addChild("Hatch Proximity Sensor", hatchProxSensor);
+        hatchProxStrategyOR = StormProp.getString("hatchProxStrategy").equals("OR");
+
+        if (hatchProxStrategyOR) {
+            hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
+            addChild("Hatch Proximity Sensor", hatchProxSensor1);
+        } else {
+            hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
+            addChild("Hatch Proximity Sensor", hatchProxSensor1);
+            hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
+            addChild("Hatch Proximity Sensor", hatchProxSensor2);
+            hatchProxSensor3 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO3"));
+            addChild("Hatch Proximity Sensor", hatchProxSensor3);
+        }
 
         vacPressureSensorHigh = new DigitalInput(StormProp.getInt("vacPressureSensorHighDIO"));  // Most vacuum - run to this limit
         vacPressureSensorLow = new DigitalInput(StormProp.getInt("vacPressureSensorLowDIO")); // low vacuum - turn on when we get here
@@ -141,8 +156,15 @@ public class ValveControl extends Subsystem {
     public boolean getHatchOpen(){return hatchOpen;}
 
     public boolean getHatchProxSensor() {
-        if (Robot.debug) System.out.println("Sense Hatch?: " + ! hatchProxSensor.get());
-        return hatchProxSensor.get();
+        // TODO - not sure about the truthtable for these sensors
+        if (hatchProxStrategyOR) {
+            if (Robot.debug) System.out.println("Sense Hatch?: " + ! hatchProxSensor1.get());
+            return hatchProxSensor1.get();
+        } else {
+            if (Robot.debug) System.out.println("Sense Hatch?: " + ! (hatchProxSensor1.get() && hatchProxSensor2.get() && hatchProxSensor3.get()));
+            return hatchProxSensor1.get() && hatchProxSensor2.get() && hatchProxSensor3.get();
+        }
+
     }
 
     public boolean getBallProxSensor() {
