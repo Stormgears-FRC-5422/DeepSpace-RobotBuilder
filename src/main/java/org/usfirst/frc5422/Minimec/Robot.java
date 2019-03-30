@@ -48,6 +48,10 @@ public class Robot extends TimedRobot {
     public static final boolean useVision = StormProp.getBoolean("useVision");
     public static final boolean useNavX = StormProp.getBoolean("useNavX");
 
+    public static final boolean testBackjack = StormProp.getBoolean("testBackjack");
+    public static final boolean testStormNet = StormProp.getBoolean("testStormNet");
+
+
     public static Arm arm;
     public static Drive drive;
     public static StormNetSubsystem stormNetSubsystem;
@@ -147,6 +151,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         System.out.println("teleopInit()");
         onInitCheck();
+
+
     }
 
     /**

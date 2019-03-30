@@ -9,6 +9,7 @@ import org.usfirst.frc5422.Minimec.commands.Drive.AutoDockApproach
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.JackSequence
+import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
@@ -62,8 +63,11 @@ object DSIO {
 
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {
-//            buttonBoard.moveBackjack.whileHeld(MoveJack(true))
-            buttonBoard.moveBackjack.whileHeld(JackSequence(true))
+            if (Robot.testBackjack) {
+                buttonBoard.moveBackjack.whileHeld(MoveJack(true))
+            } else {
+                buttonBoard.moveBackjack.whileHeld(JackSequence(true))
+            }
         }
 
         if (Robot.useDrive) {

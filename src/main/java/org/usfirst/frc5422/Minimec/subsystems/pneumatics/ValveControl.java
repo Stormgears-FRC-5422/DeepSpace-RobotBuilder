@@ -126,10 +126,12 @@ public class ValveControl extends Subsystem {
     }
 
     public void armExtend() {
+        System.out.println("IntakeArmExtend");
         armValve.set(true);
     }
 
     public void armRetract(){
+        System.out.println("IntakeArmRetract");
         armValve.set(false);
     }
 

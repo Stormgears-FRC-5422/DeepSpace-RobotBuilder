@@ -18,13 +18,8 @@ import org.usfirst.frc5422.Minimec.subsystems.pneumatics.*;
  *
  */
 public class ExtendIntake extends Command {
-    private static ExtendIntake instance;
-    public static ExtendIntake getInstance() {
-        if(instance == null) instance = new ExtendIntake();
-        return instance;
-    }
-
     public ExtendIntake() {
+        System.out.println("ExtendIntake()");
         requires(Robot.valveControl);
 //        requires(Robot.intake);
     }
@@ -32,6 +27,7 @@ public class ExtendIntake extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+        System.out.println("ExtendIntake.initialize()");
         Robot.valveControl.armExtend();
     }
 
@@ -50,6 +46,8 @@ public class ExtendIntake extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+        System.out.println("ExtendIntake.end()");
+        Robot.valveControl.armRetract();
     }
 
     // Called when another command which requires one or more of the same

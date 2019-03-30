@@ -60,7 +60,7 @@ public class StormNetSubsystem extends Subsystem {
         System.out.println("get instance:");
         m_stormNet = StormNet.getInstance();
 
-        if (StormProp.getBoolean("testStormNet")) {
+        if (Robot.testStormNet) {
             System.out.println("testing");
             m_stormNet.test();
             System.out.println("done testing");
