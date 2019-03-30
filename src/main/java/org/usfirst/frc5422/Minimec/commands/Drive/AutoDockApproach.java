@@ -29,7 +29,7 @@ import javax.swing.plaf.synth.SynthToolTipUI;
 public class AutoDockApproach extends Command {
 
     private Joystick joy;
-    private double m_target_distance = 8.1;
+    private double m_target_distance = 7.9;
     private double m_max_dist = 40;
     private Boolean m_rumble_left = false;
     private Boolean m_pause = false;
@@ -77,7 +77,13 @@ public class AutoDockApproach extends Command {
         if (m_ship_mode) {
             Robot.navX.enable(Robot.navX.align_to_closest(90));
         } else {
-            Robot.navX.enable(Robot.navX.align_to_closest(30));
+            double cur_heading = Robot.navX.getHeading();
+            double rocket_heading = 30;
+            if (cur_heading > 270)     rocket_heading =330;
+            else if (cur_heading < 90) rocket_heading = 30;
+            else if (cur_heading > 180)  rocket_heading = 210;
+            else if (cur_heading <= 180) rocket_heading = 150;                    
+            Robot.navX.enable(rocket_heading);
         }
     }
     // Called repeatedly when this Command is scheduled to run
@@ -150,11 +156,18 @@ public class AutoDockApproach extends Command {
                         set_rumble(true);
                         m_rumble_left = true;
                     }
-                    // set the "P" value here
-                    y = m_approach_kp * y * (distance - m_target_distance) / m_max_dist;
-                    if (y > .5) y = .5; // Max approach speed
-                    if (y > 0 &&
-                        y < m_approach_cutover_speed) y = m_approach_speed; // max approach speed
+                    if (m_pause) {
+                        // if paused, limit driver move forward to .2 when close
+                        if (m_target_distance < m_target_distance/2) {
+                            if (y > .1) y = .1;
+                        }
+                    }
+                    else {
+                        y = m_approach_kp * y * (distance - m_target_distance) / m_max_dist;
+                        if (y > .5) y = .5; // Max approach speed
+
+                        if (y > 0 && y < m_approach_cutover_speed) y = m_approach_speed; // max approach speed
+                    }
                 } else {
                     set_rumble(true);
                 }
