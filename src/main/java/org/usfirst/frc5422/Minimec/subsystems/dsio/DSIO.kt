@@ -22,22 +22,22 @@ object DSIO {
     var precision = false
     
     init{
-        val detector = JoystickDetector()
-        detector.detect()
-        buttonBoard = detector.buttonBoard
+       // val detector = JoystickDetector()
+        //detector.detect()
+        buttonBoard = ButtonBoard.getInstance(getJoystick1(), getJoystick2(),getJoystick())
         setupControls()
     }
 
     fun getJoystick() : Joystick {
-        return buttonBoard.drivingJoystick
+        return Joystick(0)
     }
 
     fun getJoystick1() : Joystick {
-        return buttonBoard.joy1
+        return Joystick(1)
     }
 
     fun getJoystick2() : Joystick {
-        return buttonBoard.joy2
+        return Joystick(2)
     }
 
     fun getBackJackLevel() : Int {

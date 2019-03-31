@@ -84,7 +84,7 @@ public class Elevator extends Subsystem {
                 // Moving up - change the limit to level 3
                 targetPosition = MAX_POSITION;
                 elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
-                elevatorTalon.set(ControlMode.Velocity, StormProp.getInt("elevatorClimbVelocity"));
+                elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent"));
                 break;
             case 2:
                 // what if these are changing when this gets called - ugh
@@ -92,18 +92,18 @@ public class Elevator extends Subsystem {
                 if ( currentPosition < targetPosition) {
                     // Moving up - change the limit to level 2
                     elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
-                    elevatorTalon.set(ControlMode.Velocity, StormProp.getInt("elevatorClimbVelocity"));
+                    elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent"));
                 } else {
                     // Moving down
                     elevatorTalon.configReverseSoftLimitEnable(true);
-                    elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
+                    elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent"));
                 }
                 break;
             case 0:  // must be moving down
             default:
                 targetPosition = REST_POSITION;
                 elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-                elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
+                elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent"));
         }
 
     }
@@ -113,7 +113,7 @@ public class Elevator extends Subsystem {
         // Moving up - change the limit to level 3
         targetPosition = INFINITY;
         elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
-        elevatorTalon.set(ControlMode.Velocity, StormProp.getInt("elevatorReturnVelocity"));
+        elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorReturnPercent"));
         currentPosition = getCurrentPositionTicks();
     }
 
@@ -121,7 +121,7 @@ public class Elevator extends Subsystem {
     {
         targetPosition = NEG_INFINITY;
         elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-        elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
+        elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity"));
         currentPosition = getCurrentPositionTicks();
     }
 
@@ -134,7 +134,7 @@ public class Elevator extends Subsystem {
         if (go) {
             targetPosition = NEG_INFINITY;
             elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-            elevatorTalon.set(ControlMode.Velocity, -StormProp.getInt("elevatorReturnVelocity"));
+            elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity"));
         } else {  // Stop returning
             stop();
         }

@@ -61,17 +61,12 @@ public class ValveControl extends Subsystem {
 
         hatchProxStrategyOR = StormProp.getString("hatchProxStrategy").equals("OR");
 
-        if (hatchProxStrategyOR) {
-            hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
-            addChild("Hatch Proximity Sensor", hatchProxSensor1);
-        } else {
-            hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
-            addChild("Hatch Proximity Sensor", hatchProxSensor1);
-            hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
-            addChild("Hatch Proximity Sensor", hatchProxSensor2);
-            hatchProxSensor3 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO3"));
-            addChild("Hatch Proximity Sensor", hatchProxSensor3);
-        }
+        hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
+        addChild("Hatch Proximity Sensor", hatchProxSensor1);
+        hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
+        addChild("Hatch Proximity Sensor", hatchProxSensor2);
+        hatchProxSensor3 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO3"));
+        addChild("Hatch Proximity Sensor", hatchProxSensor3);
 
         vacPressureSensorHigh = new DigitalInput(StormProp.getInt("vacPressureSensorHighDIO"));  // Most vacuum - run to this limit
         vacPressureSensorLow = new DigitalInput(StormProp.getInt("vacPressureSensorLowDIO")); // low vacuum - turn on when we get here
@@ -159,12 +154,14 @@ public class ValveControl extends Subsystem {
 
     public boolean getHatchProxSensor() {
         // TODO - not sure about the truthtable for these sensors
+        boolean h1 = hatchProxSensor1.get();
+        boolean h2 = hatchProxSensor2.get();
+        boolean h3 = hatchProxSensor3.get();
+
         if (hatchProxStrategyOR) {
-            if (Robot.debug) System.out.println("Sense Hatch?: " + ! hatchProxSensor1.get());
-            return hatchProxSensor1.get();
+            return (h1 && h2 && h3);
         } else {
-            if (Robot.debug) System.out.println("Sense Hatch?: " + ! (hatchProxSensor1.get() && hatchProxSensor2.get() && hatchProxSensor3.get()));
-            return hatchProxSensor1.get() && hatchProxSensor2.get() && hatchProxSensor3.get();
+            return ( h1 || h3 );
         }
 
     }

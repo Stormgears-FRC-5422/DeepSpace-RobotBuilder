@@ -32,7 +32,7 @@ public class JackDrive extends Command {
 
         System.out.println("Z is " + z);
 
-        Robot.drive.driveArcade(0, .1, z);
+        Robot.drive.driveArcade(0, .07, 0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
