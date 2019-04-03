@@ -54,13 +54,13 @@ public class Arm extends Subsystem {
         armTalon.configClosedLoopPeakOutput(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_ClosedLoopPeakOutput"));
 
         // loaded position mode
-        armTalon.configAllowableClosedloopError(armPositionUnloadedSlotIdx, StormProp.getInt("arm_pos_loaded_AllowableClosedloopError"));
-        armTalon.config_IntegralZone(armPositionUnloadedSlotIdx, StormProp.getInt("arm_pos_loaded_IntegralZone"));
-        armTalon.config_kD(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kD"));
-        armTalon.config_kF(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kF"));
-        armTalon.config_kI(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kI"));
-        armTalon.config_kP(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kP"));
-        armTalon.configClosedLoopPeakOutput(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_loaded_ClosedLoopPeakOutput"));
+        armTalon.configAllowableClosedloopError(armPositionLoadedSlotIdx, StormProp.getInt("arm_pos_loaded_AllowableClosedloopError"));
+        armTalon.config_IntegralZone(armPositionLoadedSlotIdx, StormProp.getInt("arm_pos_loaded_IntegralZone"));
+        armTalon.config_kD(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kD"));
+        armTalon.config_kF(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kF"));
+        armTalon.config_kI(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kI"));
+        armTalon.config_kP(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kP"));
+        armTalon.configClosedLoopPeakOutput(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_ClosedLoopPeakOutput"));
 
 //        armTalon.configPeakCurrentLimit((StormProp.getInt("armCurrentLimit")));
 //        armTalon.configMotionAcceleration(750);
