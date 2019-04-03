@@ -63,7 +63,7 @@ public class ValveControl extends Subsystem {
 
         hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
         addChild("Hatch Proximity Sensor", hatchProxSensor1);
-        hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
+            hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
         addChild("Hatch Proximity Sensor", hatchProxSensor2);
         hatchProxSensor3 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO3"));
         addChild("Hatch Proximity Sensor", hatchProxSensor3);

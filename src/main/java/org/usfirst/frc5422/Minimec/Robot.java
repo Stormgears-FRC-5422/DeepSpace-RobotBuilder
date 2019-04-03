@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
 
         if (useStormNet) {
     	    stormNetSubsystem = new StormNetSubsystem();
+            System.out.println("eeeeee");
 	        tapeAlignSys = new TapeAlign();
 	        lidarAlignSys = new LidarAlign();
 	    }   
