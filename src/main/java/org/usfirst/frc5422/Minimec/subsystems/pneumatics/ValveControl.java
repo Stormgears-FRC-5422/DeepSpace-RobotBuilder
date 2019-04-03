@@ -161,7 +161,7 @@ public class ValveControl extends Subsystem {
         if (hatchProxStrategyOR) {
             return (h1 && h2 && h3);
         } else {
-            return ( h1 || h3 );
+            return ( h1 || h2 || h3 );
         }
 
     }
