@@ -19,7 +19,7 @@ import org.usfirst.frc5422.utils.dsio.JoystickDetector
 object DSIO {
 
     private var buttonBoard:IButtonBoard
-    var precision = false
+    var precision:Boolean = false
     
     init{
        // val detector = JoystickDetector()
@@ -113,5 +113,6 @@ object DSIO {
         }
 
     }
+
 
 }

@@ -27,8 +27,8 @@ public class HatchVacEnable extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(!Robot.valveControl.getHatchProxSensor()) {
-            if (Robot.debug) System.out.println("Hatch Suck");
+        if(Robot.valveControl.getHatchProxSensorReady()) {
+            if (Robot.debug) System.out.println("Hatch vacuum ready");
             Robot.valveControl.hatchStart();
         }
         else {

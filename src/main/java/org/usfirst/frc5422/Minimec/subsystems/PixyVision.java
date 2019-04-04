@@ -61,6 +61,10 @@ public class PixyVision extends PIDSubsystem {
     private NetworkTableEntry m_dbg2_entry;
     private int m_dock_brightness;
 
+    private ShuffleboardTab match_tab;
+    private NetworkTableEntry match_dockmode;
+    private NetworkTableEntry match_dock_distance;
+
     public enum ObjectType {
         CARGO,DOCK
     }
@@ -123,6 +127,9 @@ public class PixyVision extends PIDSubsystem {
         m_dbg2_entry = debug_tab.add("New lock Center", 0.0).getEntry();
         SmartDashboard.getNumber("Pixy PID Value", get_pid_output());
 
+        match_tab = Shuffleboard.getTab("Match Tab");
+        match_dockmode = match_tab.add("Vision State", m_mode.toString()).getEntry();
+        match_dock_distance = match_tab.add("Distance to Dock", 0).getEntry();
     }
 
     @Override
@@ -362,6 +369,11 @@ public class PixyVision extends PIDSubsystem {
         else {
             return(objects.getClosest(PixyObject.frame_center_x));
         }
+    }
+
+    public void periodic(){
+        match_dockmode.setString(m_mode.toString());
+        match_dock_distance.setDouble(getDockDistance());
     }
 }
 

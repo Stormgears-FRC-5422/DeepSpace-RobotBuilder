@@ -33,7 +33,6 @@ public class Backjack extends Subsystem {
     private NetworkTableEntry rightEntry;
     private NetworkTableEntry leftEntry;
     private ShuffleboardTab tab;
-
     public Backjack() {
         int kTimeoutMs = StormProp.getInt("canTimeout");
         Shuffleboard.selectTab("Backjack");
