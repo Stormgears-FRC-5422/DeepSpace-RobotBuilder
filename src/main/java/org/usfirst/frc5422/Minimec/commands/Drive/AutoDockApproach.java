@@ -88,7 +88,6 @@ public class AutoDockApproach extends Command {
         } else {
             double cur_heading = Robot.navX.getHeading();
             double rocket_heading = 30;
-            Robot.navX.enable(rocket_heading);
             if (cur_heading >= 90 && cur_heading <=270){
                 if (m_rocketside == rocket_side.left){
                     rocket_heading = 210;
@@ -102,6 +101,7 @@ public class AutoDockApproach extends Command {
                     rocket_heading = 30;
                 }
             }
+            Robot.navX.enable(rocket_heading);
         }
     }
     // Called repeatedly when this Command is scheduled to run
