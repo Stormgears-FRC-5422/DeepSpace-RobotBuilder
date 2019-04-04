@@ -21,7 +21,9 @@ public class ValveControl extends Subsystem {
     private DigitalInput hatchProxSensor2;
     private DigitalInput hatchProxSensor3;
 
-    boolean hatchProxStrategyOR;
+    // How many prox sensors need to vote to release
+    // 0 means trigger vacuum immediately
+    int hatchProxCount;
 
     private DigitalInput vacPressureSensorHigh;  // Most vacuum - run to this limit
     private DigitalInput vacPressureSensorLow;   // low vacuum - turn on when we get here
@@ -59,11 +61,11 @@ public class ValveControl extends Subsystem {
         ballProxSensor = new DigitalInput(StormProp.getInt("ballProxSensorDIO" ));
         addChild("Ball Proximity Sensor", ballProxSensor);
 
-        hatchProxStrategyOR = StormProp.getString("hatchProxStrategy").equals("OR");
+        hatchProxCount = StormProp.getInt("hatchProxCount");
 
         hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
         addChild("Hatch Proximity Sensor", hatchProxSensor1);
-        hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
+            hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
         addChild("Hatch Proximity Sensor", hatchProxSensor2);
         hatchProxSensor3 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO3"));
         addChild("Hatch Proximity Sensor", hatchProxSensor3);
@@ -152,18 +154,14 @@ public class ValveControl extends Subsystem {
 
     public boolean getHatchOpen(){return hatchOpen;}
 
-    public boolean getHatchProxSensor() {
-        // TODO - not sure about the truthtable for these sensors
-        boolean h1 = hatchProxSensor1.get();
-        boolean h2 = hatchProxSensor2.get();
-        boolean h3 = hatchProxSensor3.get();
+    public boolean getHatchProxSensorReady() {
+        // These sensors return true when the are off!
+        // This 0 / 1 flip makes everything else a lot easier to think about.
+        int voteReady = hatchProxSensor1.get() ? 0 : 1;
+        voteReady += hatchProxSensor2.get() ? 0 : 1;
+        voteReady += hatchProxSensor3.get() ? 0 : 1;
 
-        if (hatchProxStrategyOR) {
-            return (h1 && h2 && h3);
-        } else {
-            return ( h1 || h3 );
-        }
-
+        return ( voteReady >= hatchProxCount);
     }
 
     public boolean getBallProxSensor() {

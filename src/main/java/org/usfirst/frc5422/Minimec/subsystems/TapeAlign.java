@@ -26,7 +26,10 @@ public class TapeAlign extends PIDSubsystem {
     private double m_pid_out;
     private ShuffleboardTab m_debug_tab;
     private NetworkTableEntry m_raw_entry; 
-    private NetworkTableEntry m_ena_entry; 
+    private NetworkTableEntry m_ena_entry;
+
+    private ShuffleboardTab match_tab;
+    private NetworkTableEntry match_tape_state;
 
     // Leave setpoint at 0. We will calculate relative position to target
     // so that we can always set input to 0 when we don't have an object
@@ -47,6 +50,9 @@ public class TapeAlign extends PIDSubsystem {
         m_ena_entry = m_debug_tab.add("Enabled", false).getEntry();
         SmartDashboard.getNumber("TapeAlign PID Value", get_pid_output());
         //TODO: Test the line above
+
+        match_tab = Shuffleboard.getTab("Match Tab");
+        match_tape_state = match_tab.add("Tape Detection", false).getEntry();
     }
 
     @Override
@@ -100,6 +106,10 @@ public class TapeAlign extends PIDSubsystem {
             return true;
         }
         return false;
+    }
+
+    public void periodic() {
+        //match_tape_state.setBoolean(tapeDetected());
     }
 }
 

@@ -2,7 +2,6 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.utils.dsio.*
-import java.awt.Button
 
 class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoystick: Joystick) : IButtonBoard {
     override val drivingJoystick = actualJoystick
@@ -21,7 +20,7 @@ class ButtonBoard private constructor(joy1:Joystick, joy2:Joystick, actualJoysti
 
     override val wristSwitch = SwitchControl(joy2, ButtonIds.WRIST_SWITCH_ID)
 
-    override val intakeOn = SwitchControl(joy2, ButtonIds.INTAKE_SWITCH_ID)
+    override val intakeOn = SwitchControl(joy2, ButtonIds.INTAKE_BUTTON_ID)
 
     override val hatchIntake = EnhancedButton(joy2, ButtonIds.HATCH_STATUS_INTAKE_BUTTON_ID)
 
