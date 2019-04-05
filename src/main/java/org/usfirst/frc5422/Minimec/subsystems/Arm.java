@@ -30,14 +30,14 @@ public class Arm extends Subsystem {
     boolean isHolding = false;
 
     public Arm() {
-        ARM_PICKUP_POSITION_TICKS = StormProp.getInt("arm_pickup_position_ticks");
-        ARM_HOME_POSITION_TICKS = StormProp.getInt("arm_home_position_ticks");
-        ARM_90_POSITION_TICKS = StormProp.getInt("arm_90_position_ticks");
-        ARM_135_POSITION_TICKS = StormProp.getInt("arm_135_position_ticks");
+        ARM_PICKUP_POSITION_TICKS = StormProp.getInt("arm_pickup_position_ticks",0);
+        ARM_HOME_POSITION_TICKS = StormProp.getInt("arm_home_position_ticks",0);
+        ARM_90_POSITION_TICKS = StormProp.getInt("arm_90_position_ticks",0);
+        ARM_135_POSITION_TICKS = StormProp.getInt("arm_135_position_ticks",0);
 
         Shuffleboard.selectTab("Arm");
-        armTalon = new WPI_TalonSRX(StormProp.getInt("armTalonId"));  // SHOULDER   TODO
-        pivotTalon = new WPI_TalonSRX(StormProp.getInt("wristTalonId"));  // WRIST TODO
+        armTalon = new WPI_TalonSRX(StormProp.getInt("armTalonId",-1));  // SHOULDER   TODO
+        pivotTalon = new WPI_TalonSRX(StormProp.getInt("wristTalonId",-1));  // WRIST TODO
 
         // safety
         reset();
@@ -45,22 +45,22 @@ public class Arm extends Subsystem {
         armTalon.setNeutralMode(NeutralMode.Brake);
 
         // unloaded position mode
-        armTalon.configAllowableClosedloopError(armPositionUnloadedSlotIdx, StormProp.getInt("arm_pos_unloaded_AllowableClosedloopError"));
-        armTalon.config_IntegralZone(armPositionUnloadedSlotIdx, StormProp.getInt("arm_pos_unloaded_IntegralZone"));
-        armTalon.config_kD(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kD"));
-        armTalon.config_kF(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kF"));
-        armTalon.config_kI(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kI"));
-        armTalon.config_kP(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kP"));
-        armTalon.configClosedLoopPeakOutput(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_ClosedLoopPeakOutput"));
+        armTalon.configAllowableClosedloopError(armPositionUnloadedSlotIdx, StormProp.getInt("arm_pos_unloaded_AllowableClosedloopError",0));
+        armTalon.config_IntegralZone(armPositionUnloadedSlotIdx, StormProp.getInt("arm_pos_unloaded_IntegralZone",0));
+        armTalon.config_kD(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kD",0.0));
+        armTalon.config_kF(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kF",0.0));
+        armTalon.config_kI(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kI",0.0));
+        armTalon.config_kP(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_kP",0.0));
+        armTalon.configClosedLoopPeakOutput(armPositionUnloadedSlotIdx, StormProp.getNumber("arm_pos_unloaded_ClosedLoopPeakOutput",0.0));
 
         // loaded position mode
-        armTalon.configAllowableClosedloopError(armPositionLoadedSlotIdx, StormProp.getInt("arm_pos_loaded_AllowableClosedloopError"));
-        armTalon.config_IntegralZone(armPositionLoadedSlotIdx, StormProp.getInt("arm_pos_loaded_IntegralZone"));
-        armTalon.config_kD(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kD"));
-        armTalon.config_kF(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kF"));
-        armTalon.config_kI(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kI"));
-        armTalon.config_kP(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kP"));
-        armTalon.configClosedLoopPeakOutput(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_ClosedLoopPeakOutput"));
+        armTalon.configAllowableClosedloopError(armPositionLoadedSlotIdx, StormProp.getInt("arm_pos_loaded_AllowableClosedloopError",0));
+        armTalon.config_IntegralZone(armPositionLoadedSlotIdx, StormProp.getInt("arm_pos_loaded_IntegralZone",0));
+        armTalon.config_kD(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kD",0.0));
+        armTalon.config_kF(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kF",0.0));
+        armTalon.config_kI(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kI",0.0));
+        armTalon.config_kP(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kP",0.0));
+        armTalon.configClosedLoopPeakOutput(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_ClosedLoopPeakOutput",0.0));
 
 //        armTalon.configPeakCurrentLimit((StormProp.getInt("armCurrentLimit")));
 //        armTalon.configMotionAcceleration(750);
@@ -121,9 +121,9 @@ public class Arm extends Subsystem {
         isHolding = false;
 
         if (isLoaded()) {
-            armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("arm_percent_loaded_up"));
+            armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("arm_percent_loaded_up",0.0));
         } else {
-            armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("arm_percent_unloaded_up"));
+            armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("arm_percent_unloaded_up",0.0));
         }
         curArmPos = getArmPositionTicks();
     }
@@ -132,9 +132,9 @@ public class Arm extends Subsystem {
         isHolding = false;
 
         if (isLoaded()) {
-            armTalon.set(ControlMode.PercentOutput, StormProp.getNumber("arm_percent_loaded_down"));
+            armTalon.set(ControlMode.PercentOutput, StormProp.getNumber("arm_percent_loaded_down",0.0));
         } else {
-            armTalon.set(ControlMode.PercentOutput, StormProp.getNumber("arm_percent_unloaded_down"));
+            armTalon.set(ControlMode.PercentOutput, StormProp.getNumber("arm_percent_unloaded_down",0.0));
         }
         curArmPos = getArmPositionTicks();
     }
@@ -143,9 +143,9 @@ public class Arm extends Subsystem {
         isHolding = false;
         if (go) {
             if (isLoaded()) {
-                armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("armReturnPercentOutputLoaded"));
+                armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("armReturnPercentOutputLoaded",0.0));
             } else {
-                armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("armReturnPercentOutputUnloaded"));
+                armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("armReturnPercentOutputUnloaded",0.0));
             }
         } else {
             System.out.println("Stop returning");

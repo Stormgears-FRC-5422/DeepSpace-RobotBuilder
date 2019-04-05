@@ -19,9 +19,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.*;  // Import the Collections class
-import org.usfirst.frc5422.Minimec.PixyObject;
-import org.usfirst.frc5422.Minimec.PixyObjectCollection;
-import org.usfirst.frc5422.Minimec.PixyObject.PixyType;
+import org.usfirst.frc5422.utils.PixyObject;
+import org.usfirst.frc5422.utils.PixyObjectCollection;
+import org.usfirst.frc5422.utils.PixyObject.PixyType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import org.usfirst.frc5422.utils.StormProp;
@@ -110,7 +110,7 @@ public class PixyVision extends PIDSubsystem {
         getPIDController().setAbsoluteTolerance(.03);
         getPIDController().setOutputRange(-1, 1);
 
-        m_dock_brightness = StormProp.getInt("dock_brightness");
+        m_dock_brightness = StormProp.getInt("dock_brightness",15);
         m_vision_table_name = vision_table;
         m_nt_inst = NetworkTableInstance.getDefault();
         m_entry_brightness = m_nt_inst.getTable(m_vision_table_name).getEntry("brightness");

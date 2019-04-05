@@ -68,7 +68,7 @@ public class UDPListener extends StormNetVoice implements Runnable{
 
         try {
             // Listening only - lets use a different port
-            socket = new DatagramSocket(StormProp.getInt("udpListenerPort"));
+            socket = new DatagramSocket(StormProp.getInt("udpListenerPort",-1));
             DatagramPacket packet = new DatagramPacket(localBuffer, localBuffer.length);
 
             while (!m_stopNow) {

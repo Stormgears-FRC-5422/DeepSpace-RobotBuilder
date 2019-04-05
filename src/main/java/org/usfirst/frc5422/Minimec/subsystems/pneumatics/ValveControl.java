@@ -38,42 +38,42 @@ public class ValveControl extends Subsystem {
 
     public ValveControl() {
         timer = new Timer();
-        maxVenturiTime = StormProp.getNumber("maxVenturiTime");
+        maxVenturiTime = StormProp.getNumber("maxVenturiTime",5.0);
 
-        int mod = StormProp.getInt("CompressorModuleId");
+        int mod = StormProp.getInt("CompressorModuleId",-1);
 
-        cargoValve = new Solenoid(mod, StormProp.getInt("cargoValve"));
+        cargoValve = new Solenoid(mod, StormProp.getInt("cargoValve",-1));
         cargoValve.set(false);
         addChild("BALL_VALVE", cargoValve);
 
-        hatchValve = new Solenoid(mod , StormProp.getInt("hatchValve"));
+        hatchValve = new Solenoid(mod , StormProp.getInt("hatchValve",-1));
         hatchValve.set(false);
         addChild("HATCH_VALVE",hatchValve);
 
-        armValve = new Solenoid(mod , StormProp.getInt("armValve"));
+        armValve = new Solenoid(mod , StormProp.getInt("armValve",-1));
         armValve.set(false);
         addChild("ARM_VALVE",armValve);
 
-        vacValve = new Solenoid(mod , StormProp.getInt("vacValve"));
+        vacValve = new Solenoid(mod , StormProp.getInt("vacValve",-1));
         vacValve.set(false);
         addChild("VAC_VALVE",vacValve);
 
-        ballProxSensor = new DigitalInput(StormProp.getInt("ballProxSensorDIO" ));
+        ballProxSensor = new DigitalInput(StormProp.getInt("ballProxSensorDIO" ,-1));
         addChild("Ball Proximity Sensor", ballProxSensor);
 
-        hatchProxCount = StormProp.getInt("hatchProxCount");
+        hatchProxCount = StormProp.getInt("hatchProxCount",3);
 
-        hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1"));
+        hatchProxSensor1 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO1",-1));
         addChild("Hatch Proximity Sensor", hatchProxSensor1);
-            hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2"));
+	hatchProxSensor2 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO2",-1));
         addChild("Hatch Proximity Sensor", hatchProxSensor2);
-        hatchProxSensor3 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO3"));
+        hatchProxSensor3 = new DigitalInput(StormProp.getInt("hatchProxSensorDIO3",-1));
         addChild("Hatch Proximity Sensor", hatchProxSensor3);
 
-        vacPressureSensorHigh = new DigitalInput(StormProp.getInt("vacPressureSensorHighDIO"));  // Most vacuum - run to this limit
-        vacPressureSensorLow = new DigitalInput(StormProp.getInt("vacPressureSensorLowDIO")); // low vacuum - turn on when we get here
+        vacPressureSensorHigh = new DigitalInput(StormProp.getInt("vacPressureSensorHighDIO",-1));  // Most vacuum - run to this limit
+        vacPressureSensorLow = new DigitalInput(StormProp.getInt("vacPressureSensorLowDIO",-1)); // low vacuum - turn on when we get here
 
-        vacPressureSensor = new AnalogInput(StormProp.getInt("vacPressureSensor"));
+        vacPressureSensor = new AnalogInput(StormProp.getInt("vacPressureSensor",-1));
         addChild("Pressure Sensor", vacPressureSensor);
 
         cargoOpen = false;
@@ -180,8 +180,8 @@ public class ValveControl extends Subsystem {
     }
 
     public void manageVac() {
-        double highVacuum = StormProp.getNumber("highVacuumKPa");
-        double lowVacuum = StormProp.getNumber("lowVacuumKPa");
+        double highVacuum = StormProp.getNumber("highVacuumKPa",0.0);
+        double lowVacuum = StormProp.getNumber("lowVacuumKPa",0.0);
         double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
 
         if (!Robot.compressor.isActiveAndCharged() && timer.get() > maxVenturiTime) {

@@ -24,17 +24,17 @@ public class Elevator extends Subsystem {
     public Elevator()
     {
         int slotIdx = 0;
-        kTimeoutMs = StormProp.getInt("canTimeout");
-        REST_POSITION = StormProp.getInt("elevatorRestPosition");
-        MAX_POSITION = StormProp.getInt("elevatorMaxPosition");
-        LEVEL2_POSITION = StormProp.getInt("elevatorLevelTwoHeight");
-        elevatorTalon = new WPI_TalonSRX(StormProp.getInt("elevatorTalonId"));
+        kTimeoutMs = StormProp.getInt("canTimeout",0);
+        REST_POSITION = StormProp.getInt("elevatorRestPosition",0);
+        MAX_POSITION = StormProp.getInt("elevatorMaxPosition",0);
+        LEVEL2_POSITION = StormProp.getInt("elevatorLevelTwoHeight",0);
+        elevatorTalon = new WPI_TalonSRX(StormProp.getInt("elevatorTalonId",-1));
 
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
 
         elevatorTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, kTimeoutMs);
 
-        elevatorTalon.configReverseSoftLimitThreshold(StormProp.getInt("elevatorLevelTwoHeight"), kTimeoutMs);
+        elevatorTalon.configReverseSoftLimitThreshold(StormProp.getInt("elevatorLevelTwoHeight",0), kTimeoutMs);
         elevatorTalon.configReverseSoftLimitEnable(false);
 
         elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
@@ -43,16 +43,16 @@ public class Elevator extends Subsystem {
         // safety
         reset();
 
-        elevatorTalon.configMotionAcceleration(StormProp.getInt("elevatorMMAcceleration"));
-        elevatorTalon.configMotionCruiseVelocity(StormProp.getInt("elevatorMMVelocity"));
+        elevatorTalon.configMotionAcceleration(StormProp.getInt("elevatorMMAcceleration",0));
+        elevatorTalon.configMotionCruiseVelocity(StormProp.getInt("elevatorMMVelocity",0));
 
         elevatorTalon.selectProfileSlot(slotIdx , 0);
-        elevatorTalon.config_kF(slotIdx , StormProp.getNumber("elevatorConfig_kF"), kTimeoutMs);
-        elevatorTalon.config_kP(slotIdx , StormProp.getNumber("elevatorConfig_kP"), kTimeoutMs);
-        elevatorTalon.config_kI(slotIdx , StormProp.getNumber("elevatorConfig_kI"), kTimeoutMs);
-        elevatorTalon.config_kD(slotIdx , StormProp.getNumber("elevatorConfig_kD"), kTimeoutMs);
-        elevatorTalon.config_IntegralZone(slotIdx , StormProp.getInt("elevatorConfig_iZone"), kTimeoutMs);
-        allowableError = StormProp.getInt("elevatorAllowableError");
+        elevatorTalon.config_kF(slotIdx , StormProp.getNumber("elevatorConfig_kF",0.0), kTimeoutMs);
+        elevatorTalon.config_kP(slotIdx , StormProp.getNumber("elevatorConfig_kP",0.0), kTimeoutMs);
+        elevatorTalon.config_kI(slotIdx , StormProp.getNumber("elevatorConfig_kI",0.0), kTimeoutMs);
+        elevatorTalon.config_kD(slotIdx , StormProp.getNumber("elevatorConfig_kD",0.0), kTimeoutMs);
+        elevatorTalon.config_IntegralZone(slotIdx , StormProp.getInt("elevatorConfig_iZone",0), kTimeoutMs);
+        allowableError = StormProp.getInt("elevatorAllowableError",0);
         elevatorTalon.configAllowableClosedloopError(0,allowableError,kTimeoutMs);
         //elevatorMotionMagicTuner = new TalonTuner("ElevatorMotionMagic", elevatorTalon, ControlMode.MotionMagic, slotIdx);
     }
@@ -84,7 +84,7 @@ public class Elevator extends Subsystem {
                 // Moving up - change the limit to level 3
                 targetPosition = MAX_POSITION;
                 elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
-                elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent"));
+                elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent",0));
                 break;
             case 2:
                 // what if these are changing when this gets called - ugh
@@ -92,18 +92,18 @@ public class Elevator extends Subsystem {
                 if ( currentPosition < targetPosition) {
                     // Moving up - change the limit to level 2
                     elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
-                    elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent"));
+                    elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent",0));
                 } else {
                     // Moving down
                     elevatorTalon.configReverseSoftLimitEnable(true);
-                    elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent"));
+                    elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
                 }
                 break;
             case 0:  // must be moving down
             default:
                 targetPosition = REST_POSITION;
                 elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-                elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent"));
+                elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
         }
 
     }
@@ -113,7 +113,7 @@ public class Elevator extends Subsystem {
         // Moving up - change the limit to level 3
         targetPosition = INFINITY;
         elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
-        elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorReturnPercent"));
+        elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorReturnPercent",0));
         currentPosition = getCurrentPositionTicks();
     }
 
@@ -121,7 +121,7 @@ public class Elevator extends Subsystem {
     {
         targetPosition = NEG_INFINITY;
         elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-        elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity"));
+        elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity",0));
         currentPosition = getCurrentPositionTicks();
     }
 
@@ -134,7 +134,7 @@ public class Elevator extends Subsystem {
         if (go) {
             targetPosition = NEG_INFINITY;
             elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-            elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity"));
+            elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity",0));
         } else {  // Stop returning
             stop();
         }

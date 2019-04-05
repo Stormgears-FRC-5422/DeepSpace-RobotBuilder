@@ -34,7 +34,7 @@ public class Backjack extends Subsystem {
     private NetworkTableEntry leftEntry;
     private ShuffleboardTab tab;
     public Backjack() {
-        int kTimeoutMs = StormProp.getInt("canTimeout");
+        int kTimeoutMs = StormProp.getInt("canTimeout",0);
         Shuffleboard.selectTab("Backjack");
         tab = Shuffleboard.getTab("Backjack");
         fLightR = new DigitalInput(9);
@@ -49,7 +49,7 @@ public class Backjack extends Subsystem {
         // 2048 tics per second
         // 200 tics per 100 ms is a reasonable target velocity
 
-        jackTalon = new WPI_TalonSRX(StormProp.getInt("jackTalonId"));
+        jackTalon = new WPI_TalonSRX(StormProp.getInt("jackTalonId",-1));
         jackTalon.setNeutralMode(NeutralMode.Brake);
 
 

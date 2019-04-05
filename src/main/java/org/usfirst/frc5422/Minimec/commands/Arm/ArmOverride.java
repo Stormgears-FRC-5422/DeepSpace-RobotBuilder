@@ -13,8 +13,6 @@ package org.usfirst.frc5422.Minimec.commands.Arm;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.PixyObject.PixyType;
-import org.usfirst.frc5422.Minimec.PixyObject;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
 

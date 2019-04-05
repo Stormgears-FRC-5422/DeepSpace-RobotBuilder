@@ -12,7 +12,6 @@
 package org.usfirst.frc5422.Minimec.commands.Drive;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.PixyObject;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

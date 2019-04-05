@@ -30,7 +30,7 @@ public class Compression extends Subsystem {
     private Compressor mainCompressor;
 
     public Compression() {
-        mainCompressor = new Compressor(StormProp.getInt("CompressorModuleId"));
+        mainCompressor = new Compressor(StormProp.getInt("CompressorModuleId",-1));
         addChild("MainCompressor",mainCompressor);
         mainCompressor.setClosedLoopControl(false);
         running = false;

@@ -37,19 +37,19 @@ import org.usfirst.frc5422.utils.StormProp;
  * the project.
  */
 public class Robot extends TimedRobot {
-    public static final boolean useCompressor = StormProp.getBoolean("useCompressor");
-    public static final boolean useValveControl = StormProp.getBoolean("useValveControl");
-    public static final boolean useStormNet = StormProp.getBoolean("useStormNet");
-    public static final boolean useDrive = StormProp.getBoolean("useDrive");
-    public static final boolean useElevator = StormProp.getBoolean("useElevator");
-    public static final boolean useArm = StormProp.getBoolean("useArm");
-    public static final boolean useBackjack = StormProp.getBoolean("useBackjack");
-    public static final boolean useIntake = StormProp.getBoolean("useIntake");
-    public static final boolean useVision = StormProp.getBoolean("useVision");
-    public static final boolean useNavX = StormProp.getBoolean("useNavX");
+    public static final boolean useCompressor = StormProp.getBoolean("useCompressor",true);
+    public static final boolean useValveControl = StormProp.getBoolean("useValveControl",true);
+    public static final boolean useStormNet = StormProp.getBoolean("useStormNet",true);
+    public static final boolean useDrive = StormProp.getBoolean("useDrive",true);
+    public static final boolean useElevator = StormProp.getBoolean("useElevator",true);
+    public static final boolean useArm = StormProp.getBoolean("useArm",true);
+    public static final boolean useBackjack = StormProp.getBoolean("useBackjack",true);
+    public static final boolean useIntake = StormProp.getBoolean("useIntake",true);
+    public static final boolean useVision = StormProp.getBoolean("useVision",true);
+    public static final boolean useNavX = StormProp.getBoolean("useNavX",true);
 
-    public static final boolean testBackjack = StormProp.getBoolean("testBackjack");
-    public static final boolean testStormNet = StormProp.getBoolean("testStormNet");
+    public static final boolean testBackjack = StormProp.getBoolean("testBackjack",false);
+    public static final boolean testStormNet = StormProp.getBoolean("testStormNet",false);
 
 
     public static Arm arm;
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         System.out.println("robotInit()");
-        debug = StormProp.getBoolean("debug");
+        debug = StormProp.getBoolean("debug",false);
 
         // Ideally this would be handled uniformly using a subclass of SubSystem, but not now
         drive = new Drive();  // Drive always instanced, but will not instance talons if useDrive is false
@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
 
         if (useIntake) intake = new Intake();
 
-        if (useVision) pixyVision = new PixyVision(StormProp.getString("visionTable"), true);
+        if (useVision) pixyVision = new PixyVision(StormProp.getString("visionTable","vision"), true);
 
         if (useNavX) navX = new NavX();
 
