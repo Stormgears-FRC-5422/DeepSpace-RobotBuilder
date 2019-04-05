@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
 import org.usfirst.frc5422.Minimec.subsystems.NavX;
 import org.usfirst.frc5422.Minimec.subsystems.TapeAlign;
+import org.usfirst.frc5422.Minimec.subsystems.PixyVision.DockSelection;
+import org.usfirst.frc5422.Minimec.subsystems.PixyVision.VisionMode;
 import org.usfirst.frc5422.utils.StormProp;
 
 import javax.swing.plaf.synth.SynthToolTipUI;
@@ -33,10 +35,15 @@ public class AutoDockApproach extends Command {
     private Boolean m_rumble_left = false;
     private Boolean m_pause = false;
     private Boolean m_ship_mode = true;  // alignment for cargo ship only (90 degress)
-    public enum rocket_side{
+    private CargoPosition m_dock_select = CargoPosition.middle;
+    public enum RocketSide {
         left, right
     }
-    private rocket_side m_rocketside = rocket_side.left;
+    public enum CargoPosition {
+        left, middle, right
+    }
+
+    private RocketSide m_rocketside = RocketSide.left;
 
     private final double m_approach_speed;
     private final double m_approach_cutover_speed;
@@ -63,10 +70,17 @@ public class AutoDockApproach extends Command {
         requires(Robot.drive);
         m_ship_mode = true;
     }
-    public AutoDockApproach(rocket_side side){
+    public AutoDockApproach(RocketSide side){
         this();
         m_rocketside = side;
+        m_dock_select = CargoPosition.middle;
         m_ship_mode = false;
+    }
+
+    public AutoDockApproach(CargoPosition dock){
+        this();
+        m_dock_select = dock;
+        m_ship_mode = true;
     }
 
     // Called just before this Command runs the first time
@@ -78,7 +92,10 @@ public class AutoDockApproach extends Command {
         set_navx_target();
         Robot.drive.setBrakeMode();
         Robot.pixyVision.set_strafe_mode();
-        Robot.pixyVision.enable(PixyVision.VisionMode.DOCK);
+        if      (m_dock_select == CargoPosition.left) Robot.pixyVision.changeDockMode(DockSelection.LEFT);
+        else if (m_dock_select == CargoPosition.middle) Robot.pixyVision.changeDockMode(DockSelection.MIDDLE);
+        else if (m_dock_select == CargoPosition.right) Robot.pixyVision.changeDockMode(DockSelection.RIGHT);
+        Robot.pixyVision.enable(VisionMode.DOCK);
     }
 
     private void set_navx_target() {
@@ -89,18 +106,25 @@ public class AutoDockApproach extends Command {
             double cur_heading = Robot.navX.getHeading();
             double rocket_heading = 30;
             if (cur_heading >= 90 && cur_heading <=270){
-                if (m_rocketside == rocket_side.left){
+                if (m_rocketside == RocketSide.left){
+                    m_dock_select = CargoPosition.right;
                     rocket_heading = 210;
                 } else {
+                    m_dock_select = CargoPosition.left;
                     rocket_heading = 150;
                 }
             } else {
-                if (m_rocketside == rocket_side.left){
+                if (m_rocketside == RocketSide.left){
+                    m_dock_select = CargoPosition.left;
                     rocket_heading = 330;
                 } else {
+                    m_dock_select = CargoPosition.right;
                     rocket_heading = 30;
                 }
             }
+            if      (m_dock_select == CargoPosition.left) Robot.pixyVision.changeDockMode(DockSelection.LEFT);
+            else if (m_dock_select == CargoPosition.middle) Robot.pixyVision.changeDockMode(DockSelection.MIDDLE);
+            else if (m_dock_select == CargoPosition.right) Robot.pixyVision.changeDockMode(DockSelection.RIGHT);
             Robot.navX.enable(rocket_heading);
         }
     }
@@ -155,16 +179,16 @@ public class AutoDockApproach extends Command {
             if (x < -1.0) x = -1.0;
 
 
-            // Check for dock mode changes
-            if (joy.getRawButton(3)) {
-                Robot.pixyVision.changeDockMode(PixyVision.DockSelection.LEFT);
-            }
-            if (joy.getRawButton(4)) {
-                Robot.pixyVision.changeDockMode(PixyVision.DockSelection.MIDDLE);
-            }
-            if (joy.getRawButton(2)) {
-                Robot.pixyVision.changeDockMode(PixyVision.DockSelection.RIGHT);
-            }
+            // // Check for dock mode changes - these buttons now just change the command that is running
+            // if (joy.getRawButton(3)) {
+            //     Robot.pixyVision.changeDockMode(PixyVision.DockSelection.LEFT);
+            // }
+            // if (joy.getRawButton(4)) {
+            //     Robot.pixyVision.changeDockMode(PixyVision.DockSelection.MIDDLE);
+            // }
+            // if (joy.getRawButton(2)) {
+            //     Robot.pixyVision.changeDockMode(PixyVision.DockSelection.RIGHT);
+	    //            }
 
             if (distance > 0 && distance < (m_target_distance + m_max_dist)) {
                 SmartDashboard.putNumber("PixyVisionDistance", distance);

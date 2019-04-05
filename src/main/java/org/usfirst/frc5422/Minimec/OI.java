@@ -95,8 +95,8 @@ public class OI {
         //Setup rocket vision commands
         m_rocket_left = new POVButton(getJoystick(), POVButton.Direction.Left);
         m_rocket_right = new POVButton(getJoystick(), POVButton.Direction.Right);
-        m_rocket_left.whenPressed(new AutoDockApproach(AutoDockApproach.rocket_side.left));
-        m_rocket_right.whenPressed(new AutoDockApproach(AutoDockApproach.rocket_side.right));
+        m_rocket_left.whenPressed(new AutoDockApproach(AutoDockApproach.RocketSide.left));
+        m_rocket_right.whenPressed(new AutoDockApproach(AutoDockApproach.RocketSide.right));
 
     }
 

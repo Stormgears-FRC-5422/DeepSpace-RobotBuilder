@@ -51,7 +51,7 @@ public class PixyObjectCollection {
             // remove objects that are too small
             m_list.removeIf( obj -> { 
                     if (obj.getHeight() < min_height) { 
-                        System.out.println("Dropping object for distance x=" + obj.getX() + " h=" + obj.getHeight());
+                        if (Robot.debug) System.out.println("Dropping object for distance x=" + obj.getX() + " h=" + obj.getHeight());
                         
                         return(true); 
                     }
@@ -88,10 +88,10 @@ public class PixyObjectCollection {
             // remove objects that are too low or too high
             m_list.removeIf( obj -> { 
                     if (request_high && obj.getY() < (highest_object.getY() - ref_height * factor)) {
-                        System.out.println("Dropping low object for height");
+                        if (Robot.debug) System.out.println("Dropping low object for height");
                         return(true); 
                     } else if (!request_high && obj.getY() > (lowest_object.getY() + ref_height * factor)) {
-                        System.out.println("Dropping high object for height");
+                        if (Robot.debug) System.out.println("Dropping high object for height");
                         return(true);
                     } else {
                         return(false);
