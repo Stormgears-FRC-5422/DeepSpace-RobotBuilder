@@ -74,14 +74,22 @@ public class StormProp {
         overrideInit = true;
 
     }
-    public static String getString(String key) {
+
+    public static String getString(String key){
+        System.out.println("Please use the new method with an additional String parameter with the default value to use.");
+        return getString(key, "");
+    }
+    public static String getString(String key, String defaultVal) {
         if (!initialized) {
             init();
         }
         if (!overrideInit) {
             overrideInit();
         }
-        if (overrideProperties.containsKey(key)){
+        if (!overrideProperties.containsKey(key) && !properties.containsKey(key)){
+            return defaultVal;
+        }
+        else if (overrideProperties.containsKey(key)){
             return overrideProperties.getProperty(key);
         }
         else {
@@ -89,22 +97,35 @@ public class StormProp {
         }
     }
 
-    //This was failing and I have no idea why
     public static double getNumber(String key) {
-        return Double.parseDouble(getString(key));
+        System.out.println("Please use the new method with an additional String parameter with the default value to use.");
+        return getNumber(key, "");
     }
-    public static int getInt(String key) {
-        return Integer.parseInt(getString(key));
+    public static double getNumber(String key, String defaultVal) {
+        return Double.parseDouble(getString(key, defaultVal));
     }
 
-    //untested but should work
+    public static int getInt(String key){
+        System.out.println("Please use the new method with an additional String parameter with the default value to use.");
+        return getInt(key, "");
+    }
+    public static int getInt(String key, String defaultVal) {
+        return Integer.parseInt(getString(key, defaultVal));
+    }
+
     public static boolean getBoolean(String key) {
-            String str = getString(key);
+        System.out.println("Please use the new method with an additional String parameter with the default value to use.");
+        String str = getString(key, "");
+        return str.toLowerCase().equals("true");
+
+    }
+
+    public static boolean getBoolean(String key, String defaultVal) {
+            String str = getString(key, defaultVal);
             return str.toLowerCase().equals("true");
 
     }
 
-    //puts all values to Smartdashboard except for values that should not change like talon ids.
     public static void toSmartDashBoard() {
         if (!initialized) {
             init();
@@ -116,7 +137,7 @@ public class StormProp {
         Set<String> keys = properties.stringPropertyNames();
         for (String key : keys) {
             if (!Arrays.asList(Blacklist).contains(key)) {
-                SmartDashboard.putString(key, getString(key));
+                SmartDashboard.putString(key, getString(key, ""));
             }
         }
     }
