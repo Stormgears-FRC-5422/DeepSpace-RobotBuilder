@@ -72,6 +72,7 @@ public class Arm extends Subsystem {
     }
 
     public void periodic() {
+        curArmPos = armTalon.getSensorCollection().getQuadraturePosition();
         if (isHome()) reset();
     }
 
@@ -83,7 +84,7 @@ public class Arm extends Subsystem {
     }
 
     private int getArmPositionTicks() {
-        return armTalon.getSensorCollection().getQuadraturePosition();
+        return curArmPos;
     }
 
     public void stop() {
@@ -114,7 +115,6 @@ public class Arm extends Subsystem {
             armTalon.set(ControlMode.Position, position);
         }
 
-        curArmPos = getArmPositionTicks();
     }
 
     public void moveUpManual() {
@@ -125,7 +125,7 @@ public class Arm extends Subsystem {
         } else {
             armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("arm_percent_unloaded_up",0.0));
         }
-        curArmPos = getArmPositionTicks();
+
     }
 
     public void moveDownManual() {
@@ -136,7 +136,6 @@ public class Arm extends Subsystem {
         } else {
             armTalon.set(ControlMode.PercentOutput, StormProp.getNumber("arm_percent_unloaded_down",0.0));
         }
-        curArmPos = getArmPositionTicks();
     }
 
     public void returnHome(boolean go) {

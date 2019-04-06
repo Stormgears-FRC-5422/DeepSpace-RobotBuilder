@@ -62,7 +62,7 @@ public class Elevator extends Subsystem {
         setDefaultCommand(new ElevatorOverride());
     }
 
-    private int getCurrentPositionTicks() { return elevatorTalon.getSensorCollection().getQuadraturePosition(); }
+    public int getCurrentPositionTicks() { return currentPosition; }
 
     public void reset() {
         elevatorTalon.setSelectedSensorPosition(0);
@@ -72,13 +72,11 @@ public class Elevator extends Subsystem {
 
     // This elevator just doesn't move from gravity. No reason to actively hold position
     public void stop() {
-        currentPosition = getCurrentPositionTicks();
         targetPosition = currentPosition;
         elevatorTalon.set(ControlMode.PercentOutput, 0.0);
     }
 
     public void moveToLevel(int level){
-        currentPosition = getCurrentPositionTicks();
         switch (level) {
             case 3: // must be moving up
                 // Moving up - change the limit to level 3
@@ -114,7 +112,6 @@ public class Elevator extends Subsystem {
         targetPosition = INFINITY;
         elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
         elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorReturnPercent",0));
-        currentPosition = getCurrentPositionTicks();
     }
 
     public void moveDownManual()
@@ -122,11 +119,10 @@ public class Elevator extends Subsystem {
         targetPosition = NEG_INFINITY;
         elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
         elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
-        currentPosition = getCurrentPositionTicks();
     }
 
     public void periodic(){
-        currentPosition = getCurrentPositionTicks();
+        currentPosition = elevatorTalon.getSensorCollection().getQuadraturePosition();
         if (isHome()) reset();
     }
 
@@ -147,7 +143,7 @@ public class Elevator extends Subsystem {
 
     // For elevatorMove commands
     public boolean isFinished() {
-        return (Math.abs(getCurrentPositionTicks() - targetPosition) < allowableError);
+        return (Math.abs(currentPosition - targetPosition) < allowableError);
     }
 }
 
