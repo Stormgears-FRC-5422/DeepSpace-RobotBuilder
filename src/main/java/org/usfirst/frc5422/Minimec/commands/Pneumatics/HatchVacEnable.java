@@ -31,10 +31,6 @@ public class HatchVacEnable extends Command {
             if (Robot.debug) System.out.println("Hatch vacuum ready");
             Robot.valveControl.hatchStart();
         }
-        else {
-            Robot.valveControl.hatchStop();
-        }
-
     }
 
     // Make this return true when this Command no longer needs to run execute()
