@@ -33,6 +33,9 @@ public class Backjack extends Subsystem {
     private NetworkTableEntry rightEntry;
     private NetworkTableEntry leftEntry;
     private ShuffleboardTab tab;
+
+    private int currentPosition;
+
     public Backjack() {
         int kTimeoutMs = StormProp.getInt("canTimeout",0);
         Shuffleboard.selectTab("Backjack");
@@ -63,14 +66,15 @@ public class Backjack extends Subsystem {
 
         tab = Shuffleboard.getTab("Backjack");
         Shuffleboard.selectTab("Backjack");
-        encoderEntry = tab.add("encoder ticks", getCurrentPositionTicks()).getEntry();
+        currentPosition = getCurrentPositionTicks();
+        encoderEntry = tab.add("encoder ticks", currentPosition).getEntry();
     }
 
     public void reset() {
         jackTalon.setSelectedSensorPosition(0);
     }
 
-    public double getCurrentPositionTicks(){
+    public int getCurrentPositionTicks(){
         return jackTalon.getSensorCollection().getQuadraturePosition();
     }
 
@@ -82,14 +86,15 @@ public class Backjack extends Subsystem {
     @Override
     public void periodic() {
         //currentEntry.setDouble(jackTalon.getOutputCurrent());
-        encoderEntry.setDouble(getCurrentPositionTicks());
+        currentPosition = getCurrentPositionTicks();
+        encoderEntry.setDouble(currentPosition);
         rightEntry.setBoolean((fLightR).get());
         leftEntry.setBoolean((fLightL).get());
         if (!fLightL.get() && !fLightR.get()) {
             Robot.drive.driveArcade(0, .15, 0);
         }
         else {
-            if (getCurrentPositionTicks() > MAX_POSITION){
+            if (currentPosition > MAX_POSITION){
                 returnHome(true);
             }
         }
@@ -97,13 +102,13 @@ public class Backjack extends Subsystem {
     }
 
     public boolean atMax() {
-        if (nextLevel == 2) return (getCurrentPositionTicks() > SECONDLEVEL);
-        else if (nextLevel == 3) return (getCurrentPositionTicks() > MAX_POSITION);
+        if (nextLevel == 2) return (currentPosition > SECONDLEVEL);
+        else if (nextLevel == 3) return (currentPosition > MAX_POSITION);
         else return false;
     }
 
     public boolean pastMin() {
-        return (getCurrentPositionTicks() > MIN_POSITION);
+        return (currentPosition > MIN_POSITION);
     }
 
     public void move(boolean active) {
