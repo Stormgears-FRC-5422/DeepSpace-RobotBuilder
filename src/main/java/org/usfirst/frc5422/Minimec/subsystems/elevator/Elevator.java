@@ -76,6 +76,12 @@ public class Elevator extends Subsystem {
         elevatorTalon.set(ControlMode.PercentOutput, 0.0);
     }
 
+    public void moveToTicks(int ticks){
+
+        elevatorTalon.configForwardSoftLimitThreshold(ticks, kTimeoutMs);
+        elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent", 0));
+    }
+
     public void moveToLevel(int level){
         switch (level) {
             case 3: // must be moving up
@@ -113,6 +119,8 @@ public class Elevator extends Subsystem {
         elevatorTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
         elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorReturnPercent",0));
     }
+
+
 
     public void moveDownManual()
     {
