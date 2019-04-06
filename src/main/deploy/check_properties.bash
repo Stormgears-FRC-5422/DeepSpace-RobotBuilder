@@ -4,6 +4,9 @@
 #set -x
 
 # assume this is running in the ./deploy directory
+# must run on the development machine, not the roborio - the java sources don't make it to the rio!
+
+echo "***** Running configuration file checker *****"
 
 # First make sure that there are no temp files lying around from last time
 # the -f forces the rm and doesn't complain if the file is missing
@@ -59,6 +62,8 @@ res=$?
 
 if [[ $res == 1 ]] ; then
     echo "********** FAILING **********"
+else
+    echo "***** Success *****"
 fi
 
 #It is safe to comment the rm line if you want to look at the files

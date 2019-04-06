@@ -109,7 +109,6 @@ public class Robot extends TimedRobot {
 	        lidarAlignSys = new LidarAlign();
 	    }   
 
-
         // OI must be constructed after subsystems. If the OI creates Commands
         //(which it very likely will), subsystems are not guaranteed to be
         // constructed yet. Thus, their requires() statements may grab null
@@ -152,8 +151,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         System.out.println("teleopInit()");
         onInitCheck();
-
-
     }
 
     /**
@@ -162,6 +159,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+//        System.out.println("Line sensor output: " + stormNetSubsystem.getLineIROffset());
         Scheduler.getInstance().run();
     }
 
