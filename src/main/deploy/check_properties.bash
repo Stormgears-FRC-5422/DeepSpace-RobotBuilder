@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#uncomment this line if you want to see the whole script run
 #set -x
 
 # assume this is running in the ./deploy directory
@@ -20,7 +21,7 @@ cat ./config.properties | grep -v "#" | grep "=" | sed "s/ //g" | while read lin
 	echo "CONFIG[$config]=$config" >> config.shell
 done
 
-# Add this new array to the current environment
+# Add this new array to the current environment by "dotting" it in (reads it as a set of commands)
 . ./config.shell
 
 # create the list of java references in java or kotlin files
@@ -60,5 +61,6 @@ if [[ $res == 1 ]] ; then
     echo "********** FAILING **********"
 fi
 
+#It is safe to comment the rm line if you want to look at the files
 rm -rf ./config.shell ./src.properties.found
 exit $res

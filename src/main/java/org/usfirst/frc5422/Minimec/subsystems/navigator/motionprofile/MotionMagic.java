@@ -32,10 +32,10 @@ public class MotionMagic {
         /* set closed loop gains in slot0 - see documentation */
         /*
         talon.selectProfileSlot(0, 0);
-        talon.config_kF(0, StormProp.getNumber("velocityF"), TALON_FPID_TIMEOUT);
-        talon.config_kP(0, StormProp.getNumber("velocityP"), TALON_FPID_TIMEOUT);
-        talon.config_kI(0, StormProp.getNumber("velocityI"), TALON_FPID_TIMEOUT);
-        talon.config_kD(0, StormProp.getNumber("velocityD"), TALON_FPID_TIMEOUT);
+        talon.config_kF(0, StormPROP.getNumber("velocityF"), TALON_FPID_TIMEOUT);
+        talon.config_kP(0, StormPROP.getNumber("velocityP"), TALON_FPID_TIMEOUT);
+        talon.config_kI(0, StormPROP.getNumber("velocityI"), TALON_FPID_TIMEOUT);
+        talon.config_kD(0, StormPROP.getNumber("velocityD"), TALON_FPID_TIMEOUT);
         /* set acceleration and vcruise velocity - see documentation */
 
 
@@ -56,11 +56,11 @@ public class MotionMagic {
     public void runMotionMagic(int targetPos) {
         //redundant code
         /*
-        talon.config_kP(0, Double.parseDouble(StormProp.getString("positionP")), TALON_FPID_TIMEOUT);
-        talon.config_kI(0, Double.parseDouble(StormProp.getString("positionI")), TALON_FPID_TIMEOUT);
-        talon.config_kD(0, Double.parseDouble(StormProp.getString("positionD")), TALON_FPID_TIMEOUT);
+        talon.config_kP(0, Double.parseDouble(StormPROP.getString("positionP")), TALON_FPID_TIMEOUT);
+        talon.config_kI(0, Double.parseDouble(StormPROP.getString("positionI")), TALON_FPID_TIMEOUT);
+        talon.config_kD(0, Double.parseDouble(StormPROP.getString("positionD")), TALON_FPID_TIMEOUT);
 
-        talon.config_IntegralZone(0,(int)Double.parseDouble(StormProp.getString("positionIzone")), TALON_FPID_TIMEOUT);
+        talon.config_IntegralZone(0,(int)Double.parseDouble(StormPROP.getString("positionIzone")), TALON_FPID_TIMEOUT);
         */
         talon.set(ControlMode.MotionMagic, targetPos);
 

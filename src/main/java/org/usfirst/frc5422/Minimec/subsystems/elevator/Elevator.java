@@ -121,7 +121,7 @@ public class Elevator extends Subsystem {
     {
         targetPosition = NEG_INFINITY;
         elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-        elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity",0));
+        elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
         currentPosition = getCurrentPositionTicks();
     }
 
@@ -134,7 +134,7 @@ public class Elevator extends Subsystem {
         if (go) {
             targetPosition = NEG_INFINITY;
             elevatorTalon.configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
-            elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnVelocity",0));
+            elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
         } else {  // Stop returning
             stop();
         }

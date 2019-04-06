@@ -62,7 +62,7 @@ public class Arm extends Subsystem {
         armTalon.config_kP(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_kP",0.0));
         armTalon.configClosedLoopPeakOutput(armPositionLoadedSlotIdx, StormProp.getNumber("arm_pos_loaded_ClosedLoopPeakOutput",0.0));
 
-//        armTalon.configPeakCurrentLimit((StormProp.getInt("armCurrentLimit")));
+//        armTalon.configPeakCurrentLimit((StormPROP.getInt("armCurrentLimit")));
 //        armTalon.configMotionAcceleration(750);
 //        armTalon.configMotionCruiseVelocity(2500);
     }
