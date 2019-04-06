@@ -29,7 +29,7 @@ import javax.swing.plaf.synth.SynthToolTipUI;
 public class AutoDockApproach extends Command {
 
     private Joystick joy;
-    private double m_target_distance = 7.9;
+    private double m_target_distance = 7.7;
     private double m_max_dist = 40;
     private Boolean m_rumble_left = false;
     private Boolean m_pause = false;
