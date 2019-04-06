@@ -107,13 +107,17 @@ public class Drive extends Subsystem {
     
     }
     public void driveArcade(double x, double y, double z) {
-        if (Robot.useDrive) mecanumDrive1.driveCartesian(x,  y, z);
-        SmartDashboard.putNumber("Front Left Talon Output: ", leftFront.getSensorCollection().getQuadratureVelocity());
-        SmartDashboard.putNumber("Front Right Talon Output: ", rightFront.getSensorCollection().getQuadratureVelocity());
-        SmartDashboard.putNumber("Back Left Talon Output: ", leftBack.getSensorCollection().getQuadratureVelocity());
-        SmartDashboard.putNumber("Back Right Talon Output: ", rightBack.getSensorCollection().getQuadratureVelocity());
+        if (Robot.useDrive) {
+            mecanumDrive1.driveCartesian(x,  y, z);
+            if (Robot.debug) {
+                SmartDashboard.putNumber("Front Left Talon Output: ", leftFront.getSensorCollection().getQuadratureVelocity());
+                SmartDashboard.putNumber("Front Right Talon Output: ", rightFront.getSensorCollection().getQuadratureVelocity());
+                SmartDashboard.putNumber("Back Left Talon Output: ", leftBack.getSensorCollection().getQuadratureVelocity());
+                SmartDashboard.putNumber("Back Right Talon Output: ", rightBack.getSensorCollection().getQuadratureVelocity());
+           }
+        }   
     }
-
+    
     public void driveArcadeDeRate(double x, double y, double z,double rate) {
         if (rate > 1) {
             driveArcade(x, y, z);
