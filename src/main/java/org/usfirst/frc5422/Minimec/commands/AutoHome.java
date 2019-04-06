@@ -11,7 +11,7 @@ public class AutoHome extends CommandGroup {
     public AutoHome(boolean active) {
         System.out.println("Starting auto-homing sequence - active = " + active);
         // Note that these aren't run here - they are created and scheduled. Running happens next
-        if (Robot.useNavX) addSequential(new NavXReset(active));
+        if (Robot.useNavX) addSequential(new NavXReset());
         if (Robot.useArm) addSequential(new ArmReset(active));
         if (Robot.useElevator) addSequential(new ElevatorReset(active));
         if (Robot.useBackjack) addSequential(new BackjackReset(active));

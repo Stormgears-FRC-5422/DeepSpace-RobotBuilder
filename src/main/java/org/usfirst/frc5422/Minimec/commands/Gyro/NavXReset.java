@@ -5,15 +5,13 @@ import org.usfirst.frc5422.Minimec.Robot;
 
 public class NavXReset extends Command {
 
-    private boolean active;
+    public NavXReset(){
 
-    public NavXReset(boolean active){
-        this.active = active;
     }
 
     @Override
     protected void initialize() {
-        if(active) Robot.navX.calibrate();
+        Robot.navX.calibrate();
     }
 
     @Override
