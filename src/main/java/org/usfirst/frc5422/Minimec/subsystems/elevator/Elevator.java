@@ -75,7 +75,12 @@ public class Elevator extends Subsystem {
         targetPosition = currentPosition;
         elevatorTalon.set(ControlMode.PercentOutput, 0.0);
     }
+    public void moveToTicks(int ticks){
 
+        elevatorTalon.configForwardSoftLimitThreshold(ticks, kTimeoutMs);
+        elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent", 0));
+    }
+    
     public void moveToTicks(int ticks, int level){
         switch (level) {
             case 3: // must be moving up

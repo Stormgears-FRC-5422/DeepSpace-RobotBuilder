@@ -105,10 +105,6 @@ object DSIO {
             buttonBoard.elevatorLevelTwo.whenPressed(ElevatorMove(2))
             buttonBoard.elevatorLevelThree.whenPressed(ElevatorMove(3))
         }
-        if(Robot.useElevator && Robot.useArm){
-            println("eeee")
-            buttonBoard.moveBackjack.whenPressed(PlacementSequence())
-        }
 
         buttonBoard.wristSwitch.whenFlipped {
             println("WRIST SWITCH")
