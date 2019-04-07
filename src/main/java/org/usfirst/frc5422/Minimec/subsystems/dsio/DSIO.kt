@@ -90,7 +90,7 @@ object DSIO {
         }
 
         if (Robot.useArm) {
-            buttonBoard.armRest.whenPressed(ArmToPosition(Robot.arm.ARM_HOME_POSITION_TICKS))
+            buttonBoard.armRest.whenPressed(ArmToPosition(Robot.arm.ARM_REST_POSITION_TICKS))
             buttonBoard.armPickupPosition.whenPressed(ArmToPosition(Robot.arm.ARM_PICKUP_POSITION_TICKS))
             buttonBoard.arm90.whenPressed(ArmToPosition(Robot.arm.ARM_90_POSITION_TICKS))
             buttonBoard.arm135.whenPressed(ArmToPosition(Robot.arm.ARM_135_POSITION_TICKS))

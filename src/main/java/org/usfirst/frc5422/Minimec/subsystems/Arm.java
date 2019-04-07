@@ -13,6 +13,7 @@ public class Arm extends Subsystem {
     public final int ARM_HOME_POSITION_TICKS;
     public final int ARM_90_POSITION_TICKS;
     public final int ARM_135_POSITION_TICKS;
+    public final int ARM_REST_POSITION_TICKS;
 
     private WPI_TalonSRX armTalon;
     private WPI_TalonSRX pivotTalon;
@@ -34,6 +35,7 @@ public class Arm extends Subsystem {
         ARM_HOME_POSITION_TICKS = StormProp.getInt("arm_home_position_ticks",0);
         ARM_90_POSITION_TICKS = StormProp.getInt("arm_90_position_ticks",0);
         ARM_135_POSITION_TICKS = StormProp.getInt("arm_135_position_ticks",0);
+        ARM_REST_POSITION_TICKS = StormProp.getInt("arm_rest_position_ticks",0);
 
         Shuffleboard.selectTab("Arm");
         armTalon = new WPI_TalonSRX(StormProp.getInt("armTalonId",-1));  // SHOULDER   TODO
