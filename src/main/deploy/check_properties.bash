@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# I'm assuming people on windows are using GitBash!
+# I'm assuming people on windows are using GitBash or something similar.
 
 #uncomment this line if you want to see the whole script run
 #set -x
