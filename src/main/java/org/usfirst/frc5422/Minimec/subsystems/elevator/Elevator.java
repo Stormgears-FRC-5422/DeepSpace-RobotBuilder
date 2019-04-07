@@ -76,11 +76,34 @@ public class Elevator extends Subsystem {
         elevatorTalon.set(ControlMode.PercentOutput, 0.0);
     }
 
-    public void moveToTicks(int ticks){
-
-        elevatorTalon.configForwardSoftLimitThreshold(ticks, kTimeoutMs);
-        elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent", 0));
-    }
+    public void moveToTicks(int ticks, int level){
+        switch (level) {
+            case 3: // must be moving up
+                // Moving up - change the limit to level 3
+                targetPosition = MAX_POSITION ;
+                elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
+                elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent",0));
+                break;
+            case 2:
+                // what if these are changing when this gets called - ugh
+                targetPosition = LEVEL2_POSITION + ticks;
+                if ( currentPosition < targetPosition) {
+                    // Moving up - change the limit to level 2
+                    elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
+                    elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent",0));
+                } else {
+                    // Moving down
+                    elevatorTalon.configReverseSoftLimitEnable(true);
+                    elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
+                }
+                break;
+            case 0:  // must be moving down
+            default:
+                targetPosition = REST_POSITION + ticks;
+                elevatorTalon
+                        .configReverseSoftLimitEnable(false); // still have the hard limit - don't want to stop on level 2
+                elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
+        } }
 
     public void moveToLevel(int level){
         switch (level) {

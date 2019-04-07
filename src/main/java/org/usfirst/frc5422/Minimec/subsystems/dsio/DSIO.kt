@@ -7,6 +7,7 @@ import org.usfirst.frc5422.Minimec.commands.AutoHome
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
 import org.usfirst.frc5422.Minimec.commands.Drive.AutoDockApproach
 import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
+import org.usfirst.frc5422.Minimec.commands.Elevator.PlacementSequence
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.JackSequence
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
@@ -103,6 +104,10 @@ object DSIO {
             buttonBoard.elevatorLevelOne.whenPressed(ElevatorMove(0))
             buttonBoard.elevatorLevelTwo.whenPressed(ElevatorMove(2))
             buttonBoard.elevatorLevelThree.whenPressed(ElevatorMove(3))
+        }
+        if(Robot.useElevator && Robot.useArm){
+            println("eeee")
+            buttonBoard.moveBackjack.whenPressed(PlacementSequence())
         }
 
         buttonBoard.wristSwitch.whenFlipped {
