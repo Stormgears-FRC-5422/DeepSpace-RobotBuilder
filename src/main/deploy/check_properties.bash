@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# I'm assuming people on windows are using GitBash!
 
 #uncomment this line if you want to see the whole script run
 #set -x
@@ -11,6 +12,21 @@ echo "***** Running configuration file checker *****"
 # First make sure that there are no temp files lying around from last time
 # the -f forces the rm and doesn't complain if the file is missing
 rm -f ./config.shell ./src.properties.found
+
+# We need to use the find command, but windows has its own, completely different, find. So be explicit
+# OS specific support (must be 'true' or 'false').
+case "`uname`" in
+  MINGW* )
+    find=/usr/bin/find
+    ;;
+  MSYS* )
+    find=/usr/bin/find
+    ;;
+    * )
+    # we can just get it off the PATH like everything else
+    find=find
+    ;;
+esac
 
 # read config.properties and put its values into a new .shell file
 # This takes
@@ -32,9 +48,9 @@ done
 # This will fail for very dynamic properties (if you do StormProp.getInt(StormProp.getString(..)) )
 # Lets just say please don't do that. If you want that behavior, use two steps.
 # Note that some sed's don't support \n as newline, so this script has a real newline in it
-find .. -name "*.java" -exec grep "StormProp.get" {} \; | sed "s/ //g" | sed 's/StormProp/\
+$find .. -name "*.java" -exec grep "StormProp.get" {} \; | sed "s/ //g" | sed 's/StormProp/\
     StormProp/g' | grep StormProp  > src.properties.found
-find .. -name "*.kt"   -exec grep "StormProp.get" {} \; | sed "s/ //g" | sed 's/StormProp/\
+$find .. -name "*.kt"   -exec grep "StormProp.get" {} \; | sed "s/ //g" | sed 's/StormProp/\
     StormProp/g' | grep StormProp >> src.properties.found
 
 cat src.properties.found | while read line ; do
@@ -53,6 +69,8 @@ cat src.properties.found | while read line ; do
 		: # nothing to do
 	else
 		echo "I found the key \"$key\" in source code and not in the config.properties file"
+		echo "The line looks something like this:"
+		echo "$line"
 		exit 1 # fail
 	fi
 done

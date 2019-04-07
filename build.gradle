@@ -5,7 +5,30 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.20'
 }
 
+// Check this out.  We can get a build scan report by running
+// gradlew build --scan
+if (hasProperty('buildScan')) {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
+}
+
 def ROBOT_MAIN_CLASS = "org.usfirst.frc5422.Minimec.Main"
+
+task checkProperties(type:Exec) {
+    workingDir 'src/main/deploy'
+    
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'bash', '-c', './check_properties.bash'
+    } else {
+        commandLine 'bash -c ./check_properties.bash'
+    }
+}
+
+check {
+    dependsOn checkProperties
+}
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
