@@ -164,7 +164,7 @@ public class AutoDockApproach extends Command {
                     x += Robot.tapeAlignSys.get_pid_output();
                 }
                 else{
-                    x += .65 * Robot.pixyVision.get_pid_output(); // vision controls strafing
+                    x += Robot.pixyVision.get_pid_output(); // vision controls strafing
                 }
                 z += Robot.navX.get_pid_output();  // NavX controls turning
             } else {

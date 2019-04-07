@@ -51,7 +51,7 @@ public class PixyVision extends PIDSubsystem {
     private double m_last_dock_pair_separation = 0; // Track the distance between dock pairs to filter out bad data
     private int m_lost_track_count = 0;
     private boolean m_inverted = true;
-    private static final double m_strafe_pid = .08;
+    private static final double m_strafe_pid = .02;
     private static final double m_turn_pid = .005;
 
     private NetworkTableEntry m_dockmode_entry;
@@ -151,8 +151,8 @@ public class PixyVision extends PIDSubsystem {
 
     public void set_strafe_mode() {
         getPIDController().setP(m_strafe_pid);
-        getPIDController().setD(.2);
-        getPIDController().setOutputRange(-.5, .5);
+        getPIDController().setD(.1);
+        getPIDController().setOutputRange(-.6, .6);
     }
 
     public void clearLastTracked() {
