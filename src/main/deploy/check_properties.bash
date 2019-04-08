@@ -13,8 +13,7 @@ echo "***** Running configuration file checker *****"
 # the -f forces the rm and doesn't complain if the file is missing
 rm -f ./config.shell ./src.properties.found
 
-# We need to use the find command, but windows has its own, completely different, find. So be explicit
-# OS specific support (must be 'true' or 'false').
+# We need to use the find command, but windows has its own, completely different, find. So be explicit.
 case "`uname`" in
   MINGW* )
     find=/usr/bin/find

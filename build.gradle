@@ -18,12 +18,9 @@ def ROBOT_MAIN_CLASS = "org.usfirst.frc5422.Minimec.Main"
 
 task checkProperties(type:Exec) {
     workingDir 'src/main/deploy'
-    
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine 'bash', '-c', './check_properties.bash'
-    } else {
-        commandLine 'bash -c ./check_properties.bash'
-    }
+
+    executable 'bash'
+    args '-c', './check_properties.bash'
 }
 
 check {
