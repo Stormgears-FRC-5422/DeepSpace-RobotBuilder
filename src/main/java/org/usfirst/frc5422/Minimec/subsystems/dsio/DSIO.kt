@@ -15,6 +15,7 @@ import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
+import org.usfirst.frc5422.utils.StatusLight
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
@@ -112,6 +113,7 @@ object DSIO {
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Precision, precision);
             if (Robot.debug) println(precision)
         }
 

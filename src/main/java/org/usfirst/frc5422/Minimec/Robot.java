@@ -27,6 +27,7 @@ import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 import org.usfirst.frc5422.Minimec.subsystems.intake.Intake;
 import org.usfirst.frc5422.Minimec.subsystems.pneumatics.*;
 import org.usfirst.frc5422.Minimec.subsystems.backjack.*;
+import org.usfirst.frc5422.utils.StatusLight;
 import org.usfirst.frc5422.utils.StormProp;
 
 /**
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
     public static final boolean useIntake = StormProp.getBoolean("useIntake",true);
     public static final boolean useVision = StormProp.getBoolean("useVision",true);
     public static final boolean useNavX = StormProp.getBoolean("useNavX",true);
+    public static final boolean useStatusLights = StormProp.getBoolean("useStatusLights", false);
 
     public static final boolean testBackjack = StormProp.getBoolean("testBackjack",false);
     public static final boolean testStormNet = StormProp.getBoolean("testStormNet",false);
@@ -174,5 +176,9 @@ public class Robot extends TimedRobot {
     // Try to set the subsystem state accordingly
     public void onInitCheck() {
         System.out.println("onInitCheck()");
+    }
+
+    public static void setStatusLight(StatusLight light, boolean active){
+        stormNetSubsystem.setStatusLights(light, active);
     }
 }
