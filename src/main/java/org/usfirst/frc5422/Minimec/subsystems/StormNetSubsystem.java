@@ -93,10 +93,10 @@ public class StormNetSubsystem extends Subsystem {
                 if(active) lightPort.writeString("2t\n"); else lightPort.writeString("2f\n");
                 break;
             case Vacuum:
-                if(active) lightPort.writeString("3t\n"); else lightPort.writeString("2f\n");
+                if(active) lightPort.writeString("3t\n"); else lightPort.writeString("3f\n");
                 break;
             case Intake:
-                if(active) lightPort.writeString("4t\n"); else lightPort.writeString("2f\n");
+                if(active) lightPort.writeString("4t\n"); else lightPort.writeString("4f\n");
                 break;
             default:
                 System.out.println("Oh no! Someone must have forgot to put break statements.");
