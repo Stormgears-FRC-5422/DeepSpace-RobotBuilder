@@ -14,6 +14,7 @@ public class ValveControl extends Subsystem {
     private Solenoid cargoValve;
     private Solenoid hatchValve;
     private Solenoid armValve;
+    private Solenoid wheelValve;
     private Solenoid vacValve;
 
     private DigitalInput ballProxSensor;
@@ -53,6 +54,10 @@ public class ValveControl extends Subsystem {
         armValve = new Solenoid(mod , StormProp.getInt("armValve",-1));
         armValve.set(false);
         addChild("ARM_VALVE",armValve);
+
+        wheelValve = new Solenoid(mod, StormProp.getInt("wheelValve", -1));
+        armValve.set(false);
+        addChild("WHEEL_VALVE", wheelValve );
 
         vacValve = new Solenoid(mod , StormProp.getInt("vacValve",-1));
         vacValve.set(false);
@@ -135,6 +140,22 @@ public class ValveControl extends Subsystem {
     public void armRetract(){
         System.out.println("IntakeArmRetract");
         armValve.set(false);
+    }
+    public boolean armState() {
+        return armValve.get();
+    }
+
+    public boolean wheelState(){
+        return wheelValve.get();
+    }
+    public void wheelExtend() {
+        System.out.println("IntakeArmExtend");
+        wheelValve.set(true);
+    }
+
+    public void wheelRetract(){
+        System.out.println("IntakeArmRetract");
+        wheelValve.set(false);
     }
 
     public void vacStart() {
