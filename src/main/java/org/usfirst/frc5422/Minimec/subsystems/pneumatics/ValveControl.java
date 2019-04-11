@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.EnableVacuum;
+import org.usfirst.frc5422.utils.StatusLight;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.Minimec.Robot;
 
@@ -21,6 +22,12 @@ public class ValveControl extends Subsystem {
     private DigitalInput hatchProxSensor1;
     private DigitalInput hatchProxSensor2;
     private DigitalInput hatchProxSensor3;
+
+    private final double highVacuum;
+    private final double lowVacuum;
+
+    private double currentVac;
+
 
     // How many prox sensors need to vote to release
     // 0 means trigger vacuum immediately
@@ -79,6 +86,10 @@ public class ValveControl extends Subsystem {
         vacPressureSensorLow = new DigitalInput(StormProp.getInt("vacPressureSensorLowDIO",-1)); // low vacuum - turn on when we get here
 
         vacPressureSensor = new AnalogInput(StormProp.getInt("vacPressureSensor",-1));
+
+        highVacuum = StormProp.getNumber("highVacuumKPa",0.0);
+        lowVacuum = StormProp.getNumber("lowVacuumKPa",0.0);
+
         addChild("Pressure Sensor", vacPressureSensor);
 
         cargoOpen = false;
@@ -92,14 +103,21 @@ public class ValveControl extends Subsystem {
         setDefaultCommand(new EnableVacuum());
     }
 
+    //true means low vac
+    boolean lastState = false;
+
     @Override
     public void periodic() {
-        manageVac();
-//        System.out.println("H1: " + hatchProxSensor1.get() +
-//                            " H2: " + hatchProxSensor2.get() +
-//                            " H3: " + hatchProxSensor3.get());
-
-
+        manageVac();  // sets currentVac
+        if(Robot.useStatusLights){
+            if(currentVac < lowVacuum){
+                if(!lastState) Robot.setStatusLight(StatusLight.Vacuum, 1);
+                lastState = false;
+            }else if(currentVac > highVacuum){
+                if(lastState) Robot.setStatusLight(StatusLight.Vacuum, 0);
+                lastState = true;
+            }
+        }
     }
 
     // Put methods for controlling this subsystem
@@ -206,9 +224,7 @@ public class ValveControl extends Subsystem {
     }
 
     public void manageVac() {
-        double highVacuum = StormProp.getNumber("highVacuumKPa",0.0);
-        double lowVacuum = StormProp.getNumber("lowVacuumKPa",0.0);
-        double currentVac = voltsToKPa(vacPressureSensor.getVoltage());
+        currentVac = voltsToKPa(vacPressureSensor.getVoltage());
 
         if (!Robot.compressor.isActiveAndCharged() && timer.get() > maxVenturiTime) {
             // conservative stop. Let the compressor charge up first
@@ -216,9 +232,11 @@ public class ValveControl extends Subsystem {
         } else if (currentVac > highVacuum ||  Robot.oi.getControlOverride() ) {
             // normal stop
             vacStop();
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vacuum, 0);
         } else if ( currentVac < lowVacuum) {
             // OK to go
             vacStart();
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vacuum, 1);
         }
     }
 }

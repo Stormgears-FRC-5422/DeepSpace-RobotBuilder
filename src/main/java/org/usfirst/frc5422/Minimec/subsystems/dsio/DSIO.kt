@@ -3,6 +3,7 @@ package org.usfirst.frc5422.Minimec.subsystems.dsio
 import edu.wpi.first.wpilibj.Joystick
 import org.usfirst.frc5422.Minimec.Robot
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToPosition
+import org.usfirst.frc5422.Minimec.commands.Arm.ReleaseGroup
 import org.usfirst.frc5422.Minimec.commands.AutoHome
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
 import org.usfirst.frc5422.Minimec.commands.Drive.AutoDockApproach
@@ -15,13 +16,14 @@ import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
+import org.usfirst.frc5422.utils.StatusLight
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
 
     private var buttonBoard:IButtonBoard
     var precision:Boolean = false
-    
+
     init{
        // val detector = JoystickDetector()
         //detector.detect()
@@ -60,7 +62,7 @@ object DSIO {
     private fun setupControls()
     {
         System.out.println("setupControls()")
-        buttonBoard.resetCode.whenPressed(AutoHome(true))
+        buttonBoard.resetCode.whenPressed(AutoHome(true, true))
 
         // Note that these are creating and passing new Command objects, not calling functions
         if (Robot.useBackjack) {
@@ -82,7 +84,7 @@ object DSIO {
             buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
             buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
             buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
-            buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
+            buttonBoard.hatchRelease.whenPressed(ReleaseGroup())
         }
 
         if (Robot.useIntake) {
@@ -112,6 +114,7 @@ object DSIO {
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Precision, if( precision) 1 else 0);
             if (Robot.debug) println(precision)
         }
 

@@ -27,6 +27,8 @@ check {
     dependsOn checkProperties
 }
 
+ 
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {

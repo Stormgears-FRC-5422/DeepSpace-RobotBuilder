@@ -7,9 +7,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake;
 
+import java.util.Random;
+
 public class Intake extends Subsystem {
     public static Intake instance;
-
     public static Intake getInstance()
     {
         if(instance == null) instance = getInstance();

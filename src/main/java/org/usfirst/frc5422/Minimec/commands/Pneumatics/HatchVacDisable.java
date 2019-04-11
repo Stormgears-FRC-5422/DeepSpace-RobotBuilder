@@ -2,6 +2,7 @@ package org.usfirst.frc5422.Minimec.commands.Pneumatics;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
+import org.usfirst.frc5422.utils.StatusLight;
 
 public class HatchVacDisable extends Command {
 
@@ -17,7 +18,7 @@ public class HatchVacDisable extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-
+        if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Intake, 0);
     }
 
     // Called repeatedly when this Command is scheduled to run
