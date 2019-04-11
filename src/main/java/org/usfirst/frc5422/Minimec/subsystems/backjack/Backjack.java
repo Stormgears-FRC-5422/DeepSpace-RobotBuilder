@@ -22,9 +22,9 @@ public class Backjack extends Subsystem {
 
     private WPI_TalonSRX jackTalon;
 
-    private static final int MAX_POSITION = 32600;
+    private static final int MAX_POSITION = 21000;
     private static final int MIN_POSITION = 0;
-    private static final int SECONDLEVEL = 15000;
+    private static final int SECONDLEVEL = 21000;
     private DigitalInput fLightR;
     private DigitalInput fLightL;
     private int nextLevel;
