@@ -70,7 +70,7 @@ public class Arm extends Subsystem {
     }
 
     public void initDefaultCommand() {
-        setDefaultCommand(new ArmOverride());
+        //setDefaultCommand(new ArmOverride());
     }
 
     public void periodic() {

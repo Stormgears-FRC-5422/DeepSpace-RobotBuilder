@@ -11,7 +11,7 @@ public class ElevatorPlacement extends Command {
     }
 
     protected void execute(){
-       Robot.elevator.moveToTicks(StormProp.getInt("elevatorPlacementPosition", 0),0);
+//       Robot.elevator.moveToTicks(StormProp.getInt("elevatorPlacementPosition", 0),0);
     }
     protected void initialize(){
         System.out.println("ElevatorMove.initialize() : " + StormProp.getInt("elevatorPlacementPosition", 0));

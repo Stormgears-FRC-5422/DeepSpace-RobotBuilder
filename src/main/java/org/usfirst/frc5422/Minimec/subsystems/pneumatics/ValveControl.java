@@ -184,6 +184,7 @@ public class ValveControl extends Subsystem {
         voteReady += hatchProxSensor2.get() ? 0 : 1;
         voteReady += hatchProxSensor3.get() ? 0 : 1;
 
+//        System.out.println("1: " + hatchProxSensor1.get() + " 2: " + hatchProxSensor2.get()+ " 3: " + hatchProxSensor3.get());
         return ( voteReady >= hatchProxCount);
     }
 

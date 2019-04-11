@@ -17,8 +17,8 @@ public class ButtonIds {
     public static final int ELEVATOR_LEVEL_2_BUTTON_ID = 8;
     public static final int ELEVATOR_LEVEL_3_BUTTON_ID = 9;
 
-    public static final int WRIST_SWITCH_ID = 10; //Off = false
-    public static final int INTAKE_BUTTON_ID = 2; //really now a button
+    public static final int WRIST_SWITCH_ID = 11; //Off = false
+    public static final int INTAKE_BUTTON_ID = 10; //really now a button
 
     public static final int HATCH_STATUS_INTAKE_BUTTON_ID = 3;
     public static final int HATCH_STATUS_RELEASE_BUTTON_ID = 4;

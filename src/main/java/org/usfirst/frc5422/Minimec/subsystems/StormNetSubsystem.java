@@ -43,7 +43,7 @@ public class StormNetSubsystem extends Subsystem {
 
     public StormNetSubsystem() {
         Shuffleboard.selectTab("StormNet");
-        lightPort = new SerialPort(115200, SerialPort.Port.kUSB2);
+        if (Robot.useStatusLights) lightPort = new SerialPort(115200, SerialPort.Port.kUSB2);
     }
 
     public void connect() {
@@ -87,6 +87,9 @@ public class StormNetSubsystem extends Subsystem {
 
     //only robot should call this
     public void setStatusLights(StatusLight light, int s){
+
+        if (!Robot.useStatusLights) return;
+
         switch(light){
             case Precision:
                 if(s!=0) lightPort.writeString("0t\n"); else lightPort.writeString("0f\n");
