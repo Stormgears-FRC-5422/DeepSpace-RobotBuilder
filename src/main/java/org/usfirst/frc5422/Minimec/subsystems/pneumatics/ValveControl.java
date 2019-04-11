@@ -63,7 +63,7 @@ public class ValveControl extends Subsystem {
         addChild("ARM_VALVE",armValve);
 
         wheelValve = new Solenoid(mod, StormProp.getInt("wheelValve", -1));
-        armValve.set(false);
+        wheelValve.set(false);
         addChild("WHEEL_VALVE", wheelValve );
 
         vacValve = new Solenoid(mod , StormProp.getInt("vacValve",-1));
