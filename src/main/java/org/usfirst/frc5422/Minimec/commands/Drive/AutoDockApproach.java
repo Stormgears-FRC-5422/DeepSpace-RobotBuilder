@@ -20,6 +20,7 @@ import org.usfirst.frc5422.Minimec.subsystems.NavX;
 import org.usfirst.frc5422.Minimec.subsystems.TapeAlign;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision.DockSelection;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision.VisionMode;
+import org.usfirst.frc5422.utils.StatusLight;
 import org.usfirst.frc5422.utils.StormProp;
 
 import javax.swing.plaf.synth.SynthToolTipUI;
@@ -74,12 +75,15 @@ public class AutoDockApproach extends Command {
         m_rocketside = side;
         m_dock_select = CargoPosition.middle;
         m_ship_mode = false;
+        if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 2);
+
     }
 
     public AutoDockApproach(CargoPosition dock){
         this();
         m_dock_select = dock;
         m_ship_mode = true;
+        if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 1);
     }
 
     // Called just before this Command runs the first time

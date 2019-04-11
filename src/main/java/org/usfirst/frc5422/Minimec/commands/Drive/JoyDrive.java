@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import java.time.Year;
 
 import org.usfirst.frc5422.Minimec.Robot;
+import org.usfirst.frc5422.utils.StatusLight;
 import org.usfirst.frc5422.utils.StormProp;
 
 /**
@@ -53,6 +54,7 @@ public class JoyDrive extends Command {
             joy = Robot.oi.getJoystick();
         }
         m_alignment_enabled = false;
+        if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 0);
     }
 
     // Called repeatedly when this Command is scheduled to run

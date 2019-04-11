@@ -22,7 +22,7 @@ object DSIO {
 
     private var buttonBoard:IButtonBoard
     var precision:Boolean = false
-    
+
     init{
        // val detector = JoystickDetector()
         //detector.detect()
@@ -113,7 +113,7 @@ object DSIO {
 
         buttonBoard.precisionButton.whenPressed {
             precision = !precision
-            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Precision, precision);
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Precision, if( precision) 1 else 0);
             if (Robot.debug) println(precision)
         }
 

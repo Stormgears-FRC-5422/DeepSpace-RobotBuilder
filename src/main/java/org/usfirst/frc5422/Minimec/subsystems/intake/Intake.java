@@ -5,9 +5,10 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+import java.util.Random;
+
 public class Intake extends Subsystem {
     public static Intake instance;
-
     public static Intake getInstance()
     {
         if(instance == null) instance = getInstance();

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 
+import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
 import org.usfirst.frc5422.utils.StatusLight;
 import org.usfirst.frc5422.utils.StormProp;
@@ -42,7 +43,7 @@ public class StormNetSubsystem extends Subsystem {
 
     public StormNetSubsystem() {
         Shuffleboard.selectTab("StormNet");
-        lightPort = new SerialPort(115200, SerialPort.Port.kUSB1);
+        lightPort = new SerialPort(115200, SerialPort.Port.kUSB2);
     }
 
     public void connect() {
@@ -83,20 +84,24 @@ public class StormNetSubsystem extends Subsystem {
         return m_stormNet.getLineIROffset();
     } 
 
+
     //only robot should call this
-    public void setStatusLights(StatusLight light, boolean active){
+    public void setStatusLights(StatusLight light, int s){
         switch(light){
             case Precision:
-                if(active) lightPort.writeString("1t\n"); else lightPort.writeString("1f\n");
+                if(s!=0) lightPort.writeString("0t\n"); else lightPort.writeString("0f\n");
                 break;
             case Vision:
-                if(active) lightPort.writeString("2t\n"); else lightPort.writeString("2f\n");
+                if(s == 0) lightPort.writeString("1f\n"); //rocket mode
+                else if(s == 1) lightPort.writeString("1c\n"); //cargo mode
+                else if(s == 2) lightPort.writeString("1r\n"); //vision turned off
+                else lightPort.writeString("1t"); //error
                 break;
             case Vacuum:
-                if(active) lightPort.writeString("3t\n"); else lightPort.writeString("3f\n");
+                if(s != 0) lightPort.writeString("2t\n"); else lightPort.writeString("2f\n");
                 break;
             case Intake:
-                if(active) lightPort.writeString("4t\n"); else lightPort.writeString("4f\n");
+                if(s != 0) lightPort.writeString("3t\n"); else lightPort.writeString("3f\n");
                 break;
             default:
                 System.out.println("Oh no! Someone must have forgot to put break statements.");

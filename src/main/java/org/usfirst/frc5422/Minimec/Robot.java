@@ -178,7 +178,7 @@ public class Robot extends TimedRobot {
         System.out.println("onInitCheck()");
     }
 
-    public static void setStatusLight(StatusLight light, boolean active){
-        stormNetSubsystem.setStatusLights(light, active);
+    public static void setStatusLight(StatusLight light, int s){
+        stormNetSubsystem.setStatusLights(light, s);
     }
 }
