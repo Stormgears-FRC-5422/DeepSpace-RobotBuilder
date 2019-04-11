@@ -22,7 +22,7 @@ public class Backjack extends Subsystem {
 
     private WPI_TalonSRX jackTalon;
 
-    private static final int MAX_POSITION = 21000;
+    private static final int MAX_POSITION = 23500; //21000
     private static final int MIN_POSITION = 0;
     private static final int SECONDLEVEL = 21000;
     private DigitalInput fLightR;
@@ -60,7 +60,7 @@ public class Backjack extends Subsystem {
 
         jackTalon.setInverted(true);
         jackTalon.configForwardSoftLimitThreshold(MAX_POSITION, kTimeoutMs);
-        jackTalon.configForwardSoftLimitEnable(true);
+        jackTalon.configForwardSoftLimitEnable(false);
 
         nextLevel = -1;
 
