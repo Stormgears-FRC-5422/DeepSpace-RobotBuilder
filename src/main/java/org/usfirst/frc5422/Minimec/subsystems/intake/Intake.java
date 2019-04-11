@@ -40,23 +40,17 @@ public class Intake extends Subsystem {
     }
 
     public void extend() {
-        if(Robot.oi.getBackJackLevel() == 3){
-            Robot.valveControl.armExtend();
-        }
-        else if(Robot.oi.getBackJackLevel() == 2){
-            Robot.valveControl.wheelExtend();
+        if (Robot.oi.getBackJackLevel() == 0 || Robot.oi.getBackJackLevel() == -1) {
+            System.out.println("WHAT ARE YOU DOING?! STOP CLICKING THE RAIL BUTTON SURYAA!");
         } else {
-            System.out.println("FLUSH THIS ROBOT DOWN THE TOILET");
+            Robot.valveControl.armExtend();
+            Robot.valveControl.wheelExtend();
         }
     }
 
     public void retract() {
-        if(Robot.valveControl.wheelState()){
-            Robot.valveControl.wheelRetract();
-        }
-        if(Robot.valveControl.armState()){
-            Robot.valveControl.armRetract();
-        }
+        Robot.valveControl.wheelRetract();
+        Robot.valveControl.armRetract();
     }
     protected void initDefaultCommand() {}
 

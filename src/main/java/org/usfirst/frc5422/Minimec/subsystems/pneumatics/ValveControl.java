@@ -159,13 +159,7 @@ public class ValveControl extends Subsystem {
         System.out.println("IntakeArmRetract");
         armValve.set(false);
     }
-    public boolean armState() {
-        return armValve.get();
-    }
 
-    public boolean wheelState(){
-        return wheelValve.get();
-    }
     public void wheelExtend() {
         System.out.println("IntakeArmExtend");
         wheelValve.set(true);
