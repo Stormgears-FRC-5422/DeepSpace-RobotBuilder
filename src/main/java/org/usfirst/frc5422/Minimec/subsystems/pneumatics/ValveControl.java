@@ -27,8 +27,9 @@ public class ValveControl extends Subsystem {
     private final double warnVacuum;
 
     private double currentVac;
+    private double rearmVac;
 
-
+    private boolean in_contact;
     // How many prox sensors need to vote to release
     // 0 means trigger vacuum immediately
     int hatchProxCount;
@@ -92,6 +93,7 @@ public class ValveControl extends Subsystem {
         cargoOpen = false;
         hatchOpen = false;
         vacRunning = false;
+        in_contact = false;
     }
 
     @Override
@@ -138,6 +140,7 @@ public class ValveControl extends Subsystem {
         if(hatchOpen) {
             hatchValve.set(false);
             hatchOpen = false;
+            in_contact = false;
         }
     }
 
@@ -163,6 +166,7 @@ public class ValveControl extends Subsystem {
     }
 
     public void vacStop(){
+        in_contact = false;
         if (vacRunning) {
             vacValve.set(false);
             timer.stop();
@@ -201,7 +205,13 @@ public class ValveControl extends Subsystem {
 
     public void manageVac() {
         currentVac = voltsToKPa(vacPressureSensor.getVoltage());
-
+        if (!in_contact && getHatchProxSensorReady()) {
+            in_contact = true;
+            rearmVac = currentVac - 10;
+        }
+        if (currentVac <= rearmVac) {
+            hatchStop();
+        }
         if (!Robot.compressor.isActiveAndCharged() && timer.get() > maxVenturiTime) {
             // conservative stop. Let the compressor charge up first
             vacStop();
