@@ -24,6 +24,7 @@ public class ValveControl extends Subsystem {
 
     private final double highVacuum;
     private final double lowVacuum;
+    private final double warnVacuum;
 
     private double currentVac;
 
@@ -84,6 +85,7 @@ public class ValveControl extends Subsystem {
 
         highVacuum = StormProp.getNumber("highVacuumKPa",0.0);
         lowVacuum = StormProp.getNumber("lowVacuumKPa",0.0);
+        warnVacuum = StormProp.getNumber("warnVacuumKPa",0.0);
 
         addChild("Pressure Sensor", vacPressureSensor);
 
@@ -105,13 +107,7 @@ public class ValveControl extends Subsystem {
     public void periodic() {
         manageVac();  // sets currentVac
         if(Robot.useStatusLights){
-            if(currentVac < lowVacuum){
-                if(!lastState) Robot.setStatusLight(StatusLight.Vacuum, 1);
-                lastState = false;
-            }else if(currentVac > highVacuum){
-                if(lastState) Robot.setStatusLight(StatusLight.Vacuum, 0);
-                lastState = true;
-            }
+            Robot.setStatusLight(StatusLight.Vacuum, currentVac < warnVacuum ? 1 : 0);
         }
     }
 

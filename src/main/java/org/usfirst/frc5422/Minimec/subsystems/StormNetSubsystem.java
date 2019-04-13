@@ -106,6 +106,8 @@ public class StormNetSubsystem extends Subsystem {
 
         if (!Robot.useStatusLights) return;
 
+//        System.out.println("VacArmed.get = " + vacArmedLight.get() + "   VacInsufficient.get = " + vacInsufficientLight.get());
+
         switch(light){
 //            case Precision:
 //                if(s!=0) lightPort.writeString("0t\n"); else lightPort.writeString("0f\n");
