@@ -12,7 +12,7 @@ package org.usfirst.frc5422.Minimec.subsystems;
 
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,8 +20,6 @@ import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
 
 import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
@@ -39,11 +37,17 @@ public class StormNetSubsystem extends Subsystem {
     StormNet m_stormNet;
     ShuffleboardTab tab = Shuffleboard.getTab("StormNet");
 
-    private SerialPort lightPort;
+    //private SerialPort lightPort;
+    private DigitalOutput vacArmedLight;
+    private DigitalOutput vacInsufficientLight;
 
     public StormNetSubsystem() {
         Shuffleboard.selectTab("StormNet");
-        if (Robot.useStatusLights) lightPort = new SerialPort(115200, SerialPort.Port.kUSB2);
+        if (Robot.useStatusLights) {
+//            lightPort = new SerialPort(115200, SerialPort.Port.kUSB2);
+            vacInsufficientLight = new DigitalOutput(StormProp.getInt("vacInsufficientLightDIO" ,-1));
+            vacArmedLight = new DigitalOutput(StormProp.getInt("vacArmedLightDIO" ,-1));
+        }
     }
 
     public void connect() {
@@ -86,25 +90,39 @@ public class StormNetSubsystem extends Subsystem {
 
 
     //only robot should call this
-    public void setStatusLights(StatusLight light, int s){
+    public void setStatusLights(StatusLight light, int state){
+        /* **********
+         *  0t - turn on precision mode
+         *  0f - turn off precision mode
+         *  1t - white (error?)
+         *  1r - vision mode for rocket
+         *  1c - vision mode for cargo ship
+         *  1f - turn off vision
+         *  2t - vacuum insufficient
+         *  2f - turn off vacuum light
+         *  3t - intake vacuum armed
+         *  3f - intake vacuum unarmed
+         */
 
         if (!Robot.useStatusLights) return;
 
         switch(light){
-            case Precision:
-                if(s!=0) lightPort.writeString("0t\n"); else lightPort.writeString("0f\n");
-                break;
-            case Vision:
-                if(s == 0) lightPort.writeString("1f\n"); //rocket mode
-                else if(s == 1) lightPort.writeString("1c\n"); //cargo mode
-                else if(s == 2) lightPort.writeString("1r\n"); //vision turned off
-                else lightPort.writeString("1t"); //error
-                break;
+//            case Precision:
+//                if(s!=0) lightPort.writeString("0t\n"); else lightPort.writeString("0f\n");
+//                break;
+//            case Vision:
+//                if(s == 0) lightPort.writeString("1f\n"); //rocket mode
+//                else if(s == 1) lightPort.writeString("1c\n"); //cargo mode
+//                else if(s == 2) lightPort.writeString("1r\n"); //vision turned off
+//                else lightPort.writeString("1t"); //error
+//                break;
             case Vacuum:
-                if(s != 0) lightPort.writeString("2t\n"); else lightPort.writeString("2f\n");
+//                if(s != 0) lightPort.writeString("2t\n"); else lightPort.writeString("2f\n");
+                vacInsufficientLight.set(state != 0);
                 break;
             case Intake:
-                if(s != 0) lightPort.writeString("3t\n"); else lightPort.writeString("3f\n");
+//                if(s != 0) lightPort.writeString("3t\n"); else lightPort.writeString("3f\n");
+                vacArmedLight.set(state != 0);
                 break;
             default:
                 System.out.println("Oh no! Someone must have forgot to put break statements.");
