@@ -8,13 +8,11 @@
 package org.usfirst.frc5422.Minimec.subsystems;
 
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
 import org.usfirst.frc5422.utils.StormProp;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
@@ -31,6 +29,8 @@ public class TapeAlign extends PIDSubsystem {
     private ShuffleboardTab match_tab;
     private NetworkTableEntry match_tape_state;
 
+    private boolean useShuffleboard = StormProp.getBoolean("debugconfig", false);
+
     // Leave setpoint at 0. We will calculate relative position to target
     // so that we can always set input to 0 when we don't have an object
     // to keep the PID from reacting.
@@ -45,10 +45,11 @@ public class TapeAlign extends PIDSubsystem {
         getPIDController().setOutputRange(-0.35, 0.35);  // FIXME property TapePidRange
 
         // Debug data
+        if (useShuffleboard){
         m_debug_tab = Shuffleboard.getTab("TapeAlignDebug");
         m_raw_entry = m_debug_tab.add("Sensor Value (cm)", 0).getEntry();
         m_ena_entry = m_debug_tab.add("Enabled", false).getEntry();
-        SmartDashboard.getNumber("TapeAlign PID Value", get_pid_output());
+        SmartDashboard.getNumber("TapeAlign PID Value", get_pid_output());}
         //TODO: Test the line above
 
         match_tab = Shuffleboard.getTab("Match Tab");
@@ -69,14 +70,16 @@ public class TapeAlign extends PIDSubsystem {
 
     public void enable() {
         getPIDController().enable();
+        if (useShuffleboard){
         SmartDashboard.putString("Tape Subsystem", "ENABLED");
-        m_ena_entry.setBoolean(true);
+        m_ena_entry.setBoolean(true);}
     }
 
     public void disable() {
         getPIDController().disable();
+        if (useShuffleboard) {
         SmartDashboard.putString("Tape Subsystem", "DISABLED");
-        m_ena_entry.setBoolean(false);
+        m_ena_entry.setBoolean(false); }
     }
 
     @Override
@@ -85,7 +88,8 @@ public class TapeAlign extends PIDSubsystem {
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         double offset = Robot.stormNetSubsystem.getLineIROffset();
-        m_raw_entry.setDouble(offset);
+
+        if (useShuffleboard) m_raw_entry.setDouble(offset);
 
         return(offset);
     }

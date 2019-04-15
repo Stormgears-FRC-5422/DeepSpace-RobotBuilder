@@ -23,9 +23,9 @@ task checkProperties(type:Exec) {
     args '-c', './check_properties.bash'
 }
 
-check {
+/*check {
     dependsOn checkProperties
-}
+}*/
 
  
 

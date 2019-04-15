@@ -7,19 +7,15 @@
 
 package org.usfirst.frc5422.Minimec.subsystems;
 
-import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
 import org.usfirst.frc5422.utils.StormProp;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.networktables.NetworkTableEntry;
 
 /**
  *
@@ -36,6 +32,8 @@ public class NavX extends PIDSubsystem {
     private double m_desired_angle;
     private NetworkTableEntry m_raw_entry;
     private NetworkTableEntry m_ena_entry;
+    private boolean useShuffleboard = StormProp.getBoolean("debugconfig", false);
+
     private ShuffleboardTab match_tab;
     private NetworkTableEntry orientation_entry;
 
@@ -54,11 +52,12 @@ public class NavX extends PIDSubsystem {
 	    m_ahrs = new AHRS(SerialPort.Port.kUSB);
 	
         // Debug data
+        if(useShuffleboard){
         m_debug_tab = Shuffleboard.getTab("NavXDebug");
         m_raw_entry = m_debug_tab.add("Sensor Value", 0).getEntry();
         m_ena_entry = m_debug_tab.add("Enabled", false).getEntry();
         SmartDashboard.getNumber("NavX PID Value", get_pid_output());
-        SmartDashboard.putData("NavX", m_ahrs);
+        SmartDashboard.putData("NavX", m_ahrs);}
 
         match_tab = Shuffleboard.getTab("Match Tab");
         orientation_entry = match_tab.add("Orientation", 0).getEntry();
@@ -85,9 +84,10 @@ public class NavX extends PIDSubsystem {
     public void enable(double req_heading) {
         set_gyro_target(req_heading);
         getPIDController().enable();
+        if (useShuffleboard) {
         SmartDashboard.putNumber("NavX Desired Heading", req_heading);
         SmartDashboard.putString("NavX Heading Subsystem", "ENABLED");
-        m_ena_entry.setBoolean(true);
+        m_ena_entry.setBoolean(true);}
     }
 
     // find closest angle in steps of angle_step
@@ -121,7 +121,7 @@ public class NavX extends PIDSubsystem {
     public void disable() {
         getPIDController().disable();
         SmartDashboard.putString("NavX Heading Subsystem", "DISABLED");
-        m_ena_entry.setBoolean(false);
+        if (useShuffleboard) m_ena_entry.setBoolean(false);
     }
 
     public double getHeading() {
@@ -157,8 +157,10 @@ public class NavX extends PIDSubsystem {
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         double angle = m_ahrs.getAngle();
-        SmartDashboard.putNumber("Heading", getHeading());
-        m_raw_entry.setDouble(angle);
+        if (useShuffleboard) {
+            SmartDashboard.putNumber("Heading", getHeading());
+            m_raw_entry.setDouble(angle);
+        }
 
         return(angle);
     }

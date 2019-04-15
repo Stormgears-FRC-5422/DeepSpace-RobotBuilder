@@ -64,6 +64,7 @@ public class PixyVision extends PIDSubsystem {
     private ShuffleboardTab match_tab;
     private NetworkTableEntry match_dockmode;
     private NetworkTableEntry match_dock_distance;
+    private boolean useShuffleboard = StormProp.getBoolean("debugconfig", false);
 
     public enum ObjectType {
         CARGO,DOCK

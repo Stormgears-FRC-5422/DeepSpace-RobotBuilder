@@ -33,18 +33,25 @@ public class Backjack extends Subsystem {
     private NetworkTableEntry rightEntry;
     private NetworkTableEntry leftEntry;
     private ShuffleboardTab tab;
+    private boolean useShuffleboard = StormProp.getBoolean("debugconfig", false);
+
 
     private int currentPosition;
 
     public Backjack() {
         int kTimeoutMs = StormProp.getInt("canTimeout",0);
+        if (useShuffleboard) {
         Shuffleboard.selectTab("Backjack");
         tab = Shuffleboard.getTab("Backjack");
-        fLightR = new DigitalInput(9);
-        fLightL = new DigitalInput(8);
         rightEntry = tab.add("Right Light", (fLightR).get()).getEntry();
         leftEntry = tab.add("Left Light", (fLightL).get()).getEntry();
+        tab = Shuffleboard.getTab("Backjack");
+        Shuffleboard.selectTab("Backjack");
+        currentPosition = getCurrentPositionTicks();
+        encoderEntry = tab.add("encoder ticks", currentPosition).getEntry(); }
 
+        fLightR = new DigitalInput(9);
+        fLightL = new DigitalInput(8);
         // backjack gear radius is 1 inches
         // two seconds per rotation
         // so, pi inches per second.
@@ -63,11 +70,6 @@ public class Backjack extends Subsystem {
         jackTalon.configForwardSoftLimitEnable(false);
 
         nextLevel = -1;
-
-        tab = Shuffleboard.getTab("Backjack");
-        Shuffleboard.selectTab("Backjack");
-        currentPosition = getCurrentPositionTicks();
-        encoderEntry = tab.add("encoder ticks", currentPosition).getEntry();
     }
 
     public void reset() {
@@ -87,9 +89,12 @@ public class Backjack extends Subsystem {
     public void periodic() {
         //currentEntry.setDouble(jackTalon.getOutputCurrent());
         currentPosition = getCurrentPositionTicks();
+
+        if (useShuffleboard) {
         encoderEntry.setDouble(currentPosition);
         rightEntry.setBoolean((fLightR).get());
-        leftEntry.setBoolean((fLightL).get());
+        leftEntry.setBoolean((fLightL).get()); }
+
         if (!fLightL.get() && !fLightR.get()) {
             Robot.drive.driveArcade(0, .15, 0);
         }
