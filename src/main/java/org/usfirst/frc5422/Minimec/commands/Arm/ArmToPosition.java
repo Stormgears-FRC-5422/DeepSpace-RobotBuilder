@@ -21,6 +21,8 @@ import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
  */
 public class ArmToPosition extends Command {
     int m_position;
+    Boolean m_is_finished;
+
     public ArmToPosition(int position) {
         System.out.println("ArmToPosition() : " + m_position);
         m_position = position;
@@ -31,26 +33,25 @@ public class ArmToPosition extends Command {
     @Override
     protected void initialize() {
         System.out.println("ArmToPosition.initialize() : " + m_position);
+        m_is_finished = false;
     }
 
-    // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        Robot.arm.moveToPosition(m_position);
+        m_is_finished = Robot.arm.moveToPosition(m_position);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        // Don't end unless someone grabs the manual override
-        return (getArmJoystick() != 0);
+        // Return control to default command (ArmOverride)
+        return (m_is_finished);
     }
 
     // Called once after isFinished returns true
     @Override
+
     protected void end() {
-        System.out.println("ArmToPosition.end() : " + m_position);
-        Robot.arm.stop();
     }
 
     // Called when another command which requires one or more of the same
@@ -59,11 +60,6 @@ public class ArmToPosition extends Command {
     protected void interrupted() {
         System.out.println("ArmToPosition.interrupted() : " + m_position);
         Robot.arm.stop();
-    }
-
-    private int getArmJoystick()
-    {
-        return (int) Math.round(-1 * Robot.oi.getJoystick2().getRawAxis(1));
     }
 
 }

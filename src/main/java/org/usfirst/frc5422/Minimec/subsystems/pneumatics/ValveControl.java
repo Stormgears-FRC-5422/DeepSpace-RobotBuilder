@@ -4,7 +4,6 @@ package org.usfirst.frc5422.Minimec.subsystems.pneumatics;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc5422.Minimec.Robot;
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.EnableVacuum;
 import org.usfirst.frc5422.utils.StatusLight;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.Minimec.Robot;
@@ -96,8 +95,6 @@ public class ValveControl extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        setDefaultCommand(new EnableVacuum());
     }
 
     //true means low vac
