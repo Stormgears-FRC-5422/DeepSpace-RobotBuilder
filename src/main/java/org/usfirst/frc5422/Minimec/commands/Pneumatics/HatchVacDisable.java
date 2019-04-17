@@ -6,13 +6,8 @@ import org.usfirst.frc5422.utils.StatusLight;
 
 public class HatchVacDisable extends Command {
 
-
     public HatchVacDisable() {
-
-
         requires(Robot.valveControl);
-
-
     }
 
     // Called just before this Command runs the first time

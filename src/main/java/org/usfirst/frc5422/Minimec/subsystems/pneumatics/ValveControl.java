@@ -23,11 +23,15 @@ public class ValveControl extends Subsystem {
 
     private final double highVacuum;
     private final double lowVacuum;
+    private final double warnVacuum;
 
     private double currentVac;
     private double rearmVac;
+    private double maxVacDropPerHatch;
+
 
     private boolean in_contact;
+
     // How many prox sensors need to vote to release
     // 0 means trigger vacuum immediately
     int hatchProxCount;
@@ -84,6 +88,8 @@ public class ValveControl extends Subsystem {
 
         highVacuum = StormProp.getNumber("highVacuumKPa",0.0);
         lowVacuum = StormProp.getNumber("lowVacuumKPa",0.0);
+        warnVacuum = StormProp.getNumber("warnVacuumKPa",0.0);
+        maxVacDropPerHatch = StormProp.getNumber("maxVacDropPerHatchKPa",10.0);
 
         addChild("Pressure Sensor", vacPressureSensor);
 
@@ -104,13 +110,7 @@ public class ValveControl extends Subsystem {
     public void periodic() {
         manageVac();  // sets currentVac
         if(Robot.useStatusLights){
-            if(currentVac < lowVacuum){
-                if(!lastState) Robot.setStatusLight(StatusLight.Vacuum, 1);
-                lastState = false;
-            }else if(currentVac > highVacuum){
-                if(lastState) Robot.setStatusLight(StatusLight.Vacuum, 0);
-                lastState = true;
-            }
+            Robot.setStatusLight(StatusLight.Vacuum, currentVac < warnVacuum ? 1 : 0);
         }
     }
 
@@ -133,6 +133,7 @@ public class ValveControl extends Subsystem {
     public void hatchStart() {
         if(!hatchOpen) {
             hatchValve.set(true);
+            rearmVac = currentVac - maxVacDropPerHatch;
             hatchOpen = true;
         }
     }
@@ -140,8 +141,8 @@ public class ValveControl extends Subsystem {
     public void hatchStop(){
         if(hatchOpen) {
             hatchValve.set(false);
+            rearmVac = 0;
             hatchOpen = false;
-            in_contact = false;
         }
     }
 
@@ -167,7 +168,6 @@ public class ValveControl extends Subsystem {
     }
 
     public void vacStop(){
-        in_contact = false;
         if (vacRunning) {
             vacValve.set(false);
             timer.stop();
@@ -206,13 +206,11 @@ public class ValveControl extends Subsystem {
 
     public void manageVac() {
         currentVac = voltsToKPa(vacPressureSensor.getVoltage());
-        if (!in_contact && getHatchProxSensorReady()) {
-            in_contact = true;
-            rearmVac = currentVac - 10;
+
+        if (hatchOpen && currentVac <= rearmVac) {
+            hatchStop();  // force close because the pressure dropped too much. something must have gone wrong
         }
-        if (currentVac <= rearmVac) {
-            hatchStop();
-        }
+
         if (!Robot.compressor.isActiveAndCharged() && timer.get() > maxVenturiTime) {
             // conservative stop. Let the compressor charge up first
             vacStop();
@@ -227,4 +225,3 @@ public class ValveControl extends Subsystem {
         }
     }
 }
-
