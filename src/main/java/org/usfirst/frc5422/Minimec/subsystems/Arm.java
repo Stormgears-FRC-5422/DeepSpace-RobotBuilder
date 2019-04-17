@@ -22,6 +22,7 @@ public class Arm extends Subsystem {
     private final int armPositionUnloadedSlotIdx = 1;
     private final int armPositionLoadedSlotIdx = 2;
     private final int armVelocitySlotIdx = 3;
+    private final int armTargetRange = 10;
 
     //    private final int armHatchOnIdx = 3;
     int curArmPos;
@@ -97,7 +98,7 @@ public class Arm extends Subsystem {
 
     public Boolean isAtTarget() {
         // FIXME - need code to determine whether we are at target
-        return(false);
+        return(Math.abs(curArmPos - targetPosition) < armTargetRange);
     }
 
     // Call this function. It will eventually figure out whether you are loaded or not
