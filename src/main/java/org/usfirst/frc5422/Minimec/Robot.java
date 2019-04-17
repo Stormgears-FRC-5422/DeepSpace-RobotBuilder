@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
     public static OI oi;
 
 
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -118,6 +119,7 @@ public class Robot extends TimedRobot {
         oi = new OI();
         onInitCheck();
 
+
     }
 
     /**
@@ -139,6 +141,7 @@ public class Robot extends TimedRobot {
         System.out.println("autonomousInit()");
         onInitCheck();
         navX.calibrate();
+        new AutonomousCommand().start();
     }
 
     /**

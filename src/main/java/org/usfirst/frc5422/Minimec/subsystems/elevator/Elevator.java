@@ -110,6 +110,13 @@ public class Elevator extends Subsystem {
 //                elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
 //        } }
 
+    public int getLevelTicks(int level){
+        if (level == 2) return LEVEL2_POSITION;
+        if (level == 3) return MAX_POSITION;
+        return 0;
+    }
+
+
     public void moveToLevel(int level){
         switch (level) {
             case 3: // must be moving up
@@ -138,6 +145,12 @@ public class Elevator extends Subsystem {
                 elevatorTalon.set(ControlMode.PercentOutput, -StormProp.getInt("elevatorReturnPercent",0));
         }
 
+    }
+
+    public void moveToPosition(int ticks){
+        targetPosition = ticks;
+        elevatorTalon.configForwardSoftLimitThreshold(targetPosition, kTimeoutMs);
+        elevatorTalon.set(ControlMode.PercentOutput, StormProp.getInt("elevatorClimbPercent", 0));
     }
 
     public void moveUpManual()
