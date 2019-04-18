@@ -1,8 +1,11 @@
 package org.usfirst.frc5422.Minimec.subsystems.dsio
 
 import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj.buttons.Button
 import org.usfirst.frc5422.Minimec.Robot
 import org.usfirst.frc5422.Minimec.commands.Arm.ArmToPosition
+import org.usfirst.frc5422.Minimec.commands.Arm.HatchPickup
+import org.usfirst.frc5422.Minimec.commands.Arm.HatchRelease
 import org.usfirst.frc5422.Minimec.commands.Arm.ReleaseGroup
 import org.usfirst.frc5422.Minimec.commands.AutoHome
 import org.usfirst.frc5422.Minimec.commands.Drive.JoyDrive
@@ -16,6 +19,7 @@ import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
 import org.usfirst.frc5422.utils.StatusLight
+import org.usfirst.frc5422.utils.StormProp
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
 
 object DSIO {
@@ -82,9 +86,18 @@ object DSIO {
         if (Robot.useCompressor) {
             buttonBoard.cargoIntake.whenPressed(CargoVacEnable())
             buttonBoard.cargoRelease.whenPressed(CargoVacDisable())
-            buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
+            when(Robot.hatchCommandMode){
+                0 -> {
+                    buttonBoard.hatchIntake.whenPressed(HatchVacEnable())
+                    buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
+                }
+                1 -> {
+                    buttonBoard.hatchIntake.whenPressed(HatchPickup())
+                    buttonBoard.hatchRelease.whenPressed(HatchRelease())
+                }
+
+            }
 //            buttonBoard.hatchRelease.whenPressed(ReleaseGroup())
-            buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
         }
 
         if (Robot.useIntake) {

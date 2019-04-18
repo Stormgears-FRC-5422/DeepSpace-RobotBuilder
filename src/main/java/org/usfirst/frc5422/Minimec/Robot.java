@@ -49,9 +49,11 @@ public class Robot extends TimedRobot {
     public static final boolean useVision = StormProp.getBoolean("useVision",true);
     public static final boolean useNavX = StormProp.getBoolean("useNavX",true);
     public static final boolean useStatusLights = StormProp.getBoolean("useStatusLights", false);
+    public static final int hatchCommandMode = StormProp.getInt("hatchCommandMode", 0);
 
     public static final boolean testBackjack = StormProp.getBoolean("testBackjack",false);
     public static final boolean testStormNet = StormProp.getBoolean("testStormNet",false);
+
 
 
     public static Arm arm;

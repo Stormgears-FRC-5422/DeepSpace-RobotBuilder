@@ -1,5 +1,6 @@
 package org.usfirst.frc5422.Minimec.commands.Pneumatics;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.Minimec.subsystems.pneumatics.*;
@@ -32,6 +33,7 @@ public class HatchVacEnable extends Command {
         if(Robot.valveControl.getHatchProxSensorReady()) {
             if (Robot.debug) System.out.println("Hatch vacuum ready");
             Robot.valveControl.hatchStart();
+//            Timer.delay(1.0);
         }
     }
 
