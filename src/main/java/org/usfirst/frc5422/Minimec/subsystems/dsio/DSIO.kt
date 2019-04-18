@@ -74,9 +74,9 @@ object DSIO {
 
         if (Robot.useDrive) {
             buttonBoard.xboxA.whenPressed(JoyDrive())
-            buttonBoard.xboxX.whenPressed(AutoDockApproach(AutoDockApproach.CargoPosition.left))
-            buttonBoard.xboxY.whenPressed(AutoDockApproach(AutoDockApproach.CargoPosition.middle))
-            buttonBoard.xboxB.whenPressed(AutoDockApproach(AutoDockApproach.CargoPosition.right))
+            buttonBoard.xboxX.whenPressed(AutoDockApproach(AutoDockApproach.DockTarget.SHIP_LEFT))
+            buttonBoard.xboxY.whenPressed(AutoDockApproach(AutoDockApproach.DockTarget.SHIP_MIDDLE))
+            buttonBoard.xboxB.whenPressed(AutoDockApproach(AutoDockApproach.DockTarget.SHIP_RIGHT))
         }
 
         if (Robot.useCompressor) {

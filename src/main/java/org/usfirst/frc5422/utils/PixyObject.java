@@ -31,7 +31,6 @@ public class PixyObject {
 
     public PixyObject(String type,double x, double y, double width, double height) {
         // invert needs to be set if camera is upside down
-        double factor = -1;
         m_type = type;
         m_x = x;
         m_y = y;

@@ -35,15 +35,15 @@ public class AutoDockApproach extends Command {
     private Boolean m_rumble_left = false;
     private Boolean m_pause = false;
     private Boolean m_ship_mode = true;  // alignment for cargo ship only (90 degress)
-    private CargoPosition m_dock_select = CargoPosition.middle;
-    public enum RocketSide {
-        left, right
+    private PixyVision.DockSelection m_vision_select = PixyVision.DockSelection.MIDDLE;
+    private DockTarget m_dock_target = DockTarget.SHIP_MIDDLE;
+    public enum DockTarget {
+        ROCKET_LEFT, ROCKET_RIGHT, SHIP_LEFT, SHIP_MIDDLE, SHIP_RIGHT
     }
-    public enum CargoPosition {
-        left, middle, right
-    }
+//    public enum VisionTarget {
+//        LEFT, MIDDLE, RIGHT
+//    }
 
-    private RocketSide m_rocketside = RocketSide.left;
 
     private final double m_approach_speed;
     private final double m_approach_cutover_speed;
@@ -70,20 +70,36 @@ public class AutoDockApproach extends Command {
         requires(Robot.drive);
         m_ship_mode = true;
     }
-    public AutoDockApproach(RocketSide side){
+    public AutoDockApproach(DockTarget target){
         this();
-        m_rocketside = side;
-        m_dock_select = CargoPosition.middle;
-        m_ship_mode = false;
-        if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 2);
+        m_dock_target = target;
+        if (target == DockTarget.SHIP_LEFT) {
+            m_vision_select = PixyVision.DockSelection.LEFT;
+            m_ship_mode = true;
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 1);
+        }
+        else if (target == DockTarget.SHIP_MIDDLE) {
+            m_vision_select = PixyVision.DockSelection.MIDDLE;
+            m_ship_mode = true;
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 1);
+        }
+        else if (target == DockTarget.SHIP_RIGHT) {
+            m_vision_select = PixyVision.DockSelection.RIGHT;
+            m_ship_mode = true;
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 1);
+        }
+        else if (target == DockTarget.ROCKET_LEFT) {
+            m_vision_select = PixyVision.DockSelection.MIDDLE;
+            m_ship_mode = false;
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 2);
+        }
+        else if (target == DockTarget.ROCKET_RIGHT) {
+            m_vision_select = PixyVision.DockSelection.MIDDLE;
+            m_ship_mode = false;
+            if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 2);
+        }
 
-    }
 
-    public AutoDockApproach(CargoPosition dock){
-        this();
-        m_dock_select = dock;
-        m_ship_mode = true;
-        if(Robot.useStatusLights) Robot.setStatusLight(StatusLight.Vision, 1);
     }
 
     // Called just before this Command runs the first time
@@ -95,9 +111,6 @@ public class AutoDockApproach extends Command {
         set_navx_target();
         Robot.drive.setBrakeMode();
         Robot.pixyVision.set_strafe_mode();
-        if      (m_dock_select == CargoPosition.left) Robot.pixyVision.changeDockMode(DockSelection.LEFT);
-        else if (m_dock_select == CargoPosition.middle) Robot.pixyVision.changeDockMode(DockSelection.MIDDLE);
-        else if (m_dock_select == CargoPosition.right) Robot.pixyVision.changeDockMode(DockSelection.RIGHT);
         Robot.pixyVision.enable(VisionMode.DOCK);
     }
 
@@ -105,29 +118,29 @@ public class AutoDockApproach extends Command {
         if (Robot.navX.is_enabled()) Robot.navX.disable();
         if (m_ship_mode) {
             Robot.navX.enable(Robot.navX.align_to_closest(90));
+            Robot.pixyVision.changeDockMode(m_vision_select);
+
         } else {
             double cur_heading = Robot.navX.getHeading();
             double rocket_heading = 30;
             if (cur_heading >= 90 && cur_heading <=270){
-                if (m_rocketside == RocketSide.left){
-                    m_dock_select = CargoPosition.right;
+                if (m_dock_target == DockTarget.ROCKET_RIGHT) {
+                    m_vision_select = PixyVision.DockSelection.RIGHT;
                     rocket_heading = 210;
                 } else {
-                    m_dock_select = CargoPosition.left;
+                    m_vision_select = PixyVision.DockSelection.LEFT;
                     rocket_heading = 150;
                 }
             } else {
-                if (m_rocketside == RocketSide.left){
-                    m_dock_select = CargoPosition.left;
+                if (m_dock_target == DockTarget.ROCKET_LEFT){
+                    m_vision_select = PixyVision.DockSelection.LEFT;
                     rocket_heading = 330;
                 } else {
-                    m_dock_select = CargoPosition.right;
+                    m_vision_select = PixyVision.DockSelection.RIGHT;
                     rocket_heading = 30;
                 }
             }
-            if      (m_dock_select == CargoPosition.left) Robot.pixyVision.changeDockMode(DockSelection.LEFT);
-            else if (m_dock_select == CargoPosition.middle) Robot.pixyVision.changeDockMode(DockSelection.MIDDLE);
-            else if (m_dock_select == CargoPosition.right) Robot.pixyVision.changeDockMode(DockSelection.RIGHT);
+            Robot.pixyVision.changeDockMode(m_vision_select);
             Robot.navX.enable(rocket_heading);
         }
     }
