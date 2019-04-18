@@ -126,7 +126,7 @@ public class AutoDockApproach extends Command {
             double cur_heading = Robot.navX.getHeading();
             double rocket_heading = 30;
             if (cur_heading >= 90 && cur_heading <=270){
-                if (m_dock_target == DockTarget.ROCKET_RIGHT) {
+                if (m_dock_target == DockTarget.ROCKET_LEFT) {
                     m_vision_select = PixyVision.DockSelection.RIGHT;
                     rocket_heading = 210;
                 } else {
