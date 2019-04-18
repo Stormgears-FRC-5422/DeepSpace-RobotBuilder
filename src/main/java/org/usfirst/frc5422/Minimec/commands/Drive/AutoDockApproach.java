@@ -37,6 +37,8 @@ public class AutoDockApproach extends Command {
     private Boolean m_ship_mode = true;  // alignment for cargo ship only (90 degress)
     private PixyVision.DockSelection m_vision_select = PixyVision.DockSelection.MIDDLE;
     private DockTarget m_dock_target = DockTarget.SHIP_MIDDLE;
+    private Boolean m_tape_detected = false;
+    private Boolean m_tape_system_enabled = false;
     public enum DockTarget {
         ROCKET_LEFT, ROCKET_RIGHT, SHIP_LEFT, SHIP_MIDDLE, SHIP_RIGHT
     }
@@ -170,22 +172,35 @@ public class AutoDockApproach extends Command {
                 }
             }
 
-            // Temporary disable
+            if (Robot.tapeAlignSys.tapeDetected()){
+                m_tape_detected = true;
+            } else {
+                m_tape_detected = false;
+            }
+
+                // Temporary disable
             if (joy.getRawButton(5) == true) {
                 // Button 5 will enable PID input to drive
                 if (m_pause) set_navx_target();
                 m_pause = false;
 
-                if(Robot.tapeAlignSys.tapeDetected()){
-                    Robot.tapeAlignSys.enable();
+                if(m_tape_detected) {
+                    if (!m_tape_system_enabled) {
+                        Robot.tapeAlignSys.enable();  // Don't call this every cycle
+                        m_tape_system_enabled = true;
+                    }
                     x += Robot.tapeAlignSys.get_pid_output();
                 }
-                else{
+                else {
+                    m_tape_system_enabled = false;
+                    Robot.tapeAlignSys.disable(); 
                     x += Robot.pixyVision.get_pid_output(); // vision controls strafing
                 }
                 z += Robot.navX.get_pid_output();  // NavX controls turning
             } else {
                 Robot.pixyVision.clearLastTracked();
+                Robot.tapeAlignSys.disable(); 
+                m_tape_system_enabled = false;
                 m_pause = true;
             }
             if (z > 1.0) z = 1.0;
