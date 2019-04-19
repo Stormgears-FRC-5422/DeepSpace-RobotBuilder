@@ -102,10 +102,7 @@ public class TapeAlign extends PIDSubsystem {
     }
 
     public boolean tapeDetected() {
-        if (Robot.stormNetSubsystem.getLineIROffset() != 0) {
-            return true;
-        }
-        return false;
+        return(Robot.stormNetSubsystem.lineDetected());
     }
 
     public void periodic() {

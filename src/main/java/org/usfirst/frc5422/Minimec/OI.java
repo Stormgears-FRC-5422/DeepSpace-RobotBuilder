@@ -20,6 +20,7 @@ import org.usfirst.frc5422.Minimec.commands.Drive.*;
 import org.usfirst.frc5422.Minimec.subsystems.dsio.DSIO;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.dsio.POVButton;
+import org.usfirst.frc5422.utils.DeepSpaceTypes;
 
 
 /**
@@ -83,9 +84,8 @@ public class OI {
 //        SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putData("JoyDrive", new JoyDrive());
         SmartDashboard.putData("AutoDockApproach", new AutoDockApproach());
-        SmartDashboard.putData("DockDrive", new DockDrive());
-        SmartDashboard.putData("CargoDrive", new CargoDrive());
-        SmartDashboard.putData("DockAlignDrive", new DockCloseDrive());
+        SmartDashboard.putData("AutoDockDeliver(SHIP LEFT)", new AutoDockDeliver(DeepSpaceTypes.DockTarget.SHIP_LEFT));
+
 //        m_last_joystick_output[] = new double[3];
 //        m_last_joystick_output[0] = 0.0;
 //        m_last_joystick_output[1] = 0.0;
@@ -101,8 +101,8 @@ public class OI {
         //Setup rocket vision commands
         m_rocket_left = new POVButton(getJoystick(), POVButton.Direction.Left);
         m_rocket_right = new POVButton(getJoystick(), POVButton.Direction.Right);
-        m_rocket_left.whenPressed(new AutoDockApproach(AutoDockApproach.DockTarget.ROCKET_LEFT));
-        m_rocket_right.whenPressed(new AutoDockApproach(AutoDockApproach.DockTarget.ROCKET_RIGHT));
+        m_rocket_left.whenPressed(new AutoDockApproach(DeepSpaceTypes.DockTarget.ROCKET_LEFT));
+        m_rocket_right.whenPressed(new AutoDockApproach(DeepSpaceTypes.DockTarget.ROCKET_RIGHT));
 
     }
 

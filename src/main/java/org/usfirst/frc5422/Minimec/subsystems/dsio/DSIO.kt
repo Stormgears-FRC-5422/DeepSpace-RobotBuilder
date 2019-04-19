@@ -21,6 +21,7 @@ import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
 import org.usfirst.frc5422.utils.StatusLight
 import org.usfirst.frc5422.utils.StormProp
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
+import org.usfirst.frc5422.utils.DeepSpaceTypes
 
 object DSIO {
 
@@ -78,9 +79,9 @@ object DSIO {
 
         if (Robot.useDrive) {
             buttonBoard.xboxA.whenPressed(JoyDrive())
-            buttonBoard.xboxX.whenPressed(AutoDockApproach(AutoDockApproach.DockTarget.SHIP_LEFT))
-            buttonBoard.xboxY.whenPressed(AutoDockApproach(AutoDockApproach.DockTarget.SHIP_MIDDLE))
-            buttonBoard.xboxB.whenPressed(AutoDockApproach(AutoDockApproach.DockTarget.SHIP_RIGHT))
+            buttonBoard.xboxX.whenPressed(AutoDockApproach(DeepSpaceTypes.DockTarget.SHIP_LEFT))
+            buttonBoard.xboxY.whenPressed(AutoDockApproach(DeepSpaceTypes.DockTarget.SHIP_MIDDLE))
+            buttonBoard.xboxB.whenPressed(AutoDockApproach(DeepSpaceTypes.DockTarget.SHIP_RIGHT))
         }
 
         if (Robot.useCompressor) {

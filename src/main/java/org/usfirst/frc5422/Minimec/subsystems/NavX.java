@@ -16,10 +16,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
 import org.usfirst.frc5422.utils.StormProp;
+import org.usfirst.frc5422.utils.DeepSpaceTypes.DockTarget;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.networktables.NetworkTableEntry;
+import org.usfirst.frc5422.utils.DeepSpaceTypes;
 
 /**
  *
@@ -90,6 +92,14 @@ public class NavX extends PIDSubsystem {
         m_ena_entry.setBoolean(true);
     }
 
+    public void enable(DeepSpaceTypes.DockTarget target) {
+        setNavxTarget(target);
+        getPIDController().enable();
+        SmartDashboard.putNumber("NavX Desired Heading", getHeading());
+        SmartDashboard.putString("NavX Heading Subsystem", "ENABLED");
+        m_ena_entry.setBoolean(true);
+    }
+
     // find closest angle in steps of angle_step
     public double align_to_closest(double heading,double angle_step) {
         heading += angle_step/2;
@@ -150,6 +160,35 @@ public class NavX extends PIDSubsystem {
         m_ahrs.zeroYaw();
 	    m_calibrated = true;
     }
+    
+    // Based on current heading and what our desired dock is, set the correct PID targets
+    // for vision and gyro
+    public void setNavxTarget(DeepSpaceTypes.DockTarget target) {
+
+        if (target == DeepSpaceTypes.DockTarget.SHIP_LEFT || 
+            target == DeepSpaceTypes.DockTarget.SHIP_RIGHT || 
+            target == DeepSpaceTypes.DockTarget.SHIP_MIDDLE)  {
+            set_gyro_target(align_to_closest(90));            
+        } else if (target == DeepSpaceTypes.DockTarget.PICKUP) {
+            set_gyro_target(180);
+        } else {
+            double cur_heading = getHeading();
+            if (cur_heading >= 90 && cur_heading <=270){
+                if (target == DeepSpaceTypes.DockTarget.ROCKET_LEFT) {
+                    set_gyro_target(210);
+                } else {
+                    set_gyro_target(150);
+                }
+            } else {
+                if (target == DeepSpaceTypes.DockTarget.ROCKET_LEFT){
+                    set_gyro_target(330);
+                } else {
+                    set_gyro_target(30);
+                }
+            }
+        }
+    }
+
     
     @Override
     protected double returnPIDInput() {
