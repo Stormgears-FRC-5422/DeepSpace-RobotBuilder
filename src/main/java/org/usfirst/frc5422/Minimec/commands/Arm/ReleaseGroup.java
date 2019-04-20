@@ -11,7 +11,7 @@ public class ReleaseGroup extends CommandGroup {
 
     public ReleaseGroup(){
         System.out.println("Starting reset sequence command");
-        if (Robot.useValveControl) addSequential(new HatchVacDisable());
+        if (Robot.useValveControl) addSequential(new HatchVacDisable(true));
         if (Robot.useArm) addSequential(new ArmReset(true));
         if (Robot.useElevator) addSequential(new ElevatorReset(true));
     }

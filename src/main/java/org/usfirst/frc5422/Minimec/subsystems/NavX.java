@@ -7,15 +7,21 @@
 
 package org.usfirst.frc5422.Minimec.subsystems;
 
+import org.usfirst.frc5422.Minimec.Robot;
+import org.usfirst.frc5422.Minimec.commands.*;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc5422.Minimec.subsystems.stormnet.*;
 import org.usfirst.frc5422.utils.StormProp;
+import org.usfirst.frc5422.utils.DeepSpaceTypes.DockTarget;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
+import org.usfirst.frc5422.utils.DeepSpaceTypes;
 
 /**
  *
@@ -32,8 +38,6 @@ public class NavX extends PIDSubsystem {
     private double m_desired_angle;
     private NetworkTableEntry m_raw_entry;
     private NetworkTableEntry m_ena_entry;
-    private boolean useShuffleboard = StormProp.getBoolean("debugconfig", false);
-
     private ShuffleboardTab match_tab;
     private NetworkTableEntry orientation_entry;
 
@@ -52,12 +56,11 @@ public class NavX extends PIDSubsystem {
 	    m_ahrs = new AHRS(SerialPort.Port.kUSB);
 	
         // Debug data
-        if(useShuffleboard){
         m_debug_tab = Shuffleboard.getTab("NavXDebug");
         m_raw_entry = m_debug_tab.add("Sensor Value", 0).getEntry();
         m_ena_entry = m_debug_tab.add("Enabled", false).getEntry();
         SmartDashboard.getNumber("NavX PID Value", get_pid_output());
-        SmartDashboard.putData("NavX", m_ahrs);}
+        SmartDashboard.putData("NavX", m_ahrs);
 
         match_tab = Shuffleboard.getTab("Match Tab");
         orientation_entry = match_tab.add("Orientation", 0).getEntry();
@@ -84,10 +87,17 @@ public class NavX extends PIDSubsystem {
     public void enable(double req_heading) {
         set_gyro_target(req_heading);
         getPIDController().enable();
-        if (useShuffleboard) {
         SmartDashboard.putNumber("NavX Desired Heading", req_heading);
         SmartDashboard.putString("NavX Heading Subsystem", "ENABLED");
-        m_ena_entry.setBoolean(true);}
+        m_ena_entry.setBoolean(true);
+    }
+
+    public void enable(DeepSpaceTypes.DockTarget target) {
+        setNavxTarget(target);
+        getPIDController().enable();
+        SmartDashboard.putNumber("NavX Desired Heading", getHeading());
+        SmartDashboard.putString("NavX Heading Subsystem", "ENABLED");
+        m_ena_entry.setBoolean(true);
     }
 
     // find closest angle in steps of angle_step
@@ -121,7 +131,7 @@ public class NavX extends PIDSubsystem {
     public void disable() {
         getPIDController().disable();
         SmartDashboard.putString("NavX Heading Subsystem", "DISABLED");
-        if (useShuffleboard) m_ena_entry.setBoolean(false);
+        m_ena_entry.setBoolean(false);
     }
 
     public double getHeading() {
@@ -151,16 +161,43 @@ public class NavX extends PIDSubsystem {
 	    m_calibrated = true;
     }
     
+    // Based on current heading and what our desired dock is, set the correct PID targets
+    // for vision and gyro
+    public void setNavxTarget(DeepSpaceTypes.DockTarget target) {
+
+        if (target == DeepSpaceTypes.DockTarget.SHIP_LEFT || 
+            target == DeepSpaceTypes.DockTarget.SHIP_RIGHT || 
+            target == DeepSpaceTypes.DockTarget.SHIP_MIDDLE)  {
+            set_gyro_target(align_to_closest(90));            
+        } else if (target == DeepSpaceTypes.DockTarget.PICKUP) {
+            set_gyro_target(180);
+        } else {
+            double cur_heading = getHeading();
+            if (cur_heading >= 90 && cur_heading <=270){
+                if (target == DeepSpaceTypes.DockTarget.ROCKET_LEFT) {
+                    set_gyro_target(210);
+                } else {
+                    set_gyro_target(150);
+                }
+            } else {
+                if (target == DeepSpaceTypes.DockTarget.ROCKET_LEFT){
+                    set_gyro_target(330);
+                } else {
+                    set_gyro_target(30);
+                }
+            }
+        }
+    }
+
+    
     @Override
     protected double returnPIDInput() {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         double angle = m_ahrs.getAngle();
-        if (useShuffleboard) {
-            SmartDashboard.putNumber("Heading", getHeading());
-            m_raw_entry.setDouble(angle);
-        }
+        SmartDashboard.putNumber("Heading", getHeading());
+        m_raw_entry.setDouble(angle);
 
         return(angle);
     }

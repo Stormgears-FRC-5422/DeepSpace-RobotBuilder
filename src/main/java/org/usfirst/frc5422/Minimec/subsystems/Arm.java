@@ -23,14 +23,13 @@ public class Arm extends Subsystem {
     private final int armPositionUnloadedSlotIdx = 1;
     private final int armPositionLoadedSlotIdx = 2;
     private final int armVelocitySlotIdx = 3;
+    private final int armTargetRange = 10;
 
     //    private final int armHatchOnIdx = 3;
     int curArmPos;
     int curPivPos;
-    int holdPosition;
-
-    boolean isHolding = false;
-
+    int targetPosition = -1;
+    
     public Arm() {
         ARM_PICKUP_POSITION_TICKS = StormProp.getInt("arm_pickup_position_ticks",0);
         ARM_HOME_POSITION_TICKS = StormProp.getInt("arm_home_position_ticks",0);
@@ -102,34 +101,36 @@ public class Arm extends Subsystem {
         armTalon.set(ControlMode.PercentOutput, 0);
     }
 
-    public void hold(boolean loaded) {
-        if (!isHolding) {
-            holdPosition = curArmPos;
-            isHolding = true;
-        }
-        moveToPosition_internal(holdPosition, loaded);
+    public void hold() {
+        moveToPosition(curArmPos);
+    }
+
+    public Boolean isAtTarget() {
+        // FIXME - need code to determine whether we are at target
+        return(Math.abs(curArmPos - targetPosition) < armTargetRange);
     }
 
     // Call this function. It will eventually figure out whether you are loaded or not
-    public void moveToPosition(int position) {
-        isHolding = false;
-        moveToPosition_internal(position, false);
+    public Boolean moveToPosition(int position) {
+        if (position != targetPosition || !isAtTarget()) {
+            targetPosition = position;
+            moveToTarget_internal(false);
+        }
+        return(!isAtTarget());
     }
 
     // Don't call this function casually! It makes assusmptions
-    private void moveToPosition_internal(int position, boolean loaded) {
+    private void moveToTarget_internal(boolean loaded) {
         if (isLoaded()) {
             armTalon.selectProfileSlot(armPositionLoadedSlotIdx, 0);
-            armTalon.set(ControlMode.Position, position);
+            armTalon.set(ControlMode.Position, targetPosition);
         } else {
             armTalon.selectProfileSlot(armPositionUnloadedSlotIdx, 0);
-            armTalon.set(ControlMode.Position, position);
+            armTalon.set(ControlMode.Position, targetPosition);
         }
-
     }
 
     public void moveUpManual() {
-        isHolding = false;
 
         if (isLoaded()) {
             armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("arm_percent_loaded_up",0.0));
@@ -140,7 +141,6 @@ public class Arm extends Subsystem {
     }
 
     public void moveDownManual() {
-        isHolding = false;
 
         if (isLoaded()) {
             armTalon.set(ControlMode.PercentOutput, StormProp.getNumber("arm_percent_loaded_down",0.0));
@@ -150,7 +150,6 @@ public class Arm extends Subsystem {
     }
 
     public void returnHome(boolean go) {
-        isHolding = false;
         if (go) {
             if (isLoaded()) {
                 armTalon.set(ControlMode.PercentOutput, -StormProp.getNumber("armReturnPercentOutputLoaded",0.0));

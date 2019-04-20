@@ -88,6 +88,15 @@ public class StormNetSubsystem extends Subsystem {
         return m_stormNet.getLineIROffset();
     } 
 
+    public double getLineIRCount()  { 
+        return m_stormNet.getLineIRCount();
+    } 
+
+    public Boolean lineDetected() {
+        double count = getLineIRCount();
+        return((count > 0) && (count < 12));
+    }
+
 
     //only robot should call this
     public void setStatusLights(StatusLight light, int state){

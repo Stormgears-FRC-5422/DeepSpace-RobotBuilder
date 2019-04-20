@@ -20,7 +20,7 @@ import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
  *
  */
 public class ArmOverride extends Command {
-
+    
     public ArmOverride() {
         System.out.println("ArmOverride()");
         if (Robot.useArm) requires(Robot.arm);
@@ -41,8 +41,8 @@ public class ArmOverride extends Command {
         else if(getArmJoystick() == -1) {
             Robot.arm.moveDownManual();
         }
-        else {
-            Robot.arm.hold(false);
+        else  {
+            Robot.arm.hold();
         }
     }
 
@@ -56,7 +56,7 @@ public class ArmOverride extends Command {
     @Override
     protected void end() {
         System.out.println("ArmOverride.end()");
-        Robot.arm.hold(false);
+        Robot.arm.hold();
     }
 
     // Called when another command which requires one or more of the same
@@ -64,7 +64,7 @@ public class ArmOverride extends Command {
     @Override
     protected void interrupted() {
         System.out.println("ArmOverride.interrupted()");
-        Robot.arm.hold(false);
+        Robot.arm.hold();
     }
 
     private double getArmJoystick()

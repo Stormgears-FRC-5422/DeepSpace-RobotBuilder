@@ -27,8 +27,9 @@ public class PixyObjectCollection {
                 if (item != null) {
                     // Ignore items not meeting min height requirements (too far away)
                     if (height[i] >= item.getMinHeight()) {
-                        // Ignore the belt which shows up in one corner  
-                        if (! (item.getX() < 5 && item.getY() < 10) ) {
+                        // Ignore the belt which shows up in one corner.  Testing revealed belt at 8,300
+                        if (! (item.getX() < 10 && item.getY() > (PixyObject.FRAME_SIZE_Y - 30)) &&
+                         ! (item.getX() > (PixyObject.FRAME_SIZE_X - 10) && item.getY() > (PixyObject.FRAME_SIZE_Y - 30)) ) {
                             m_list.add(item);
                         }   
                     }
