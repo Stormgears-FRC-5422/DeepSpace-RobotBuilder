@@ -5,9 +5,14 @@ import org.usfirst.frc5422.Minimec.Robot;
 import org.usfirst.frc5422.utils.StatusLight;
 
 public class HatchVacDisable extends Command {
-
+    private Boolean m_wait_for_contact = false;
     public HatchVacDisable() {
         requires(Robot.valveControl);
+    }
+
+    public HatchVacDisable(Boolean wait_for_contact) {
+        this();
+        m_wait_for_contact = wait_for_contact;
     }
 
     // Called just before this Command runs the first time
@@ -19,14 +24,16 @@ public class HatchVacDisable extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if (Robot.debug) System.out.println("Hatch Unsuck");
-        Robot.valveControl.hatchStop();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return false;
+        if (m_wait_for_contact) {
+            return(Robot.valveControl.getHatchProxSensorReady());
+        } else {
+            return true;
+        }
     }
 
     // Called once after isFinished returns true

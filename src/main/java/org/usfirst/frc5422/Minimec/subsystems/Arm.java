@@ -103,7 +103,7 @@ public class Arm extends Subsystem {
 
     // Call this function. It will eventually figure out whether you are loaded or not
     public Boolean moveToPosition(int position) {
-        if (position != targetPosition) {
+        if (position != targetPosition || !isAtTarget()) {
             targetPosition = position;
             moveToTarget_internal(false);
         }

@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Commands
 import org.usfirst.frc5422.Minimec.commands.*;
-
+import org.usfirst.frc5422.Minimec.commands.Arm.HatchMatchStart;
 // subsystems
 import org.usfirst.frc5422.Minimec.subsystems.*;
 import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
     public static TapeAlign tapeAlignSys;
     public static LidarAlign lidarAlignSys;
     public static Boolean debug;
-
+    private AutonInit aInitCmd;
     // DONT INSTANTIATE DSIO!!!!
     public static OI oi;
 
@@ -120,6 +120,8 @@ public class Robot extends TimedRobot {
         oi = new OI();
         onInitCheck();
 
+        aInitCmd = new AutonInit();
+
     }
 
     /**
@@ -141,6 +143,7 @@ public class Robot extends TimedRobot {
         System.out.println("autonomousInit()");
         onInitCheck();
         navX.calibrate();
+        aInitCmd.start();
     }
 
     /**

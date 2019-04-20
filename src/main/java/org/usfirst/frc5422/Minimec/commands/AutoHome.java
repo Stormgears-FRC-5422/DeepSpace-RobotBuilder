@@ -18,4 +18,8 @@ public class AutoHome extends CommandGroup {
         if (Robot.useArm) addSequential(new ArmReset(active));
         if (Robot.useElevator) addSequential(new ElevatorReset(active));
     }
+
+    public void end() {
+        System.out.println("Auto-homing complete");
+    }
 }
