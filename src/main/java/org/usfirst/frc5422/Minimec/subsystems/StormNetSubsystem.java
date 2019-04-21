@@ -38,15 +38,19 @@ public class StormNetSubsystem extends Subsystem {
     ShuffleboardTab tab = Shuffleboard.getTab("StormNet");
 
     //private SerialPort lightPort;
-    private DigitalOutput vacArmedLight;
-    private DigitalOutput vacInsufficientLight;
+    private Relay vacArmedLight;
+    private Relay vacInsufficientLight;
+    private Relay precisionModeLight;
+    private Relay visionModeLight;
 
     public StormNetSubsystem() {
         Shuffleboard.selectTab("StormNet");
         if (Robot.useStatusLights) {
 //            lightPort = new SerialPort(115200, SerialPort.Port.kUSB2);
-            vacInsufficientLight = new DigitalOutput(StormProp.getInt("vacInsufficientLightDIO" ,-1));
-            vacArmedLight = new DigitalOutput(StormProp.getInt("vacArmedLightDIO" ,-1));
+            vacInsufficientLight = new Relay(StormProp.getInt("vacInsufficientLightRelay" ,-1));
+            vacArmedLight = new Relay(StormProp.getInt("vacArmedLightRelay" ,-1));
+            precisionModeLight = new Relay(StormProp.getInt("precisionModeLightRelay" ,-1));
+            visionModeLight = new Relay(StormProp.getInt("visionModeLightRelay" ,-1));
         }
     }
 
@@ -118,22 +122,19 @@ public class StormNetSubsystem extends Subsystem {
 //        System.out.println("VacArmed.get = " + vacArmedLight.get() + "   VacInsufficient.get = " + vacInsufficientLight.get());
 
         switch(light){
-//            case Precision:
-//                if(s!=0) lightPort.writeString("0t\n"); else lightPort.writeString("0f\n");
-//                break;
-//            case Vision:
-//                if(s == 0) lightPort.writeString("1f\n"); //rocket mode
-//                else if(s == 1) lightPort.writeString("1c\n"); //cargo mode
-//                else if(s == 2) lightPort.writeString("1r\n"); //vision turned off
-//                else lightPort.writeString("1t"); //error
-//                break;
+            case Precision:
+                precisionModeLight.set(state != 0 ? Relay.Value.kForward : Relay.Value.kOff);
+                break;
+            case Vision:
+                if(state == 1) visionModeLight.set(Relay.Value.kForward); // Rocket mode
+                else if(state == 2) visionModeLight.set(Relay.Value.kReverse); // Cargo mode
+                else visionModeLight.set(Relay.Value.kOff);
+                break;
             case Vacuum:
-//                if(s != 0) lightPort.writeString("2t\n"); else lightPort.writeString("2f\n");
-                vacInsufficientLight.set(state != 0);
+                vacInsufficientLight.set(state != 0 ? Relay.Value.kForward : Relay.Value.kOff);
                 break;
             case Intake:
-//                if(s != 0) lightPort.writeString("3t\n"); else lightPort.writeString("3f\n");
-                vacArmedLight.set(state != 0);
+                vacArmedLight.set(state != 0 ? Relay.Value.kForward : Relay.Value.kOff);
                 break;
             default:
                 System.out.println("Oh no! Someone must have forgot to put break statements.");
