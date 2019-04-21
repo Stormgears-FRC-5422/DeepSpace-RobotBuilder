@@ -30,7 +30,7 @@ public class JackDrive extends Command {
         if (z > 1) { z = 1; }
         if (z < -1) { z= -1; }
 
-        System.out.println("Z is " + z);
+        if (Robot.debug) System.out.println("Z is " + z);
 
         Robot.drive.driveArcade(0, .2, 0);
     }

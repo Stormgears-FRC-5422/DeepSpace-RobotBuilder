@@ -50,7 +50,6 @@ public class ValveControl extends Subsystem {
     public ValveControl() {
         timer = new Timer();
         maxVenturiTime = StormProp.getNumber("maxVenturiTime",5.0);
-
         int mod = StormProp.getInt("CompressorModuleId",-1);
 
         cargoValve = new Solenoid(mod, StormProp.getInt("cargoValve",-1));
@@ -135,6 +134,15 @@ public class ValveControl extends Subsystem {
             hatchValve.set(true);
             rearmVac = currentVac - maxVacDropPerHatch;
             hatchOpen = true;
+        }
+    }
+
+    public void hatchReStart() {
+        // Re-enable hatch vaccum if hatchOpen is true.  Need to do this when we switch from auto to teleop
+        // as the solenoid resets
+        if (hatchOpen) {
+            hatchOpen = false;
+            hatchStart();
         }
     }
 
