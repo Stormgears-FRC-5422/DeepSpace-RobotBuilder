@@ -156,6 +156,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        // Immediately re-enable hatch vac if it was enabled to prevent dropping
+        valveControl.hatchReStart();
         System.out.println("teleopInit()");
         onInitCheck();
     }

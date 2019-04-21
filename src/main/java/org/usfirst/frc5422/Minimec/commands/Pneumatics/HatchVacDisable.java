@@ -39,14 +39,14 @@ public class HatchVacDisable extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.valveControl.hatchStop();
+        Robot.valveControl.hatchStop(); //
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
-        Robot.valveControl.hatchStop();
+        // don't release the hatch if we are interrupted
     }
 }
 
