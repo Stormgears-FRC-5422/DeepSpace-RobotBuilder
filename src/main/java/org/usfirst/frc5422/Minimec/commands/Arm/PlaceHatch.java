@@ -8,7 +8,7 @@ public class PlaceHatch extends Command {
 
     private static int DELTA_ELEVATOR_HEIGHT = 50;
     private int current_elevator_height;
-    private double arm_length;
+    private double arm_length = 7424.0;
     private double arm_angle;
     private int final_elevator_height;
     private int desired_level;
