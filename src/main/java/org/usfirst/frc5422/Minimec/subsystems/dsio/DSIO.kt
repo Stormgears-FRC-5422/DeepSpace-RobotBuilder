@@ -94,7 +94,7 @@ object DSIO {
                 }
                 1 -> {
                     buttonBoard.hatchIntake.whenPressed(HatchPickup())
-                    buttonBoard.hatchRelease.whenPressed(HatchRelease())
+                    buttonBoard.hatchRelease.whenPressed(HatchVacDisable())
                 }
 
             }
@@ -117,9 +117,9 @@ object DSIO {
             //buttonBoard.elevatorRest.whenPressed(???);
 
             buttonBoard.elevatorGround.whenPressed(ElevatorMove(0))
-            buttonBoard.elevatorLevelOne.whenPressed(ElevatorMove(0))
-            buttonBoard.elevatorLevelTwo.whenPressed(ElevatorMove(2))
-            buttonBoard.elevatorLevelThree.whenPressed(ElevatorMove(3))
+            buttonBoard.elevatorLevelOne.whenPressed(HatchRelease(0))
+            buttonBoard.elevatorLevelTwo.whenPressed(HatchRelease(2))
+            buttonBoard.elevatorLevelThree.whenPressed(HatchRelease(3))
         }
 
         buttonBoard.wristSwitch.whenFlipped {

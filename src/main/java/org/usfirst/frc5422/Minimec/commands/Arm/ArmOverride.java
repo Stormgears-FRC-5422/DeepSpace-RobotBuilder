@@ -20,25 +20,27 @@ import org.usfirst.frc5422.Minimec.subsystems.PixyVision;
  *
  */
 public class ArmOverride extends Command {
-    
-    public ArmOverride() {
+    private int m_direction = 0;
+    public ArmOverride(int direction) {
         System.out.println("ArmOverride()");
         if (Robot.useArm) requires(Robot.arm);
+        m_direction = direction;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
         if (Robot.debug) System.out.println("ArmOverride initialize()");
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        if(getArmJoystick() == 1) {
+        if(m_direction == -1) {
             Robot.arm.moveUpManual();
         }
-        else if(getArmJoystick() == -1) {
+        else if(m_direction == 1) {
             Robot.arm.moveDownManual();
         }
         else  {
@@ -65,10 +67,5 @@ public class ArmOverride extends Command {
     protected void interrupted() {
         System.out.println("ArmOverride.interrupted()");
         Robot.arm.hold();
-    }
-
-    private double getArmJoystick()
-    {
-        return -1 * Robot.oi.getJoystick2().getRawAxis(1);
     }
 }
