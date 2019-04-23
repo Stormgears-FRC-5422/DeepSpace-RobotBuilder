@@ -20,7 +20,7 @@ public class HorizontalAlign extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        m_is_finished = Robot.arm.moveToPosition(Robot.arm.ARM_90_POSITION_TICKS);
+        m_is_finished = ! Robot.arm.moveToPosition(Robot.arm.ARM_90_POSITION_TICKS);
     }
 
     // Make this return true when this Command no longer needs to run execute()

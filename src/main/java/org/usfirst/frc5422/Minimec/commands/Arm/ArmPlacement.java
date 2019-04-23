@@ -4,17 +4,17 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc5422.Minimec.Robot;
 
 public class ArmPlacement extends Command {
-    private Boolean is_finished;
+    private Boolean m_is_finished;
 
     public ArmPlacement(){
         if (Robot.useArm){requires(Robot.arm);}
     }
 
     protected void execute(){
-        is_finished = Robot.arm.moveToPosition(Robot.arm.ARM_90_POSITION_TICKS);
+        m_is_finished = ! Robot.arm.moveToPosition(Robot.arm.ARM_90_POSITION_TICKS);
     }
     protected void initialize(){
-        is_finished =  false;
+        m_is_finished =  false;
     }
     protected void interrupted(){
         Robot.arm.stop();
@@ -24,7 +24,7 @@ public class ArmPlacement extends Command {
 
     @Override
     protected boolean isFinished() {
-        return (is_finished);    
+        return (m_is_finished);
     }
 
 }

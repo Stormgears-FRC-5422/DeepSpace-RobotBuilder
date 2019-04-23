@@ -38,7 +38,7 @@ public class ArmToPosition extends Command {
 
     @Override
     protected void execute() {
-        m_is_finished = Robot.arm.moveToPosition(m_position);
+        m_is_finished = ! Robot.arm.moveToPosition(m_position);
     }
 
     // Make this return true when this Command no longer needs to run execute()
