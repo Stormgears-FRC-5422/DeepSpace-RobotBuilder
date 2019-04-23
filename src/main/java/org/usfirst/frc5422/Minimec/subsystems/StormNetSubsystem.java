@@ -117,8 +117,8 @@ public class StormNetSubsystem extends Subsystem {
                 precisionModeLight.set(state != 0 ? Relay.Value.kForward : Relay.Value.kOff);
                 break;
             case Vision:
-                if(state == 1) visionModeLight.set(Relay.Value.kForward); // Rocket mode
-                else if(state == 2) visionModeLight.set(Relay.Value.kReverse); // Cargo mode
+                if(state == 2) visionModeLight.set(Relay.Value.kForward); // Rocket mode
+                else if(state == 1) visionModeLight.set(Relay.Value.kReverse); // Cargo mode
                 else visionModeLight.set(Relay.Value.kOff);
                 break;
             case Vacuum:
