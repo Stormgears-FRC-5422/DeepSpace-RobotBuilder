@@ -22,7 +22,7 @@ public class Arm extends Subsystem {
     private final int armPositionUnloadedSlotIdx = 1;
     private final int armPositionLoadedSlotIdx = 2;
     private final int armVelocitySlotIdx = 3;
-    private final int armTargetRange = 10;
+    private final int armTargetRange = 50;
 
     //    private final int armHatchOnIdx = 3;
     int curArmPos;

@@ -11,7 +11,7 @@ public class HatchRelease extends CommandGroup {
         addParallel(new ElevatorMove(level));
         addSequential(new ArmToPosition(Robot.arm.ARM_PICKUP_POSITION_TICKS));
         addSequential(new HatchVacDisable(true));
-        addSequential(new ArmToPosition(Robot.arm.ARM_REST_POSITION_TICKS));
-        addSequential(new ElevatorReset(true));
+        addParallel(new ArmToPosition(Robot.arm.ARM_REST_POSITION_TICKS));
+        addParallel(new ElevatorReset(true));
     }
 }

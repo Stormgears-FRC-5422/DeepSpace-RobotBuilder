@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc5422.Minimec.commands.*;
 import org.usfirst.frc5422.Minimec.commands.Arm.HatchMatchStart;
 // subsystems
+import org.usfirst.frc5422.Minimec.commands.Arm.HatchRelease;
 import org.usfirst.frc5422.Minimec.subsystems.*;
 import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 import org.usfirst.frc5422.Minimec.subsystems.intake.Intake;
@@ -121,6 +122,7 @@ public class Robot extends TimedRobot {
         onInitCheck();
 
         aInitCmd = new AutonInit();
+
 
     }
 

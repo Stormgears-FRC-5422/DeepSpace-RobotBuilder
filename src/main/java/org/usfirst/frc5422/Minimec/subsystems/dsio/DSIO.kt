@@ -14,10 +14,7 @@ import org.usfirst.frc5422.Minimec.commands.Elevator.ElevatorMove
 import org.usfirst.frc5422.Minimec.commands.Intake.ExtendIntake
 import org.usfirst.frc5422.Minimec.commands.Jack.JackSequence
 import org.usfirst.frc5422.Minimec.commands.Jack.MoveJack
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacDisable
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.CargoVacEnable
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacDisable
-import org.usfirst.frc5422.Minimec.commands.Pneumatics.HatchVacEnable
+import org.usfirst.frc5422.Minimec.commands.Pneumatics.*
 import org.usfirst.frc5422.utils.StatusLight
 import org.usfirst.frc5422.utils.StormProp
 import org.usfirst.frc5422.utils.dsio.JoystickDetector
