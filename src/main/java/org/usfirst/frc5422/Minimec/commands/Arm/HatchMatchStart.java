@@ -1,7 +1,10 @@
 package org.usfirst.frc5422.Minimec.commands.Arm;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import kotlinx.coroutines.Delay;
+import org.usfirst.frc5422.Minimec.commands.DelayCommand;
 import org.usfirst.frc5422.Minimec.commands.Pneumatics.*;
+import org.usfirst.frc5422.utils.StormProp;
 
 public class HatchMatchStart extends CommandGroup {
 
@@ -11,6 +14,7 @@ public class HatchMatchStart extends CommandGroup {
 //        if (Robot.useArm) addParallel(new ArmToPosition(Robot.arm.ARM_PICKUP_POSITION_TICKS));
 //        if (Robot.useValveControl) addParallel(new HatchVacEnable(true));
         addSequential(new GrabHatch());
+        addSequential(new DelayCommand(StormProp.getNumber("autoHatchReleaseDelay", 1.0)));
         addSequential(new HatchRelease(1));
     }
     public void end() {

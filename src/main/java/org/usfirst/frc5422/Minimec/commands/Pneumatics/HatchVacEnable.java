@@ -33,7 +33,7 @@ public class HatchVacEnable extends Command {
         if(Robot.valveControl.getHatchProxSensorReady()) {
             if (Robot.debug) System.out.println("Hatch vacuum ready");
             Robot.valveControl.hatchStart();
-//            Timer.delay(1.0);
+//            DelayCommand.delay(1.0);
         }
     }
 
