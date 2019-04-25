@@ -150,7 +150,7 @@ public class AutoDockApproach extends Command {
 
 
             // User must hold button to engage PID control
-            if (joy.getRawButton(5) == true) {
+            if (joy.getRawButton(5) == true || joy.getRawButton(6) == true) {
                 // Button 5 will enable PID input to drive
                 if (m_pause) set_targets(); // reset pid targets when first entering PID control
                 m_pause = false;
@@ -179,7 +179,7 @@ public class AutoDockApproach extends Command {
                     }
                     x += Robot.tapeAlignSys.get_pid_output();  // tape system controls strafing
                 }
-                else {
+                else if (!joy.getRawButton(6)) {
                     if (m_tape_system_enabled) Robot.tapeAlignSys.disable(); 
                     m_tape_system_enabled = false;
                     x += Robot.pixyVision.get_pid_output(); // vision controls strafing
