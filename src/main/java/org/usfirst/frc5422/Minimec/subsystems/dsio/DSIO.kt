@@ -25,29 +25,22 @@ object DSIO {
     private var buttonBoard:IButtonBoard
     var precision:Boolean = false
 
+    val joystick = Joystick(0)
+    val joystick1 = Joystick(1)
+    val joystick2 = Joystick(2)
+
     init{
        // val detector = JoystickDetector()
         //detector.detect()
-        buttonBoard = ButtonBoard.getInstance(getJoystick1(), getJoystick2(),getJoystick())
+        buttonBoard = ButtonBoard.getInstance(joystick1, joystick2, joystick)
         setupControls()
     }
 
-    fun getJoystick() : Joystick {
-        return Joystick(0)
-    }
-
-    fun getJoystick1() : Joystick {
-        return Joystick(1)
-    }
-
-    fun getJoystick2() : Joystick {
-        return Joystick(2)
-    }
 
     fun getBackJackLevel() : Int {
-        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
+        if(joystick1.getRawButton(ButtonIds.BACKJACK_LEVEL_2)) return 2
 
-        if(getJoystick1().getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
+        if(joystick1.getRawButton(ButtonIds.BACKJACK_LEVEL_3)) return 3
 
         return 0
     }
@@ -57,7 +50,7 @@ object DSIO {
     }
 
     fun controlOverride(): Boolean {
-        return getJoystick().getRawButton(1)
+        return joystick.getRawButton(1)
     }
 
     private fun setupControls()
@@ -70,7 +63,7 @@ object DSIO {
             if (Robot.testBackjack) {
                 buttonBoard.moveBackjack.whileHeld(MoveJack(true))
             } else {
-                buttonBoard.moveBackjack.whileHeld(JackSequence(true))
+                buttonBoard.moveBackjack.whileHeld(MoveJack(true))
             }
         }
 

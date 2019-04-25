@@ -122,8 +122,6 @@ public class Robot extends TimedRobot {
         onInitCheck();
 
         aInitCmd = new AutonInit();
-
-
     }
 
     /**
@@ -146,6 +144,12 @@ public class Robot extends TimedRobot {
         onInitCheck();
         navX.calibrate();
         aInitCmd.start();
+//        if (useStatusLights) {
+//            setStatusLight(StatusLight.Intake, 0);
+//            setStatusLight(StatusLight.Vacuum, 0);
+//            setStatusLight(StatusLight.Precision, 0);
+//            setStatusLight(StatusLight.Vision, 2);
+//        }
     }
 
     /**

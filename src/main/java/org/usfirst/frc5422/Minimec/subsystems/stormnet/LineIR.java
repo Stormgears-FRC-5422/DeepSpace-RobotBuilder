@@ -23,6 +23,10 @@ public class LineIR extends StormNetSensor {
 		pollDetails();
 		return ((double) sensorDetails[0]);
 	}
-	
+
+	public int getActiveCount() {
+		pollDetails();
+		return((int) sensorDetails[1]);
+	}
 
 }

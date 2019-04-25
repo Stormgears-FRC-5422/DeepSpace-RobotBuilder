@@ -89,5 +89,5 @@ public class StormNet {
 
 	public double getLineIROffset()  {return m_lineIR.getOffset(); } // cm 
 
-	public int getLineIRCount() {return m_lineIR.getSensorCount(); }
+	public int getLineIRActiveCount() {return m_lineIR.getActiveCount(); }
 }
