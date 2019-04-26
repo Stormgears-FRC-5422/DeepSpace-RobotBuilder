@@ -70,6 +70,10 @@ public class Elevator extends Subsystem {
         targetPosition = 0;
     }
 
+    public Boolean isTargetL2() {
+        return(targetPosition == LEVEL2_POSITION);
+    }
+
     // This elevator just doesn't move from gravity. No reason to actively hold position
     public void stop() {
         targetPosition = currentPosition;

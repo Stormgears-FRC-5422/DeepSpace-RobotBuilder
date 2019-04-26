@@ -20,6 +20,7 @@ import org.usfirst.frc5422.Minimec.subsystems.NavX;
 import org.usfirst.frc5422.Minimec.subsystems.TapeAlign;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision.DockSelection;
 import org.usfirst.frc5422.Minimec.subsystems.PixyVision.VisionMode;
+import org.usfirst.frc5422.Minimec.subsystems.elevator.Elevator;
 import org.usfirst.frc5422.utils.StatusLight;
 import org.usfirst.frc5422.utils.StormProp;
 import org.usfirst.frc5422.utils.DeepSpaceTypes.DockTarget;
@@ -173,13 +174,19 @@ public class AutoDockApproach extends Command {
                 }  
 
                 if(m_tape_detected) {
-                    if (!m_tape_system_enabled) {
-                        Robot.tapeAlignSys.enable();  // Don't call this every cycle
-                        m_tape_system_enabled = true;
+                    if (!joy.getRawButton(6)) {
+                        // Ignore tape with button 6
+                        if (!m_tape_system_enabled) {
+                            Robot.tapeAlignSys.enable();  // Don't call this every cycle
+                            m_tape_system_enabled = true;
+                       }
+                       x += Robot.tapeAlignSys.get_pid_output();  // tape system controls strafing
+                    } else {
+                        Robot.tapeAlignSys.disable();
+                        m_tape_system_enabled = false;
                     }
-                    x += Robot.tapeAlignSys.get_pid_output();  // tape system controls strafing
                 }
-                else if (!joy.getRawButton(6)) {
+                else if (!Robot.elevator.isTargetL2()) {
                     if (m_tape_system_enabled) Robot.tapeAlignSys.disable(); 
                     m_tape_system_enabled = false;
                     x += Robot.pixyVision.get_pid_output(); // vision controls strafing
