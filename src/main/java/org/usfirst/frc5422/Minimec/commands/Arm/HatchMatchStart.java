@@ -14,8 +14,8 @@ public class HatchMatchStart extends CommandGroup {
 //        if (Robot.useArm) addParallel(new ArmToPosition(Robot.arm.ARM_PICKUP_POSITION_TICKS));
 //        if (Robot.useValveControl) addParallel(new HatchVacEnable(true));
         addSequential(new GrabHatch());
-        addSequential(new DelayCommand(StormProp.getNumber("autoHatchReleaseDelay", 1.0)));
-        addSequential(new HatchRelease(1));
+//        addSequential(new DelayCommand(StormProp.getNumber("autoHatchReleaseDelay", 1.0)));
+//        addSequential(new HatchRelease(1));
     }
     public void end() {
         System.out.println("Hatch match start pickup sequence command complete");
