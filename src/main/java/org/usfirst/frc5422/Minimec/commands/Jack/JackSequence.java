@@ -6,7 +6,7 @@ public class JackSequence extends CommandGroup {
 
     public JackSequence(boolean active) {
         addParallel (new MoveJack(active));
-        addParallel (new JackDrive(active));
+        //addParallel (new JackDrive(active));
     }
 
 }

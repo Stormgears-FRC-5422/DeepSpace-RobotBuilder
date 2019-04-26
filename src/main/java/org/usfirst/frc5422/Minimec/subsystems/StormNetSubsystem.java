@@ -83,13 +83,14 @@ public class StormNetSubsystem extends Subsystem {
         return m_stormNet.getLineIROffset();
     } 
 
-    public double getLineIRCount()  { 
-        return m_stormNet.getLineIRCount();
+    public double getLineIRActiveCount()  {
+        return m_stormNet.getLineIRActiveCount();
     } 
 
     public Boolean lineDetected() {
-        double count = getLineIRCount();
-        return((count > 0) && (count < 12));
+        double count = getLineIRActiveCount();
+        //System.out.println("Count is : " + count);
+        return(count > 0) && (count < 12);
     }
 
 
